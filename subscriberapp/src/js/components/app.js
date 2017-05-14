@@ -11,9 +11,9 @@ import {EVENT_CONNECTION_ESTABLISHED,
 	EVENT_PUBLISH_LOCATION,
 	EVENT_STOP_PUBLISH
 } from '../common/constants';
-//import {socket} from '../websocket-receiver';
+import {getSocket} from '../websocket-receiver';
 const zoom =14;
-const socket = io.connect('http://localhost:7000', {reconnect: true});
+const socket = getSocket();
 export default class App extends Component {
 
 	constructor(props) {

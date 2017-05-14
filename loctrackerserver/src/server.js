@@ -54,7 +54,7 @@ sub.on(events.EVENT_ON_LOCATION_RECEIVE, (channel, message)=>{
 	console.log(message);
 	subscribedconnections.forEach((item)=>{
 		if(item.channel === channel) {
-			item.websocket.emit(channel, message);
+			item.websocket.emit(events.EVENT_ON_LOCATION_RECEIVE, message);
 		}
 	});
 });

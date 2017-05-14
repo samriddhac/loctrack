@@ -1,0 +1,18 @@
+{
+  "name": "loctrackerserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:server": "nodemon src/server.js"
+  },
+  "author": "Samriddha Chatterjee",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0",
+    "redis-connection": "^5.0.0",
+    "socket.io": "^2.0.1"
+  }
+}

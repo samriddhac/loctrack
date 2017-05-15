@@ -25,7 +25,6 @@ io.on('connection', function(socket){
 	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		let dataObj = JSON.parse(data);
-		console.log(dataObj);
 		subscribedconnections.push({
 			channel:dataObj.to,
 			websocket:socket
@@ -42,7 +41,6 @@ io.on('connection', function(socket){
 		
 	});
 	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
-		console.log(events.EVENT_PUBLISH_LOCATION, data);
 		pub.publish(from, data);
 	});
 	socket.on(events.EVENT_STOP_PUBLISH, (from, data)=>{

@@ -8,15 +8,12 @@ export default class Header extends Component  {
 		return (
 			<View style={styles.header}>
 				<View style={styles.headerContent}>
-					<Image source={require('../styles/icons/icon3.png')} style={styles.headerIcon}/>
-					<Text style={styles.headerText}>Map my friends</Text>
+					<Image source={require('../images/icons/maps-icon.png')} style={styles.headerIcon}/>
+					<Text style={styles.headerText}>Find my Friends</Text>
 				</View>
-				<View
-				  style={{
-				    borderBottomColor: 'blue',
-				    borderBottomWidth: 1,
-				  }}
-				/>
+				<View style={styles.settings}>
+					<Image source={require('../images/icons/settings-icon.png')} style={styles.headerIcon}/>
+				</View>
 			</View>
 		);
 	}

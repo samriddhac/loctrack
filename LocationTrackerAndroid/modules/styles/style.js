@@ -3,42 +3,53 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
     backgroundColor: '#ffffff',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
   header: {
-    flexDirection: 'column'
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   headerContent: {
-    height: 45,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   headerIcon: {
-    width: 36,
-    margin:5,
-    height: 36,
+    paddingLeft: 5,
+    maxWidth: 60,
+    maxHeight: 60
   },
   headerText: {
-    width:50,
-    fontSize: 12,
+    paddingTop: 8,
+    paddingLeft: 5,
+    fontSize: 16,
     color: 'red',
-    textAlign: 'justify',
     fontStyle: 'italic',
-    justifyContent: 'center',
-    marginTop:5
+    fontWeight: 'bold',
+    fontFamily: 'sans-serif-condensed'
+  },
+  settings: {
+    paddingRight: 5
+  },
+  content: {
+    flex: 9
+  },
+  searchContainer : {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    borderWidth: 1
+  },
+  searchBox: {
+    flex: 2,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    borderWidth: 1
+  },
+  searchResult: {
+    flex: 8,
+    borderWidth: 1
   }
-
 });
 export default styles;

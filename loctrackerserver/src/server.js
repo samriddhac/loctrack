@@ -25,6 +25,7 @@ io.on('connection', function(socket){
 	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		let dataObj = JSON.parse(data);
+		console.log(dataObj, from);
 		subscribedconnections.push({
 			channel:dataObj.to,
 			websocket:socket

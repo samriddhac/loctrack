@@ -1,20 +1,40 @@
 import React, { Component } from 'react';
-import {Text, View, Image} from 'react-native';
+import {Text, View, Image, TouchableOpacity} from 'react-native';
 import styles from '../styles/style';
-import ToolbarAndroid from 'ToolbarAndroid';
+import Icon from 'react-native-vector-icons/Entypo';
+import OIcon from 'react-native-vector-icons/Octicons';
+import { connect } from 'react-redux';
+import {changeView} from '../actions/index';
+import { VIEW_SEARCH_BOX } from '../common/constants';
 
-export default class Header extends Component  {
+class Header extends Component  {
+
+	constructor(props) {
+		super(props);
+		this._performSearch = this._performSearch.bind(this);
+	}
+
+	_performSearch() {
+		this.props.changeView(VIEW_SEARCH_BOX);
+	}
 	render() {
 		return (
-			<View style={styles.header}>
-				<View style={styles.headerContent}>
-					<Image source={require('../images/icons/maps-icon.png')} style={styles.headerIcon}/>
-					<Text style={styles.headerText}>Find my Friends</Text>
-				</View>
-				<View style={styles.settings}>
-					<Image source={require('../images/icons/settings-icon.png')} style={styles.headerIcon}/>
+			<View style={styles.headerContent}>
+				<Text style={[styles.headerText, styles.defaultFont]}>WhereApp</Text>
+				<View style={ styles.headerIconBtn }>
+					<TouchableOpacity>
+						<OIcon name="search" size={24} 
+						style={[styles.headerIcon, styles.headerIconSearch]}
+						onPress={this._performSearch}/>
+					</TouchableOpacity>
+					<TouchableOpacity>
+						<Icon name="dots-three-vertical" size={24} 
+						style={[styles.headerIcon,styles.headerIconThreeDots]}/>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
 	}
 }
+
+export default connect(null, {changeView})(Header);

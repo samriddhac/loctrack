@@ -1,7 +1,7 @@
 import {CHANGE_VIEW} from '../actions/action-types';
-import {VIEW_SEARCH} from '../common/constants';
+import {VIEW_HOME} from '../common/constants';
 const INITIAL_STATE = {
-	id: VIEW_SEARCH
+	id: VIEW_HOME
 };
 export default function (state=INITIAL_STATE, action) {
 	switch(action.type) {

@@ -1,7 +1,8 @@
-export const VIEW_SEARCH = 1;
+export const VIEW_HOME = 1;
 export const VIEW_MAP = 2;
 export const VIEW_MEDIA = 3;
 export const VIEW_ABOUT = 4;
+export const VIEW_SEARCH_BOX = 5;
 
 export const EVENT_CONNECTION_ESTABLISHED = 'EVENT_CONNECTION_ESTABLISHED';
 export const EVENT_ESTABLISH_CHANNEL = 'EVENT_ESTABLISH_CHANNEL';
@@ -11,4 +12,8 @@ export const EVENT_ALLOW_SUBSCRIPTION = 'EVENT_ALLOW_SUBSCRIPTION';
 export const EVENT_DENY_SUBSCRIPTION = 'EVENT_DENY_SUBSCRIPTION';
 export const EVENT_PUBLISH_LOCATION = 'EVENT_PUBLISH_LOCATION';
 export const EVENT_STOP_PUBLISH = 'EVENT_STOP_PUBLISH';
-export const EVENT_ON_LOCATION_RECEIVE = 'message';
+export const EVENT_ON_MESSAGE_RECEIVE = 'message';
+
+export const STATUS_SENT = 'SENT';
+export const STATUS_PENDING = 'PENDING';
+export const STATUS_APPROVED = 'APPROVED';

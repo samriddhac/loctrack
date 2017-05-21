@@ -1,18 +1,22 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {VIEW_SEARCH, VIEW_MAP, VIEW_MEDIA, VIEW_ABOUT} from '../common/constants';
-import Search from './search';
+import {VIEW_HOME, VIEW_MAP, VIEW_MEDIA, VIEW_ABOUT, VIEW_SEARCH_BOX} from '../common/constants';
+import Home from './home';
+import SearchBoxView from './search-box-view';
 
 class ViewStateManager extends Component {
 	constructor(props) {
 		super(props);
 	}
 	render() {
-		if(this.props.viewId === VIEW_SEARCH) {
-			return(<Search />);
+		if(this.props.viewId === VIEW_HOME) {
+			return(<Home />);
 		}
-		return (<Search />);
+		else if(this.props.viewId === VIEW_SEARCH_BOX) {
+			return(<SearchBoxView />);
+		}
+		return (<Home />);
 	}
 }
 function mapStateToProps(state) {

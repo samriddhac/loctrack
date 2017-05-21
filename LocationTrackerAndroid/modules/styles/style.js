@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  defaultFont: {
+    fontWeight: 'bold',
+    fontFamily: 'notoserif'
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -10,46 +14,112 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#4A44F2',
   },
   headerContent: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex:1,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  headerIconBtn: {
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'stretch'
   },
   headerIcon: {
-    paddingLeft: 5,
-    maxWidth: 60,
-    maxHeight: 60
+    width:40,
+    color:'#ffffff'
+  },
+  headerIconThreeDots: {
+    justifyContent:'flex-end',
+    paddingLeft:10
+  },
+  headerIconSearch: {
+    justifyContent:'flex-start'
   },
   headerText: {
-    paddingTop: 8,
-    paddingLeft: 5,
-    fontSize: 16,
-    color: 'red',
-    fontStyle: 'italic',
-    fontWeight: 'bold',
-    fontFamily: 'sans-serif-condensed'
+    flex:3,
+    paddingLeft: 10,
+    fontSize: 20,
+    color: '#ffffff'
   },
-  settings: {
-    paddingRight: 5
-  },
-  content: {
-    flex: 9
-  },
-  searchContainer : {
+  homeContainer : {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    borderWidth: 1
+    alignItems: 'stretch'
   },
-  searchBox: {
-    flex: 2,
+  content: {
+    flex: 11
+  },
+  searchBoxContainer: {
+    flex: 1,
+    alignItems: 'stretch'
+  },
+  searchTextBox: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    borderWidth: 1
+    alignItems: 'center'
   },
-  searchResult: {
-    flex: 8,
-    borderWidth: 1
+  searchBack: {
+    color: '#4A44F2',
+    flex: 1
+  },
+  TextInputStyle: {
+    flex:7,
+    alignItems: 'stretch',
+    borderWidth: 1,
+    borderColor: '#4A44F2',
+    fontSize: 20,
+    marginRight:10
+  },
+  searchResultContainer: {
+    flex: 9,
+    paddingTop: 20
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    elevation:2,
+    backgroundColor: '#ffffff',
+  },
+  thumb:{
+    width:40,
+    height:40,
+    borderRadius: 40
+  },
+  rowText: {
+    marginLeft: 10,
+    fontSize: 20
+  },
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E',
+  },
+  contactContainer:{
+    flex:7,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  addButton: {
+    flex:1,
+    backgroundColor:'#4A44F2',
+    justifyContent:'space-around',
+    alignItems: 'center',
+    width:50,
+    height:50,
+    borderRadius:50
+  },
+  addBtnText: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: 'bold'
   }
 });
 export default styles;

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, StatusBar} from 'react-native';
 import { connect } from 'react-redux';
 
 import styles from '../styles/style';
 import ViewStateManager from './view-state-manager';
-import Header from './header';
 import {getAllContacts} from '../actions/index';
 
 class App extends Component {
@@ -20,10 +19,11 @@ class App extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Header/>
-				<View style={styles.content}>
-					<ViewStateManager />
-				</View>
+				<StatusBar
+			     backgroundColor="#10003F"
+			     barStyle="light-content"
+			   />
+				<ViewStateManager />
 			</View>
 		);
 	}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, TouchableHighlight, 
-	TouchableNativeFeedback, TouchableOpacity, ListView} from 'react-native';
+	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {connect} from 'react-redux';
 import styles from '../styles/style';

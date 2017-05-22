@@ -14,6 +14,7 @@ class SearchBoxView extends Component {
 		super(props);
 		this.state = { text: 'Search Contacts...' };
 		this._backHome = this._backHome.bind(this);
+		this._renderRow = this._renderRow.bind(this);
 		this._requestLocation = this._requestLocation.bind(this);
 	}
 
@@ -23,12 +24,10 @@ class SearchBoxView extends Component {
 	}
 
 	_backHome() {
-		console.log('calling back');
 		this.props.changeView(VIEW_HOME);
 	}
 
 	_requestLocation(data) {
-		console.log('calling ',data);
 		this.props.requestLocation(data);
 	}
 
@@ -56,11 +55,10 @@ class SearchBoxView extends Component {
 		              {name}
 		            </Text>
 				</View>
-				<TouchableOpacity>
-					<View style={[styles.addButton]} onPress={(e)=>{
-						console.log(e);
+				<TouchableOpacity onPress={()=>{
 						this._requestLocation(data);
 					}}>
+					<View style={[styles.addButton]}>
 						<Text style={[styles.addBtnText]}>+</Text>
 					</View>
 				</TouchableOpacity>

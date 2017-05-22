@@ -1,3 +1,5 @@
+export const LOCATION_SERVER = 'http://54.186.102.87:7000';
+
 export const VIEW_HOME = 1;
 export const VIEW_MAP = 2;
 export const VIEW_MEDIA = 3;

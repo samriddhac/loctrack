@@ -11,7 +11,7 @@ export function convertContacts(cntList) {
 						phno = ph.number;
 					}
 				});
-				if(phno !== undefined && phno !== null) {
+				if(phno !== undefined && phno !== null && phno!==0) {
 				let obj = {
 						recordID:item.recordID,
 						givenName: item.givenName,

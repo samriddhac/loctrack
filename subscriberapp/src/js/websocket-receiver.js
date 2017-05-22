@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { EVENT_ON_LOCATION_RECEIVE } from './common/constants';
+import { EVENT_ON_LOCATION_RECEIVE, LOCATION_SERVER } from './common/constants';
 import { updateLocation } from './actions/index';
 
 var socket = null;
@@ -15,7 +15,8 @@ export function startWebSocketReceiving(store) {
 
 export function getSocket() {
 	if(socket===null) {
-		socket = io.connect('http://localhost:7000', {reconnect: true});
+		socket = io.connect(LOCATION_SERVER, {reconnect: true});
+		socket.on('connection', function (socket) {});
 	}
 	return socket;
 }

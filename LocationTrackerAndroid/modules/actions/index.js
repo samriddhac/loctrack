@@ -22,6 +22,8 @@ export function requestLocation(data) {
 		from: '9717477347'
 	};
 	data.status = STATUS_PENDING;
+	console.log(data);
+	console.log(getSocket());
 	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, data.phno, JSON.stringify(objData));;
 	return {
 		type:ADD_TO_RECENT,

@@ -1,5 +1,5 @@
 import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS, 
-	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_RECENT} from './action-types';
+	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER} from './action-types';
 import {getSocket} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -22,11 +22,9 @@ export function requestLocation(data) {
 		from: '9717477347'
 	};
 	data.status = STATUS_PENDING;
-	console.log(data);
-	console.log(getSocket());
 	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, data.phno, JSON.stringify(objData));;
 	return {
-		type:ADD_TO_RECENT,
+		type:ADD_TO_SUBSCRIBER,
 		payload: data
 	};
 }

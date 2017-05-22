@@ -2,73 +2,65 @@ import React, { Component } from 'react';
 import {Text, View, TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
 import Header from './header';
+import SubscribeList from './subscribe-list';
+import PublishList from './publish-list';
 
 class Home extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+		    index: 0,
+		    routes: [
+		      { key: '1', title: 'My subscriptions' },
+		      { key: '2', title: 'My subcribers' },
+		    ]
+		  };
 	}
+	
+	_handleChangeTab = index => this.setState({ index });
+	_renderHeader = props => <TabBar {...props} />;
 
-	componentWillMount() {
-		let dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.setState({dataSource:dataSource.cloneWithRows(this.props.recent)});
-	}
-
-	_renderRow(data, sectionId, rowId, highlight) {
-		let thumbnail = require('../../modules/images/icons/default.jpg');
-		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
-			&& data.thumbnailPath!=='') {
-			thumbnail = {uri:data.thumbnailPath};
-		}
-		let name = '';
-		if(data.givenName!==undefined && data.givenName!==null 
-			&& data.givenName!=='') {
-			name = data.givenName;
-		}
-		if(data.familyName!==undefined && data.familyName!==null 
-			&& data.familyName!=='') {
-			name = name + ' ' + data.familyName;
-		}
+	_renderScene = SceneMap({
+		'1': SubscribeList,
+		'2': PublishList
+	});
+	getPubContent(_this) {
 		return(
-			<View style={styles.row}>
-				<View style={[styles.contactContainer]}>
-					<Image style={styles.thumb} source={thumbnail}
-		            defaultSource={require('../../modules/images/icons/default.jpg')} />
-		            <Text style={[styles.rowText, , styles.defaultFont]}>
-		              {name}
-		            </Text>
-				</View>
-          	</View>
+			<View style={styles.searchResultContainer}>
+				<ListView
+		          dataSource={_this.state.pubdataSource}
+		          renderRow={_this._renderRow}
+		          renderSeparator={(sectionId, rowId) => <View style=
+{styles.separator} />}
+		        />
+			</View>
 		);
 	}
-
 	render() {
 		return (
 		<View style={styles.homeContainer}>
 			<View style={styles.header}>
 				<Header/>
 			</View>
-			<View style={styles.content}>
-				<View style={styles.searchResultContainer}>
-					<ListView
-			          dataSource={this.state.dataSource}
-			          renderRow={this._renderRow}
-			          renderSeparator={(sectionId, rowId) => <View style=
-    {styles.separator} />}
-			        />
-				</View>
-			</View>
+			<TabViewAnimated
+		        style={styles.content}
+		        navigationState={this.state}
+		        renderScene={this._renderScene}
+		        renderHeader={this._renderHeader}
+		        onRequestChangeTab={this._handleChangeTab}
+		      />
       	</View>
 		);
 	}
 }
 function mapStateToProps(state) {
 	return { 
-		contacts: state.contactState.contacts,
-		recent: state.contactState.recent
+		contacts: state.contactState.contacts
 	};
 }
 export default connect(mapStateToProps)(Home);

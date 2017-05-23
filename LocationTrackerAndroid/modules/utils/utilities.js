@@ -47,10 +47,19 @@ function trimNo(input) {
 }
 
 export function mergedList(a1, a2) {
-	console.log(a1);
-	console.log(a2);
-	let mlist = _.map(a1, function(item){
-    	return _.extend(item, _.findWhere(a2, { recordID: item.recordID }));
-    });
+	if(a1!==undefined && a1!==null && a1.length>0) {
+		let exists = false;
+		a1.forEach((item)=>{
+			if(item.recordID === a2.recordID){
+				exists = true;
+			}
+		});
+		if(!exists){
+			a1 = [...a1, a2];
+		}
+	}
+	else {
+		a1 = [...a1, a2];
+	}
     return a1; 
 } 

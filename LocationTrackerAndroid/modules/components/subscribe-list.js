@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import {Text, View, TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
+import Octicons from 'react-native-vector-icons/Octicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
+import { VIEW_MAP } from '../common/constants';
+import {changeView} from '../actions/index';
 
 class SubscribeList extends Component {
 
@@ -15,6 +19,13 @@ class SubscribeList extends Component {
 		this.setState({ 
 			subdataSource:subdataSource.cloneWithRows(this.props.subscribedTo)
 		});
+	}
+	_goToMap() {
+		this.props.changeView(VIEW_MAP);
+	}
+
+	_stopSubscription() {
+
 	}
 
 	_renderRow(data, sectionId, rowId, highlight) {
@@ -42,6 +53,18 @@ class SubscribeList extends Component {
 		              {name}
 		            </Text>
 				</View>
+				<TouchableOpacity onPress={()=>{
+						this._goToMap(data);
+					}}>
+					<MaterialCommunityIcons name="map-marker-multiple" size={35} 
+						style={[styles.mapButton]} />
+				</TouchableOpacity>
+				<TouchableOpacity onPress={()=>{
+						this._stopSubscription(data);
+					}}>
+					<Octicons name="stop" size={30} 
+						style={[styles.stopButton]} />
+				</TouchableOpacity>
           	</View>
 		);
 	}
@@ -66,4 +89,4 @@ function mapStateToProps(state) {
 		subscribedTo: state.contactState.subscribedTo
 	};
 }
-export default connect(mapStateToProps)(SubscribeList);
+export default connect(mapStateToProps, {changeView})(SubscribeList);

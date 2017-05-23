@@ -62,7 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   searchBack: {
     color: '#4A44F2',
@@ -71,10 +73,11 @@ const styles = StyleSheet.create({
   TextInputStyle: {
     flex:7,
     alignItems: 'stretch',
-    borderWidth: 1,
-    borderColor: '#4A44F2',
     fontSize: 20,
-    marginRight:10
+    marginRight:10,
+    fontFamily: 'notoserif',
+    height: 44,
+    paddingHorizontal: 10,
   },
   searchResultContainer: {
     flex: 9,
@@ -107,19 +110,40 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  addButton: {
+  pubButton: {
     flex:1,
-    backgroundColor:'#4A44F2',
-    justifyContent:'space-around',
+    backgroundColor:'#ffffff',
+    color: '#4A44F2',
     alignItems: 'center',
-    width:50,
-    height:50,
-    borderRadius:50
+    width:40,
+    height:40,
+    borderRadius:40
   },
-  addBtnText: {
-    color: '#ffffff',
-    fontSize: 24,
-    fontWeight: 'bold'
+  subButton: {
+    flex:1,
+    paddingLeft:6,
+    backgroundColor:'#ffffff',
+    color: '#4A44F2',
+    alignItems: 'center',
+    width:40,
+    height:40,
+    borderRadius:40
+  },
+  stopButton: {
+    flex:1,
+    paddingLeft:6,
+    backgroundColor:'#ffffff',
+    color: '#CC1D23',
+    alignItems: 'center',
+    width:40,
+    height:40,
+    borderRadius:40
+  },
+  mapButton: {
+    flex:1,
+    paddingRight:6,
+    backgroundColor:'#ffffff',
+    color: '#CC1D23'
   }
 });
 export default styles;

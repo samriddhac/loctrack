@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {VIEW_HOME, VIEW_MAP, VIEW_MEDIA, VIEW_ABOUT, VIEW_SEARCH_BOX} from '../common/constants';
 import Home from './home';
 import SearchBoxView from './search-box-view';
+import GoogleMap from './google-map';
 
 class ViewStateManager extends Component {
 	constructor(props) {
@@ -15,6 +16,9 @@ class ViewStateManager extends Component {
 		}
 		else if(this.props.viewId === VIEW_SEARCH_BOX) {
 			return(<SearchBoxView />);
+		}
+		else if(this.props.viewId === VIEW_MAP) {
+			return(<GoogleMap />);
 		}
 		return (<Home />);
 	}

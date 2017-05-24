@@ -144,6 +144,25 @@ const styles = StyleSheet.create({
     paddingRight:6,
     backgroundColor:'#ffffff',
     color: '#CC1D23'
+  },
+  mapContainer: {
+    flex: 1
+  },
+  map: {
+    flex: 1
+  },
+  mapButtonContainer: {
+    flex:2,
+    width:40,
+    height: 40,
+    borderWidth: 1
+  },
+  mapBackButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    color: '#4A44F2',
+    borderWidth: 1
   }
 });
 export default styles;

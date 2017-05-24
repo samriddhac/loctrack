@@ -12,6 +12,8 @@ class SubscribeList extends Component {
 
 	constructor(props) {
 		super(props);
+		this._renderRow = this._renderRow.bind(this);
+		this._goToMap = this._goToMap.bind(this);
 	}
 
 	componentWillMount() {
@@ -84,7 +86,6 @@ class SubscribeList extends Component {
 }
 
 function mapStateToProps(state) {
-	console.log('pubdataSource ',state);
 	return {
 		subscribedTo: state.contactState.subscribedTo
 	};

@@ -80,6 +80,14 @@ class SubscribeList extends Component {
 		          renderSeparator={(sectionId, rowId) => <View style=
 {styles.separator} />}
 		        />
+		        <View style={[styles.globalmapButtonContainer]}>
+					<TouchableOpacity onPress={()=>{
+							this._goToMap(null);
+						}}>
+						<MaterialCommunityIcons name="map-marker-multiple" size={40} 
+						style={[styles.globalmapBackButton]} />
+					</TouchableOpacity>
+				</View>
 			</View>
 		);
 	}

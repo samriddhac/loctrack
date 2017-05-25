@@ -34,16 +34,18 @@ class GoogleMap extends Component {
 	render() {
 		return(
 			<View style={[styles.mapContainer]}>
-				<TouchableOpacity onPress={()=>{
-						this._goToHome(data);
-					}}>
-					<Ionicons name="ios-arrow-dropleft-outline" size={40} 
-							style={[styles.mapBackButton]} />
-				</TouchableOpacity>
 				<MapView style={[styles.map]}
 			      region={this.state.region}
 			      onRegionChange={this.onRegionChange}
 			    />
+			    <View style={[styles.mapButtonContainer]}>
+					<TouchableOpacity onPress={()=>{
+							this._goToHome();
+						}}>
+						<Ionicons name="ios-arrow-back" size={40} 
+								style={[styles.mapBackButton]} />
+					</TouchableOpacity>
+				</View>
 		    </View>
 		);
 	}

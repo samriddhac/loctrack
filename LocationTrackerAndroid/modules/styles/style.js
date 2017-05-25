@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   thumb:{
-    width:40,
-    height:40,
-    borderRadius: 40
+    width:50,
+    height:50,
+    borderRadius: 50
   },
   rowText: {
     marginLeft: 10,
-    fontSize: 20
+    fontSize: 16
   },
   separator: {
     height: StyleSheet.hairlineWidth,
@@ -149,20 +149,37 @@ const styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex: 1
+    ...StyleSheet.absoluteFillObject,
   },
   mapButtonContainer: {
-    flex:2,
+    position: 'absolute',
+    top: 30,
+    left: 30,
+    backgroundColor:'#4A44F2',
+    opacity:0.4,
     width:40,
-    height: 40,
-    borderWidth: 1
+    height:40,
+    borderRadius:40,
+    alignItems: 'center'
   },
   mapBackButton: {
+    paddingRight:5,
+    color: '#4A44F2'
+  },
+  globalmapButtonContainer: {
     position: 'absolute',
-    top: 20,
-    left: 20,
-    color: '#4A44F2',
-    borderWidth: 1
+    bottom: 30,
+    right: 30,
+    backgroundColor:'#CC1D23',
+    width:55,
+    height:55,
+    borderRadius:55,
+    alignItems: 'center'
+  },
+  globalmapBackButton: {
+    paddingTop:5,
+    paddingRight:5,
+    color: '#ffffff'
   }
 });
 export default styles;

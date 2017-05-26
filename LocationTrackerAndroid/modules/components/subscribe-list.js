@@ -64,7 +64,7 @@ class SubscribeList extends Component {
 				<TouchableOpacity onPress={()=>{
 						this._stopSubscription(data);
 					}}>
-					<Octicons name="stop" size={30} 
+					<Octicons name="stop" size={35} 
 						style={[styles.stopButton]} />
 				</TouchableOpacity>
           	</View>

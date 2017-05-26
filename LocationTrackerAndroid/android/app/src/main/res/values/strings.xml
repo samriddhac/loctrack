@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LocationTrackerAndroid</string>
+    <string name="account_type">com.locationtrackerandroid</string>
+    <string name="content_authority">com.locationtrackerandroid</string>
 </resources>

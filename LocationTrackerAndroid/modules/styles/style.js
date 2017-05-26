@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    elevation:2,
     backgroundColor: '#ffffff',
   },
   thumb:{

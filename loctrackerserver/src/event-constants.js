@@ -19,7 +19,7 @@ module.exports = {
 
 	TYPE_CONN_ACK: 'conn_ack',
 	TYPE_ACK: 'ack',
-	TYPE_AUTH_REQ: 'auth_req'
+	TYPE_AUTH_REQ: 'auth_req',
 	TYPE_AUTH_VALIDATE: 'auth_validate',
 	TYPE_AUTH_SUCCESS: 'auth_success',
 	TYPE_AUTH_FAILURE: 'auth_failure',

@@ -10,6 +10,7 @@
   "author": "Samriddha Chatterjee",
   "license": "ISC",
   "dependencies": {
+    "env2": "^2.2.0",
     "express": "^4.15.2",
     "nodemon": "^1.11.0",
     "redis-connection": "^5.0.0",

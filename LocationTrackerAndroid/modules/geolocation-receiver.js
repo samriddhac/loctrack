@@ -1,25 +1,22 @@
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+import {updateMyLocation} from './actions/index';
 
 export function configureGeolocation(store) {
 	BackgroundGeolocation.configure({
-      desiredAccuracy: 10,
+      desiredAccuracy: 1000,
       stationaryRadius: 50,
       distanceFilter: 50,
       locationTimeout: 30,
-      notificationTitle: 'Background tracking',
-      notificationText: 'enabled',
-      debug: true,
       startOnBoot: false,
       stopOnTerminate: false,
       locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
       interval: 10000,
-      fastestInterval: 5000,
+      fastestInterval: 10000,
       activitiesInterval: 10000,
       stopOnStillActivity: false
-      }
     });
     BackgroundGeolocation.on('location', (location) => {
-      console.log(location);
+      store.dispatch(updateMyLocation(location));
     });
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {
@@ -34,5 +31,10 @@ export function configureGeolocation(store) {
 export function start() {
 	BackgroundGeolocation.start(() => {
       console.log('[DEBUG] BackgroundGeolocation started successfully');    
+    });
+}
+export function stop() {
+	BackgroundGeolocation.stop(() => {
+      console.log('[DEBUG] BackgroundGeolocation stopped successfully');    
     });
 }

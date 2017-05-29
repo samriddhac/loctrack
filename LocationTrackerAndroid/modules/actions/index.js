@@ -1,5 +1,6 @@
 import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS, 
-	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER} from './action-types';
+	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER,
+	SET_MY_LOCATION} from './action-types';
 import {getSocket} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -25,6 +26,13 @@ export function requestLocation(data) {
 	return {
 		type:ADD_TO_SUBSCRIBER,
 		payload: data
+	};
+}
+
+export function updateMyLocation(location) {
+	return {
+		type:SET_MY_LOCATION,
+		payload:location
 	};
 }
 

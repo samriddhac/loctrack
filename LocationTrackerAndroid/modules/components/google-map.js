@@ -13,10 +13,10 @@ class GoogleMap extends Component {
 		super(props);
 		this.state = {
 			region: {
-		      latitude: 37.78825,
-		      longitude: -122.4324,
-		      latitudeDelta: 0.0922,
-		      longitudeDelta: 0.0421,
+				latitude: props.myLocation.latitude,
+		      	longitude: props.myLocation.longitude,
+		      	latitudeDelta: 0.0922,
+      		  	longitudeDelta: 0.0421,
 		    }
 		};
 		this._goToHome = this._goToHome.bind(this);
@@ -25,6 +25,28 @@ class GoogleMap extends Component {
 
 	onRegionChange(region) {
 	  this.setState({ region });
+	}
+
+	componentDidMount() {
+		this.setState({
+			region: {
+		      latitude: this.props.myLocation.latitude,
+		      longitude: this.props.myLocation.longitude,
+		      latitudeDelta: 0.0922,
+      		  longitudeDelta: 0.0421,
+		    }
+		});
+	}
+
+	componentWillReceiveProps(nexProps) {
+		console.log('nextProps ',nexProps);
+		this.setState({
+			region: {
+				...this.state.region,
+				latitude: this.props.myLocation.latitude,
+				longitude: this.props.myLocation.longitude
+			}
+		});
 	}
 
 	_goToHome() {
@@ -37,6 +59,7 @@ class GoogleMap extends Component {
 				<MapView style={[styles.map]}
 			      region={this.state.region}
 			      onRegionChange={this.onRegionChange}
+			      ref="map"
 			    />
 			    <View style={[styles.mapButtonContainer]}>
 					<TouchableOpacity onPress={()=>{
@@ -52,7 +75,8 @@ class GoogleMap extends Component {
 }
 function mapStateToProps(state){
 	return {
-		subscribedTo: state.contactState.subscribedTo
+		subscribedTo: state.contactState.subscribedTo,
+		myLocation: state.myLocationState.current
 	};
 }
 export default connect(mapStateToProps, {changeView})(GoogleMap);

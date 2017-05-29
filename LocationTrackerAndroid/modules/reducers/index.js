@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import ViewStateReducer from './view-state-reducer';
 import ContactStateReducer from './contacts-reducer';
+import MyLocationStateReducer from './my-location-reducer';
 
 const rootReducer = combineReducers({
 	viewState: ViewStateReducer,
-	contactState: ContactStateReducer
+	contactState: ContactStateReducer,
+	myLocationState: MyLocationStateReducer
 });
 
 export default rootReducer;

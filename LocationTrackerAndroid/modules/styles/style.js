@@ -179,6 +179,10 @@ const styles = StyleSheet.create({
     paddingTop:5,
     paddingRight:5,
     color: '#ffffff'
+  },
+  mylocMarker: {
+    width: 20,
+    height: 20
   }
 });
 export default styles;

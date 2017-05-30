@@ -22,7 +22,7 @@ export function requestLocation(data) {
 		to: data.phno,
 		from: '9717477347'
 	};
-	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, data.phno, JSON.stringify(objData));;
+	//getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, data.phno, JSON.stringify(objData));;
 	return {
 		type:ADD_TO_SUBSCRIBER,
 		payload: data

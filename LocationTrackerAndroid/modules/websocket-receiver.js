@@ -8,7 +8,6 @@ var socket = null;
 export function startWebSocketReceiving(store) {
 	let socket = getSocket(); 
 	socket.on(EVENT_ON_LOCATION_RECEIVE, (msg) => {
-		console.log(msg);
 		store.dispatch(updateLocation(msg));
 	});
 }

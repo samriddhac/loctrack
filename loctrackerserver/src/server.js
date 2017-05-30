@@ -4,9 +4,11 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const pub = require('redis-connection')();
 const sub = require('redis-connection')('subscriber');
+const _ = require('lodash');
 const events = require('./event-constants');
 const socketpool = require('./websocket-pool');
 
+let counter = 0;
 
 app.get('/', function(req, res){
   res.send({
@@ -17,7 +19,8 @@ app.get('/', function(req, res){
 let subscribedconnections = [];
 
 io.on(events.CONNECTION, function(socket){
-	console.log('Received connection request');
+
+	console.log('Received connection request ', ++counter);
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		socketpool.addToPool({id:from, websocket:socket});
@@ -65,19 +68,95 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		let toObj = JSON.parse(data);
 		
-		console.log(dataObj, from);
+		console.log(toObj, from);
+
+		let to = toObj.to;
+		let fromItemString = pub.get(from);
+		let toItemString = pub.get(to);
+		let fromItem = JSON.parse(fromItemString);
+		let toItem = JSON.parse(toItemString);
+		_.remove(fromItem.sub, {id:to});
+		fromItem.sub.push({id:to, s:events.STATUS_PENDING});
+		
+		let toWebsocket = socketpool.getConnectionByID(to);
+		let fromWebsocket = socketpool.getConnectionByID(from);
+		if(toWebsocket!==undefined && toWebsocket!==null) {
+			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {from:from, t:events.TYPE_SUB_REQ});
+			if(fromWebsocket!==undefined && fromWebsocket!==null) {
+				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+			}
+			_.remove(toItem.pub, {id:from});
+			toItem.pub.push({id:from, s:events.STATUS_PENDING});
+			pub.set(to, JSON.stringify(toItem));
+		}
+		else {
+			if(fromWebsocket!==undefined && fromWebsocket!==null) {
+				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_NA});
+			}
+		}
+		pub.set(from, JSON.stringify(fromItem));
+	});
+
+	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, (from, data)=>{
+		let toObj = JSON.parse(data);
+		let to = toObj.to;
+		let fromItemString = pub.get(from);
+		let toItemString = pub.get(to);
+		let fromItem = JSON.parse(fromItemString);
+		let toItem = JSON.parse(toItemString);
+		let toWebsocket = socketpool.getConnectionByID(to);
+		let fromWebsocket = socketpool.getConnectionByID(from);
+		
+		_.remove(toItem.sub, {id:from});
+		toItem.sub.push({id:from, s:events.STATUS_REJECTED});
+
+		_.remove(fromItem.pub, {id:to});
+		fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
+		
+		if(toWebsocket!==undefined && toWebsocket!==null) {
+			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_SUB_REQ_FAILURE});
+		}
+		if(fromWebsocket!==undefined && fromWebsocket!==null) {
+			fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+		}
+	});
+
+	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, (from, data)=>{
+		let toObj = JSON.parse(data);
+		let to = toObj.to;
+		let fromItemString = pub.get(from);
+		let toItemString = pub.get(to);
+		let fromItem = JSON.parse(fromItemString);
+		let toItem = JSON.parse(toItemString);
+		let toWebsocket = socketpool.getConnectionByID(to);
+		let fromWebsocket = socketpool.getConnectionByID(from);
+		_.remove(toItem.sub, {id:from});
+		toItem.sub.push({id:from, s:events.STATUS_APPROVED});
+
+		_.remove(fromItem.pub, {id:to});
+		fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
+		if(toWebsocket!==undefined && toWebsocket!==null) {
+			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_SUB_REQ_SUCCESS});
+		}
+		if(fromWebsocket!==undefined && fromWebsocket!==null) {
+			fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+		}
+		sub.subscribe(from);
+	});
+
+	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
+		pub.publish(from, data);
+	});
+
+	
+	socket.on(events.EVENT_STOP_SUBSCRIPTION, (from, data)=>{
 		subscribedconnections.push({
 			channel:dataObj.to,
 			websocket:socket
 		});
 		sub.subscribe(dataObj.to);
 	});
-	socket.on(events.EVENT_STOP_SUBSCRIPTION, (from, data)=>{
-		
-	});
-	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
-		pub.publish(from, data);
-	});
+	
 	socket.on(events.EVENT_STOP_PUBLISH, (from, data)=>{
 		console.log(events.EVENT_STOP_PUBLISH, from);
 	});

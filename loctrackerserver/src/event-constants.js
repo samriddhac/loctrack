@@ -26,7 +26,7 @@ module.exports = {
 	TYPE_SUB_REQ_FAILURE: 'sub_req_failure',
 	TYPE_NA: 'na',
 
-	STATUS_PENDING: p,
-	STATUS_APPROVED: a,
-	STATUS_REJECTED: r
+	STATUS_PENDING: 'p',
+	STATUS_APPROVED: 'a',
+	STATUS_REJECTED: 'r'
 };

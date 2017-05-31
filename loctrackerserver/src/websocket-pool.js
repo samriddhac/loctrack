@@ -62,4 +62,4 @@ function websocket_pool() {
 	}
 }
 
-module.exports = websocket_pool;
+module.exports = new websocket_pool();

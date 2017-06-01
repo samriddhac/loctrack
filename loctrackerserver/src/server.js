@@ -28,8 +28,8 @@ io.on(events.CONNECTION, function(socket){
 		socketpool.addToPool({id:from, websocket:socket.id});
 		let websocketId = socketpool.getConnectionByID(from);
 		let wSocketId = websocketId.websocket;
-		console.log(io.clients);
-		socket.sockets[wSocketId].emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+		console.log(io.sockets.adapter.rooms);
+		io.sockets.adapter.rooms[wSocketId].emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{

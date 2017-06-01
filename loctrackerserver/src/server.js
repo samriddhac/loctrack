@@ -27,8 +27,11 @@ io.on(events.CONNECTION, function(socket){
 		console.log('Connection request from ', from);
 		socketpool.addToPool({id:from, websocket:socket.id});
 		let websocketId = socketpool.getConnectionByID(from);
-		console.log('websocketId ',websocketId);
-		io.sockets.socket(websocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+		let wSocketId = websocketId.websocket;
+		console.log('socket ', JSON.stringify(socket));
+		console.log('io ', JSON.stringify(io));
+		console.log('io.sockets ', JSON.stringify(io.sockets));
+		io.sockets.socket(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{

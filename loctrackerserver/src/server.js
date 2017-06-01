@@ -28,9 +28,9 @@ io.on(events.CONNECTION, function(socket){
 		socketpool.addToPool({id:from, websocket:socket.id});
 		let websocketId = socketpool.getConnectionByID(from);
 		let wSocketId = websocketId.websocket;
-		console.log('socket ', JSON.stringify(socket));
-		console.log('io ', JSON.stringify(io));
-		console.log('io.sockets ', JSON.stringify(io.sockets));
+		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, socket);
+		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, io);
+		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, io.sockets);
 		io.sockets.socket(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 

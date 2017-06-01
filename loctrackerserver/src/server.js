@@ -25,7 +25,6 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		console.log('Connection request from ', from);
 		socketpool.addToPool({id:from, websocket:socket});
-		console.log('Connection no ',socketpool.getAllConnection().length);
 		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 
@@ -42,7 +41,7 @@ io.on(events.CONNECTION, function(socket){
 		pub.set(from, JSON.stringify(obj));
 		let websocket = socketpool.getConnectionByID(from);
 		obj.t = events.TYPE_AUTH_VALIDATE;
-		websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, obj);
+		websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
@@ -52,7 +51,7 @@ io.on(events.CONNECTION, function(socket){
 			obj.auth  = {isAuth: true};
 			let websocket = socketpool.getConnectionByID(from);
 			obj.t = events.TYPE_ACK;
-			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, obj);
+			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 		}
 	});
 
@@ -63,7 +62,7 @@ io.on(events.CONNECTION, function(socket){
 			let websocket = socketpool.getConnectionByID(from);
 			obj.t = events.TYPE_ACK;
 			obj.auth = {isAuth: false};
-			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, obj);
+			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 		}
 	});
 
@@ -83,9 +82,9 @@ io.on(events.CONNECTION, function(socket){
 		let toWebsocket = socketpool.getConnectionByID(to);
 		let fromWebsocket = socketpool.getConnectionByID(from);
 		if(toWebsocket!==undefined && toWebsocket!==null) {
-			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {from:from, t:events.TYPE_SUB_REQ});
+			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, to, {from:from, t:events.TYPE_SUB_REQ});
 			if(fromWebsocket!==undefined && fromWebsocket!==null) {
-				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 			}
 			_.remove(toItem.pub, {id:from});
 			toItem.pub.push({id:from, s:events.STATUS_PENDING});
@@ -93,7 +92,7 @@ io.on(events.CONNECTION, function(socket){
 		}
 		else {
 			if(fromWebsocket!==undefined && fromWebsocket!==null) {
-				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_NA});
+				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_NA});
 			}
 		}
 		pub.set(from, JSON.stringify(fromItem));

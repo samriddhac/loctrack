@@ -44,7 +44,7 @@ function websocket_pool() {
 				&& webSocketPool.length !== 0) {
 				let selectedConnection = {};
 				webSocketPool.forEach((item)=>{
-					if(item.id ==conn.id) {
+					if(item.id ==id) {
 						selectedConnection = item;
 					}
 				});

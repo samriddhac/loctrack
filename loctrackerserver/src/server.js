@@ -58,6 +58,7 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
 		try {
 			let objString = pub.get(from);
+			console.log(objString);
 			if(objString!==undefined && objString!==null) {
 				let obj = JSON.parse(objString);
 				obj.auth  = {isAuth: true};

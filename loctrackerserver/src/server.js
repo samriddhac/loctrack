@@ -18,19 +18,26 @@ app.get('/', function(req, res){
 
 var subscribedconnections = [];
 
-
+var t =[];
 io.on(events.CONNECTION, function(socket){
 
 	console.log('Received connection request ', ++counter+' socket id ',socket.id);
 	
-
+	t.push(socket.id);
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		try {
 			socketpool.addToPool({id:from, websocket:socket.id});
 			console.log('Connection received from ', from, 'socket id ', socket.id);
 			let websocket = socketpool.getConnectionByID(from);
 			let wSocketId = websocket.websocket;
-			socket.broadcast.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			let aSock = '';
+			for (var i = 0; i < t.length; i++) {
+				if(t[i]!==socket.id) {
+					aSock = t[i];
+					break;
+				}
+			}
+			socket.broadcast.to(aSock).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 			//socket.broadcast.to(socket.id).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 		}
 		catch(err) {

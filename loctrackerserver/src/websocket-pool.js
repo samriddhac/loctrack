@@ -1,11 +1,10 @@
 'use strict';
 
 function websocket_pool() {
-	let webSocketPool =[];
 
 	return {
 
-		addToPool: function(conn) {
+		addToPool: function(conn, webSocketPool) {
 			if(webSocketPool!==undefined && webSocketPool!==null) {
 				if(webSocketPool.length === 0 ) {
 					webSocketPool.push(conn);
@@ -23,7 +22,7 @@ function websocket_pool() {
 				}
 			}
 		},
-		removeFromPool: function(conn) {
+		removeFromPool: function(conn, webSocketPool) {
 			if(webSocketPool!==undefined && webSocketPool!==null) {
 				if(webSocketPool.length !== 0 ){
 					let matchIndex = -1;
@@ -39,7 +38,7 @@ function websocket_pool() {
 				}
 			}
 		},
-		getConnectionByID: function(id) {
+		getConnectionByID: function(id, webSocketPool) {
 			let selectedConnection = {};
 			if(webSocketPool!==undefined && webSocketPool!==null
 				&& webSocketPool.length !== 0) {
@@ -51,10 +50,7 @@ function websocket_pool() {
 			}
 			return selectedConnection;
 		},
-		getAllConnection: function() {
-			return webSocketPool;
-		},
-		removeAllConnection() {
+		removeAllConnection(webSocketPool) {
 			webSocketPool =[];
 		}
 

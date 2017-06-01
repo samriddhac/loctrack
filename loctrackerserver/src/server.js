@@ -17,6 +17,7 @@ app.get('/', function(req, res){
 });
 
 let subscribedconnections = [];
+let webSocketPool =[];
 
 io.on(events.CONNECTION, function(socket){
 
@@ -24,7 +25,7 @@ io.on(events.CONNECTION, function(socket){
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		console.log('Connection request from ', from);
-		socketpool.addToPool({id:from, websocket:socket});
+		socketpool.addToPool({id:from, websocket:socket}, webSocketPool);
 		let websocket = socketpool.getConnectionByID(from);
 		websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});

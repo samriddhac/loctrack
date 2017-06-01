@@ -24,8 +24,9 @@ io.on(events.CONNECTION, function(socket){
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		console.log('Connection request from ', from);
-		socketpool.addToPool({id:from, websocket:io});
-		io.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+		socketpool.addToPool({id:from, websocket:socket});
+		let websocket = socketpool.getConnectionByID(from);
+		websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{

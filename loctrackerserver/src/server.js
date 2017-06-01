@@ -21,12 +21,12 @@ var subscribedconnections = [];
 
 io.on(events.CONNECTION, function(socket){
 
-	console.log('Received connection request ', ++counter);
+	console.log('Received connection request ', ++counter+' socket id ',socket.id);
+	socketpool.addToPool({id:from, websocket:socket.id});
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		try {
-			console.log('Connection request from ', from, 'socket id ', socket.id);
-			socketpool.addToPool({id:from, websocket:socket.id});
+			console.log('Connection received from ', from, 'socket id ', socket.id);
 			let websocket = socketpool.getConnectionByID(from);
 			let wSocketId = websocket.websocket;
 			socket.broadcast.to(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});

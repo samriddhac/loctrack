@@ -137,11 +137,11 @@ export default class App extends Component {
 					                label: 'sub_req',
 					                value: 'sub_req'
 					              }, {
-					                label: 'sub_req_success',
-					                value: 'sub_req_success'
+					                label: 'sub_req_approved',
+					                value: 'sub_req_approved'
 					              }, {
-					                label: 'sub_req_failure',
-					                value: 'sub_req_failure'
+					                label: 'sub_req_denied',
+					                value: 'sub_req_denied'
 					              }, {
 					                label: 'na',
 					                value: 'na'

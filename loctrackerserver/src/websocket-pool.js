@@ -22,7 +22,6 @@ function websocket_pool() {
 					}
 				}
 			}
-			console.log('webSocketPool ',webSocketPool);
 		},
 		removeFromPool: function(conn) {
 			if(webSocketPool!==undefined && webSocketPool!==null) {

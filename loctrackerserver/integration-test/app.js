@@ -11,8 +11,10 @@ function getSocket() {
 	}
 	return socket;
 }
-getSocket().on('message', (msg) => {
-	console.log(msg);
+getSocket().on('message', (from, data) => {
+	console.log('Message received');
+	console.log('From ', from);
+	console.log('data ', data);
 });
 export default class App extends Component {
 

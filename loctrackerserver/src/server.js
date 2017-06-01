@@ -64,7 +64,6 @@ io.on(events.CONNECTION, function(socket){
 				}
 				else {
 					if(!util.isEmpty(data)) {
-						console.log(data);
 						let obj = JSON.parse(data);
 						obj.auth  = {isAuth: true};
 						obj.t = events.TYPE_ACK;
@@ -80,13 +79,19 @@ io.on(events.CONNECTION, function(socket){
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_FAILURE, (from, data)=>{
 		try {
-			let objString = pub.get(from);
-			if(objString!==undefined && objString!==null) {
-				let obj = JSON.parse(objString);
-				obj.t = events.TYPE_ACK;
-				obj.auth = {isAuth: false};
-				socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
-			}
+			pub.get(from, (err, data)=>{
+				if(!util.isEmpty(err)) {
+					console.log('EVENT_ESTABLISH_AUTH_FAILURE ', err);
+				}
+				else {
+					if(!util.isEmpty(data)) {
+						let obj = JSON.parse(data);
+						obj.auth  = {isAuth: false};
+						obj.t = events.TYPE_ACK;
+						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+					}
+				}
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -94,58 +99,95 @@ io.on(events.CONNECTION, function(socket){
 	});
 
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
-		let toObj = JSON.parse(data);
-		
-		console.log(toObj, from);
-
-		let to = toObj.to;
-		let fromItemString = pub.get(from);
-		let toItemString = pub.get(to);
-		let fromItem = JSON.parse(fromItemString);
-		let toItem = JSON.parse(toItemString);
-		_.remove(fromItem.sub, {id:to});
-		fromItem.sub.push({id:to, s:events.STATUS_PENDING});
-		
-		let toWebsocket = socketpool.getConnectionByID(to);
-		let fromWebsocket = socketpool.getConnectionByID(from);
-		if(toWebsocket!==undefined && toWebsocket!==null) {
-			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, to, {from:from, t:events.TYPE_SUB_REQ});
-			if(fromWebsocket!==undefined && fromWebsocket!==null) {
-				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-			}
-			_.remove(toItem.pub, {id:from});
-			toItem.pub.push({id:from, s:events.STATUS_PENDING});
-			pub.set(to, JSON.stringify(toItem));
+		try {
+			let toObj = JSON.parse(data);
+			console.log(toObj, from);
+			let to = toObj.to;
+			pub.get(from, (err, data)=>{
+				if(!util.isEmpty(err)) {
+					console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
+				}
+				else {
+					if(!util.isEmpty(data)) {
+						let fromItem = JSON.parse(data);
+						pub.get(to, (err, data)=>{
+							if(!util.isEmpty(err)) {
+								console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
+							}
+							else {
+								if(!util.isEmpty(data)) {
+									let toItem = JSON.parse(data);
+									_.remove(fromItem.sub, {id:to});
+									fromItem.sub.push({id:to, s:events.STATUS_PENDING});
+									
+									let toWebsocket = socketpool.getConnectionByID(to);
+									if(toWebsocket!==undefined && toWebsocket!==null) {
+										let toSocketId = toWebsocket.websocket;
+										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, to, 
+											{from:from, t:events.TYPE_SUB_REQ});
+										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+												{t:events.TYPE_ACK});
+										_.remove(toItem.pub, {id:from});
+										toItem.pub.push({id:from, s:events.STATUS_PENDING});
+										pub.set(to, JSON.stringify(toItem));
+									}
+									else {
+										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+												{t:events.TYPE_NA});
+									}
+									pub.set(from, JSON.stringify(fromItem));
+								}
+							}
+						});
+					}
+				}
+			});
 		}
-		else {
-			if(fromWebsocket!==undefined && fromWebsocket!==null) {
-				fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_NA});
-			}
+		catch(err) {
+			console.log(err);
 		}
-		pub.set(from, JSON.stringify(fromItem));
 	});
 
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, (from, data)=>{
-		let toObj = JSON.parse(data);
-		let to = toObj.to;
-		let fromItemString = pub.get(from);
-		let toItemString = pub.get(to);
-		let fromItem = JSON.parse(fromItemString);
-		let toItem = JSON.parse(toItemString);
-		let toWebsocket = socketpool.getConnectionByID(to);
-		let fromWebsocket = socketpool.getConnectionByID(from);
-		
-		_.remove(toItem.sub, {id:from});
-		toItem.sub.push({id:from, s:events.STATUS_REJECTED});
+		try {
+			let toObj = JSON.parse(data);
+			console.log(toObj, from);
+			let to = toObj.to;
+			pub.get(from, (err, data)=>{
+				if(!util.isEmpty(err)) {
+					console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
+				}
+				else {
+					if(!util.isEmpty(data)) {
+						let fromItem = JSON.parse(data);
+						pub.get(to, (err, data)=>{
+							if(!util.isEmpty(err)) {
+								console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
+							}
+							else {
+								if(!util.isEmpty(data)) {
+									let toItem = JSON.parse(data);
+									_.remove(toItem.sub, {id:from});
+									toItem.sub.push({id:from, s:events.STATUS_REJECTED});
 
-		_.remove(fromItem.pub, {id:to});
-		fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
-		
-		if(toWebsocket!==undefined && toWebsocket!==null) {
-			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_SUB_REQ_FAILURE});
+									_.remove(fromItem.pub, {id:to});
+									fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
+									let toWebsocket = socketpool.getConnectionByID(to);
+									if(toWebsocket!==undefined && toWebsocket!==null) {
+										let toSocketId = toWebsocket.websocket;
+										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+											{t:events.TYPE_SUB_REQ_DENIED});
+									}
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+								}
+							}
+						});
+					}
+				}
+			});
 		}
-		if(fromWebsocket!==undefined && fromWebsocket!==null) {
-			fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+		catch(err) {
+			console.log(err);
 		}
 	});
 

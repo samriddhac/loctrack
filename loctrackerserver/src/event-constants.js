@@ -22,8 +22,8 @@ module.exports = {
 	TYPE_AUTH_SUCCESS: 'auth_success',
 	TYPE_AUTH_FAILURE: 'auth_failure',
 	TYPE_SUB_REQ: 'sub_req',
-	TYPE_SUB_REQ_SUCCESS: 'sub_req_success',
-	TYPE_SUB_REQ_FAILURE: 'sub_req_failure',
+	TYPE_SUB_REQ_APPROVED: 'sub_req_approved',
+	TYPE_SUB_REQ_DENIED: 'sub_req_denied',
 	TYPE_NA: 'na',
 
 	STATUS_PENDING: 'p',

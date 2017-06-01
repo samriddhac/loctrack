@@ -23,7 +23,9 @@ io.on(events.CONNECTION, function(socket){
 	console.log('Received connection request ', ++counter);
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
+		console.log('Connection request from ', from);
 		socketpool.addToPool({id:from, websocket:socket});
+		console.log('Connection no ',socketpool.getAllConnection().length);
 		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 	});
 

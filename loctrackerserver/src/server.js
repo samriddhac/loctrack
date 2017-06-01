@@ -7,6 +7,7 @@ const sub = require('redis-connection')('subscriber');
 const _ = require('lodash');
 const events = require('./event-constants');
 const socketpool = require('./websocket-pool');
+const util = require('./util');
 
 var counter = 0;
 
@@ -57,14 +58,20 @@ io.on(events.CONNECTION, function(socket){
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
 		try {
-			let objString = pub.get(from);
-			console.log(objString);
-			if(objString!==undefined && objString!==null) {
-				let obj = JSON.parse(objString);
-				obj.auth  = {isAuth: true};
-				obj.t = events.TYPE_ACK;
-				socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
-			}
+			pub.get(from, (err, data)=>{
+				if(!util.isEmpty(err)) {
+					console.log('EVENT_ESTABLISH_AUTH_SUCCESS ', err);
+				}
+				else {
+					if(!util.isEmpty(data)) {
+						console.log(data);
+						let obj = JSON.parse(data);
+						obj.auth  = {isAuth: true};
+						obj.t = events.TYPE_ACK;
+						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+					}
+				}
+			});
 		}
 		catch(err) {
 			console.log(err);

@@ -40,9 +40,9 @@ function websocket_pool() {
 			}
 		},
 		getConnectionByID: function(id) {
+			let selectedConnection = {};
 			if(webSocketPool!==undefined && webSocketPool!==null
 				&& webSocketPool.length !== 0) {
-				let selectedConnection = {};
 				webSocketPool.forEach((item)=>{
 					if(item.id ==id) {
 						selectedConnection = item;

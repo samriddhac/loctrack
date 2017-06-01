@@ -1,51 +1,50 @@
-
-let webSocketPool = [];
+'use strict';
 
 function websocket_pool() {
-	this.webSocketPool =[];
+	let webSocketPool =[];
 
 	return {
 
 		addToPool: function(conn) {
-			if(this.webSocketPool!==undefined && this.webSocketPool!==null) {
-				if(this.webSocketPool.length === 0 ) {
-					this.webSocketPool.push(conn);
+			if(webSocketPool!==undefined && webSocketPool!==null) {
+				if(webSocketPool.length === 0 ) {
+					webSocketPool.push(conn);
 				}
 				else {
 					let exists = false;
-					this.webSocketPool.forEach((item)=>{
+					webSocketPool.forEach((item)=>{
 						if(item.id ==conn.id) {
 							exists = true;
 						}
 					});
 					if(!exists) {
-						this.webSocketPool.push(conn);
+						webSocketPool.push(conn);
 					}
 				}
 			}
-			console.log('this.webSocketPool ',this.webSocketPool);
+			console.log('webSocketPool ',webSocketPool);
 		},
 		removeFromPool: function(conn) {
-			if(this.webSocketPool!==undefined && this.webSocketPool!==null) {
-				if(this.webSocketPool.length !== 0 ){
+			if(webSocketPool!==undefined && webSocketPool!==null) {
+				if(webSocketPool.length !== 0 ){
 					let matchIndex = -1;
-					for(let index=0; index<this.webSocketPool.length; index++) {
-						let item = this.webSocketPool[index];
+					for(let index=0; index<webSocketPool.length; index++) {
+						let item = webSocketPool[index];
 						if(item.id ==conn.id) {
 							matchIndex = index;
 						}
 					}
 					if(matchIndex>0) {
-						this.webSocketPool.splice(matchIndex, 1);
+						webSocketPool.splice(matchIndex, 1);
 					}
 				}
 			}
 		},
 		getConnectionByID: function(id) {
-			if(this.webSocketPool!==undefined && this.webSocketPool!==null
-				&& this.webSocketPool.length !== 0) {
+			if(webSocketPool!==undefined && webSocketPool!==null
+				&& webSocketPool.length !== 0) {
 				let selectedConnection = {};
-				this.webSocketPool.forEach((item)=>{
+				webSocketPool.forEach((item)=>{
 					if(item.id ==conn.id) {
 						selectedConnection = item;
 					}
@@ -54,10 +53,10 @@ function websocket_pool() {
 			return selectedConnection;
 		},
 		getAllConnection: function() {
-			return this.webSocketPool;
+			return webSocketPool;
 		},
 		removeAllConnection() {
-			this.webSocketPool =[];
+			webSocketPool =[];
 		}
 
 	}

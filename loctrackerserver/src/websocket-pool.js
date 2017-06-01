@@ -8,7 +8,7 @@ function websocket_pool() {
 
 		addToPool: function(conn) {
 			if(this.webSocketPool!==undefined && this.webSocketPool!==null) {
-				if(this.webSocketPool.length === 0 ){
+				if(this.webSocketPool.length === 0 ) {
 					this.webSocketPool.push(conn);
 				}
 				else {
@@ -23,6 +23,7 @@ function websocket_pool() {
 					}
 				}
 			}
+			console.log('this.webSocketPool ',this.webSocketPool);
 		},
 		removeFromPool: function(conn) {
 			if(this.webSocketPool!==undefined && this.webSocketPool!==null) {

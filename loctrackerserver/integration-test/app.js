@@ -29,7 +29,11 @@ export default class App extends Component {
 			o.t = values.type;
 		}
 		if(values.to!==undefined && values.to!==null) {
-			getSocket().emit(values.events, values.to, JSON.stringify(o));
+			o.to = values.to;
+		}
+		console.log('JSON.stringify(o) ',JSON.stringify(o));
+		if(values.from!==undefined && values.from!==null) {
+			getSocket().emit(values.events, values.from, JSON.stringify(o));
 		}
 		else {
 			getSocket().emit(values.events, JSON.stringify(o));
@@ -43,7 +47,10 @@ export default class App extends Component {
 			o.t = values.type;
 		}
 		if(values.to!==undefined && values.to!==null) {
-			getSocket().emit(values.events, values.to, JSON.stringify(o));
+			o.to = values.to;
+		}
+		if(values.from!==undefined && values.from!==null) {
+			getSocket().emit(values.events, values.from, JSON.stringify(o));
 		}
 		else {
 			getSocket().emit(values.events, JSON.stringify(o));
@@ -62,7 +69,7 @@ export default class App extends Component {
 					    {({submitForm}) => {
 					      return (
 					        <form onSubmit={submitForm}>
-					          <span><label>From</label><Text field='no' /></span>
+					          <span><label>From</label><Text field='from' /></span>
 					          <span><label>To</label><Text field='to' /></span>
 					          <Select // This is the built-in Select formInput 
 					              field='events'
@@ -160,7 +167,7 @@ export default class App extends Component {
 					    {({submitForm}) => {
 					      return (
 					        <form onSubmit={submitForm}>
-					          <span><label>No</label><Text field='no' /></span>
+					          <span><label>No</label><Text field='from' /></span>
 					          <span><label>To</label><Text field='to' /></span>
 					          <Select // This is the built-in Select formInput 
 					              field='events'

@@ -25,12 +25,11 @@ io.on(events.CONNECTION, function(socket){
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
 		try {
-			console.log('Connection request from ', from);
+			console.log('Connection request from ', from, 'socket id ', socket.id);
 			socketpool.addToPool({id:from, websocket:socket.id});
 			let websocket = socketpool.getConnectionByID(from);
 			let wSocketId = websocket.websocket;
-			console.log(socket.broadcast.to(wSocketId));
-			io.broadcast.to(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			socket.broadcast.to(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 		}
 		catch(err) {
 			console.log(err);

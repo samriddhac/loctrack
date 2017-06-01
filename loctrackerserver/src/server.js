@@ -28,17 +28,7 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			socketpool.addToPool({id:from, websocket:socket.id});
 			console.log('Connection received from ', from, 'socket id ', socket.id);
-			let websocket = socketpool.getConnectionByID(from);
-			let wSocketId = websocket.websocket;
-			let aSock = '';
-			for (var i = 0; i < t.length; i++) {
-				if(t[i]!==socket.id) {
-					aSock = t[i];
-					break;
-				}
-			}
-			socket.broadcast.to(aSock).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
-			//socket.broadcast.to(socket.id).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 		}
 		catch(err) {
 			console.log(err);
@@ -46,43 +36,52 @@ io.on(events.CONNECTION, function(socket){
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{
-		let obj = {
-			id: from,
-			sub:[],
-			pub:[],
-			auth: {
-				isAuth: false,
-				otp: "1235"
-			}
-		};
-		pub.set(from, JSON.stringify(obj));
-		let websocket = socketpool.getConnectionByID(from);
-		console.log(websocket);
-		if(websocket!==undefined) {
+		try {
+			let obj = {
+				id: from,
+				sub:[],
+				pub:[],
+				auth: {
+					isAuth: false,
+					otp: "1235"
+				}
+			};
+			pub.set(from, JSON.stringify(obj));
 			obj.t = events.TYPE_AUTH_VALIDATE;
-			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+		}
+		catch(err) {
+			console.log(err);
 		}
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
-		let objString = pub.get(from);
-		if(objString!==undefined && objString!==null) {
-			let obj = JSON.parse(objString);
-			obj.auth  = {isAuth: true};
-			let websocket = socketpool.getConnectionByID(from);
-			obj.t = events.TYPE_ACK;
-			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+		try {
+			let objString = pub.get(from);
+			if(objString!==undefined && objString!==null) {
+				let obj = JSON.parse(objString);
+				obj.auth  = {isAuth: true};
+				obj.t = events.TYPE_ACK;
+				socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			}
+		}
+		catch(err) {
+			console.log(err);
 		}
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_FAILURE, (from, data)=>{
-		let objString = pub.get(from);
-		if(objString!==undefined && objString!==null) {
-			let obj = JSON.parse(objString);
-			let websocket = socketpool.getConnectionByID(from);
-			obj.t = events.TYPE_ACK;
-			obj.auth = {isAuth: false};
-			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+		try {
+			let objString = pub.get(from);
+			if(objString!==undefined && objString!==null) {
+				let obj = JSON.parse(objString);
+				obj.t = events.TYPE_ACK;
+				obj.auth = {isAuth: false};
+				socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			}
+		}
+		catch(err) {
+			console.log(err);
 		}
 	});
 

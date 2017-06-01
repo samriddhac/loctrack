@@ -24,12 +24,17 @@ io.on(events.CONNECTION, function(socket){
 	console.log('Received connection request ', ++counter);
 
 	socket.on(events.EVENT_CONNECTION_ESTABLISHED, (from, data)=>{
-		console.log('Connection request from ', from);
-		socketpool.addToPool({id:from, websocket:socket.id});
-		let websocketId = socketpool.getConnectionByID(from);
-		let wSocketId = websocketId.websocket;
-		console.log(socket.broadcast.to(wSocketId));
-		socket.broadcast.to(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+		try {
+			console.log('Connection request from ', from);
+			socketpool.addToPool({id:from, websocket:socket.id});
+			let websocket = socketpool.getConnectionByID(from);
+			let wSocketId = websocket.websocket;
+			console.log(socket.broadcast.to(wSocketId));
+			io.broadcast.to(wSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+		}
+		catch(err) {
+			console.log(err);
+		}
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{

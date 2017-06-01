@@ -30,7 +30,8 @@ io.on(events.CONNECTION, function(socket){
 			console.log('Connection received from ', from, 'socket id ', socket.id);
 			let websocket = socketpool.getConnectionByID(from);
 			let wSocketId = websocket.websocket;
-			socket.broadcast.to(socket.id).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			//socket.broadcast.to(socket.id).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 		}
 		catch(err) {
 			console.log(err);

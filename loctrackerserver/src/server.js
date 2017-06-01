@@ -40,8 +40,11 @@ io.on(events.CONNECTION, function(socket){
 		};
 		pub.set(from, JSON.stringify(obj));
 		let websocket = socketpool.getConnectionByID(from);
-		obj.t = events.TYPE_AUTH_VALIDATE;
-		websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+		console.log(websocket);
+		if(websocket!==undefined) {
+			obj.t = events.TYPE_AUTH_VALIDATE;
+			websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+		}
 	});
 
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{

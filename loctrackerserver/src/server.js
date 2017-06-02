@@ -192,26 +192,47 @@ io.on(events.CONNECTION, function(socket){
 	});
 
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, (from, data)=>{
-		let toObj = JSON.parse(data);
-		let to = toObj.to;
-		let fromItemString = pub.get(from);
-		let toItemString = pub.get(to);
-		let fromItem = JSON.parse(fromItemString);
-		let toItem = JSON.parse(toItemString);
-		let toWebsocket = socketpool.getConnectionByID(to);
-		let fromWebsocket = socketpool.getConnectionByID(from);
-		_.remove(toItem.sub, {id:from});
-		toItem.sub.push({id:from, s:events.STATUS_APPROVED});
+		try {
+			let toObj = JSON.parse(data);
+			console.log(toObj, from);
+			let to = toObj.to;
+			pub.get(from, (err, data)=>{
+				if(!util.isEmpty(err)) {
+					console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
+				}
+				else {
+					if(!util.isEmpty(data)) {
+						let fromItem = JSON.parse(data);
+						pub.get(to, (err, data)=>{
+							if(!util.isEmpty(err)) {
+								console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
+							}
+							else {
+								if(!util.isEmpty(data)) {
+									let toItem = JSON.parse(data);
+									_.remove(toItem.sub, {id:from});
+									toItem.sub.push({id:from, s:events.STATUS_APPROVED});
 
-		_.remove(fromItem.pub, {id:to});
-		fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
-		if(toWebsocket!==undefined && toWebsocket!==null) {
-			toWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_SUB_REQ_SUCCESS});
+									_.remove(fromItem.pub, {id:to});
+									fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
+									let toWebsocket = socketpool.getConnectionByID(to);
+									if(toWebsocket!==undefined && toWebsocket!==null) {
+										let toSocketId = toWebsocket.websocket;
+										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+											{t:events.TYPE_SUB_REQ_APPROVED});
+										sub.subscribe(from, to);
+									}
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+								}
+							}
+						});
+					}
+				}
+			});
 		}
-		if(fromWebsocket!==undefined && fromWebsocket!==null) {
-			fromWebsocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+		catch(err) {
+			console.log(err);
 		}
-		sub.subscribe(from);
 	});
 
 	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
@@ -220,11 +241,7 @@ io.on(events.CONNECTION, function(socket){
 
 	
 	socket.on(events.EVENT_STOP_SUBSCRIPTION, (from, data)=>{
-		subscribedconnections.push({
-			channel:dataObj.to,
-			websocket:socket
-		});
-		sub.subscribe(dataObj.to);
+		
 	});
 	
 	socket.on(events.EVENT_STOP_PUBLISH, (from, data)=>{
@@ -234,9 +251,19 @@ io.on(events.CONNECTION, function(socket){
 sub.on(events.EVENT_ON_LOCATION_RECEIVE, (channel, message)=>{
 	console.log(channel);
 	console.log(message);
+	pub.get(channel, (err, data)=>{
+		if(!util.isEmpty(err)) {
+			console.log('SUBS EVENT_ON_LOCATION_RECEIVE ', err);
+		}
+		else {
+			if(!util.isEmpty(data)) {
+				let fromItem = JSON.parse(data);
+			}
+		}
+	});
 	subscribedconnections.forEach((item)=>{
 		if(item.channel === channel) {
-			item.websocket.emit(events.EVENT_ON_LOCATION_RECEIVE, message);
+			item.websocket.emit(events.EVENT_ON_MESSAGE_RECEIVE, message);
 		}
 	});
 });

@@ -17,9 +17,17 @@ class SubscribeList extends Component {
 	}
 
 	componentWillMount() {
+		this.setDataSource(this.props);
+	}
+
+	componentWillReceiveProps(nextProps){
+		this.setDataSource(nextProps);
+	}
+
+	setDataSource(props) {
 		let subdataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		this.setState({ 
-			subdataSource:subdataSource.cloneWithRows(this.props.subscribedTo)
+			subdataSource:subdataSource.cloneWithRows(props.subscribedTo)
 		});
 	}
 	_goToMap() {
@@ -31,7 +39,6 @@ class SubscribeList extends Component {
 	}
 
 	_renderRow(data, sectionId, rowId, highlight) {
-		console.log('calling rowdata');
 		let thumbnail = require('../../modules/images/icons/default.jpg');
 		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
 			&& data.thumbnailPath!=='') {
@@ -94,8 +101,14 @@ class SubscribeList extends Component {
 }
 
 function mapStateToProps(state) {
+	let sub = [];
+	if(state.contactState!==undefined && state.contactState!==null
+		&& state.contactState.subscribedTo!==undefined 
+		&& state.contactState.subscribedTo!==null) {
+		sub = state.contactState.subscribedTo;
+	}
 	return {
-		subscribedTo: state.contactState.subscribedTo
+		subscribedTo: sub
 	};
 }
 export default connect(mapStateToProps, {changeView})(SubscribeList);

@@ -1,4 +1,16 @@
 import _ from 'lodash';
+import { AsyncStorage } from 'react-native';
+import { STATE } from '../common/constants';
+
+export const saveState = async (state) => {
+	try {
+		const serializedState = JSON.stringify(state);
+		await AsyncStorage.setItem(STATE, serializedState);
+	}
+	catch(err) {
+		console.error(err);
+	}
+}
 
 export function convertContacts(cntList) {
 	let contacts = [];
@@ -47,19 +59,24 @@ function trimNo(input) {
 }
 
 export function mergedList(a1, a2) {
-	if(a1!==undefined && a1!==null && a1.length>0) {
-		let exists = false;
-		a1.forEach((item)=>{
-			if(item.recordID === a2.recordID){
-				exists = true;
+	try{
+		if(a1!==undefined && a1!==null && a1.length>0) {
+			let exists = false;
+			a1.forEach((item)=>{
+				if(item.recordID === a2.recordID){
+					exists = true;
+				}
+			});
+			if(!exists){
+				a1 = [...a1, a2];
 			}
-		});
-		if(!exists){
-			a1 = [...a1, a2];
+		}
+		else {
+			a1 = [a2];
 		}
 	}
-	else {
-		a1 = [...a1, a2];
+	catch(err) {
+		console.log(err);
 	}
     return a1; 
 } 

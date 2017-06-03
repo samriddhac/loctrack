@@ -17,7 +17,7 @@ class SearchBoxView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
-			text: 'Search Contacts...',
+			text: '',
 			behavior: 'padding' 
 		};
 		this._backHome = this._backHome.bind(this);
@@ -108,7 +108,7 @@ class SearchBoxView extends Component {
 						style={[styles.searchBack]} onPress={this._backHome}/>
 					<TextInput onChangeText={(text) => this._filterData(text)}
 						underlineColorAndroid='rgba(0,0,0,0)'
-        				defaultValue={this.state.text} 
+        				placeholder='Search Contacts...'
         				style={[styles.TextInputStyle]} />
 				</KeyboardAvoidingView>
 				<View style={styles.searchResultContainer}>

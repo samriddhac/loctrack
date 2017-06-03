@@ -1,6 +1,7 @@
-import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER} from '../actions/action-types';
+import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER, GET_PERSISTED_STATE, SET_MY_CONTACT} from '../actions/action-types';
 import {convertContacts, mergedList} from '../utils/utilities';
 INITIAL_STATE = {
+	myContact:'',
 	contacts: [],
 	subscribedTo:[],
 	publishingTo:[]
@@ -13,6 +14,14 @@ export default function(state=INITIAL_STATE, action) {
 		case ADD_TO_SUBSCRIBER: 
 			let subsList = mergedList(state.subscribedTo, action.payload);
 			return {...state, subscribedTo: subsList};
+		case GET_PERSISTED_STATE: 
+			console.log('action.payload ',action.payload);
+			return {...state,
+				myContact: action.payload.myContact, 
+				subscribedTo: action.payload.subscribedTo,
+				publishingTo: action.payload.publishingTo};
+		case SET_MY_CONTACT:
+			return {...state, myContact: action.payload};
 		default:
 			return state;
 	}

@@ -183,6 +183,36 @@ const styles = StyleSheet.create({
   mylocMarker: {
     width: 20,
     height: 20
+  },
+  registerContainer: {
+    flex:8,
+    justifyContent: 'center',
+    alignItems: 'stretch'
+  },
+  TextInputStyleReg: {
+    alignItems: 'stretch',
+    fontSize: 20,
+    margin:10,
+    fontFamily: 'notoserif',
+    height: 44,
+    paddingHorizontal: 10
+  },
+  regItems: {
+    alignItems: 'stretch'
+  },
+  regItemsButton: {
+    alignItems: 'center'
+  },
+  welcomeStyle: {
+    padding:20,
+    fontFamily: 'notoserif',
+    color: '#4A44F2'
+  },
+  regItemsTextInput: {
+    alignItems: 'stretch'
+  },
+  roundBtn: {
+    borderRadius: 10
   }
 });
 export default styles;

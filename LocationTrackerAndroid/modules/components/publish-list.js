@@ -60,8 +60,14 @@ class PublishList extends Component {
 }
 
 function mapStateToProps(state) {
+	let pub = []
+	if(state.contactState!==undefined && state.contactState!==null
+		&& state.contactState.publishingTo!==undefined 
+		&& state.contactState.publishingTo!==null) {
+		pub = state.contactState.publishingTo;
+	}
 	return {
-		publishingTo: state.contactState.publishingTo
+		publishingTo: pub
 	};
 }
 export default connect(mapStateToProps)(PublishList);

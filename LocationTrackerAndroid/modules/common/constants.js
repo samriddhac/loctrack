@@ -1,5 +1,6 @@
 export const LOCATION_SERVER = 'http://54.186.102.87:7000';
 
+export const VIEW_REGISTER = 0;
 export const VIEW_HOME = 1;
 export const VIEW_MAP = 2;
 export const VIEW_MEDIA = 3;
@@ -29,10 +30,13 @@ export const TYPE_AUTH_VALIDATE = 'auth_validate';
 export const TYPE_AUTH_SUCCESS = 'auth_success';
 export const TYPE_AUTH_FAILURE = 'auth_failure';
 export const TYPE_SUB_REQ = 'sub_req';
-export const TYPE_SUB_REQ_SUCCESS = 'sub_req_success';
-export const TYPE_SUB_REQ_FAILURE = 'sub_req_failure';
+export const TYPE_SUB_REQ_APPROVED = 'sub_req_approved';
+export const TYPE_SUB_REQ_DENIED = 'sub_req_denied';
 export const TYPE_NA = 'na';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';
 export const STATUS_REJECTED = 'r';
+
+export const MY_CONTACT = 'contantno';
+export const STATE = 'state';

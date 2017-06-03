@@ -1,15 +1,37 @@
 import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS, 
 	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER,
-	SET_MY_LOCATION} from './action-types';
+	SET_MY_LOCATION, GET_PERSISTED_STATE,
+	SET_MY_CONTACT} from './action-types';
 import {getSocket} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
 	EVENT_ALLOW_SUBSCRIPTION, EVENT_DENY_SUBSCRIPTION,
 	EVENT_PUBLISH_LOCATION, EVENT_STOP_PUBLISH,
 	EVENT_ON_MESSAGE_RECEIVE, STATUS_SENT, STATUS_PENDING,
-	STATUS_APPROVED} from '../common/constants';
+	STATUS_APPROVED, STATE} from '../common/constants';
+import {AsyncStorage} from 'react-native';
 
+export function loadPersistedState(data) {
+	return {
+		type: GET_PERSISTED_STATE,
+		payload: data
+	};
+}
 
+export function setMyContact(contactno, state) {
+	return (dispatch) => {
+		let updatedState = {subscribedTo:state.subscribedTo,
+			publishingTo:state.publishingTo, myContact:contactno};
+		let serializedState = JSON.stringify(updatedState);
+		console.log('serializedState ', serializedState);
+		AsyncStorage.setItem(STATE, serializedState).then((result)=>{
+			 return dispatch({
+			 	type: SET_MY_CONTACT,
+			 	payload: contactno
+			 });
+		});
+	};
+}
 export function changeView(value) {
 	return {
 		type:CHANGE_VIEW,

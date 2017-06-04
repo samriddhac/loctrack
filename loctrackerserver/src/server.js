@@ -172,7 +172,9 @@ io.on(events.CONNECTION, function(socket){
 
 									_.remove(fromItem.pub, {id:to});
 									fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
+									console.log('to ',to);
 									let toWebsocket = socketpool.getConnectionByID(to);
+									console.log('toWebsocket ',toWebsocket);
 									if(toWebsocket!==undefined && toWebsocket!==null) {
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 

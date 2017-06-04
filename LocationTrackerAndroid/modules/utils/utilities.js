@@ -55,6 +55,7 @@ export function trimNo(input) {
 	output = replaceAll(output,'+','');
 	output = replaceAll(output,'(','');
 	output = replaceAll(output,')','');
+	output = output.substr(output.length - 10);
 	return output;
 }
 
@@ -84,7 +85,23 @@ export function mergedList(a1, a2) {
 	}
     return a1; 
 } 
-
+export function updateStatus(items, data) {
+	let itemList = [];
+	try {
+		if(items!==undefined && items!==null && items.length>0) {
+			items.forEach((item)=>{
+				if(item.phno === data.from){
+					item.status = data.status;
+				}
+			});
+			itemList = [...items];
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+	return itemList;
+}
 export function getStatus(s) {
 	if(s !==undefined && s !== null && s !== '') {
 		switch(s) {

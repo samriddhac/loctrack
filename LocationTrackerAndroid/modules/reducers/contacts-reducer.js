@@ -1,5 +1,8 @@
-import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER, GET_PERSISTED_STATE, SET_MY_CONTACT} from '../actions/action-types';
-import {convertContacts, mergedList} from '../utils/utilities';
+import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER,
+	 GET_PERSISTED_STATE, SET_MY_CONTACT,
+		UPDATE_SUBS_STATUS} from '../actions/action-types';
+import {convertContacts, mergedList,
+	updateStatus} from '../utils/utilities';
 INITIAL_STATE = {
 	myContact:'',
 	contacts: [],
@@ -22,6 +25,8 @@ export default function(state=INITIAL_STATE, action) {
 				publishingTo: action.payload.publishingTo};
 		case SET_MY_CONTACT:
 			return {...state, myContact: action.payload};
+		case UPDATE_SUBS_STATUS: 
+			return {...state, subscribedTo: updateStatus(state.subscribedTo, action.payload)}
 		default:
 			return state;
 	}

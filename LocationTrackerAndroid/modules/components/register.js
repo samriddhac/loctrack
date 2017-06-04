@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import styles from '../styles/style';
 import {setMyContact, changeView} from '../actions/index';
 import {VIEW_HOME, STATE} from '../common/constants';
-import {initConnection} from '../websocket-receiver';
+import {initConnection, initAuth} from '../websocket-receiver';
 import {trimNo} from '../utils/utilities';
 
 
@@ -32,6 +32,7 @@ class RegisterView extends Component {
 				this.props.changeView(VIEW_HOME);
 				let from = cn;
 				initConnection(from);
+				initAuth(from);
 				ToastAndroid.showWithGravity('Registered Successfully!!', ToastAndroid.SHORT, ToastAndroid.TOP);
 			});
 			

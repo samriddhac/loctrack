@@ -101,7 +101,6 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		try {
 			let toObj = JSON.parse(data);
-			console.log(toObj, from);
 			let to = toObj.to;
 			pub.get(from, (err, data)=>{
 				if(!util.isEmpty(err)) {
@@ -151,7 +150,6 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, (from, data)=>{
 		try {
 			let toObj = JSON.parse(data);
-			console.log(toObj, from);
 			let to = toObj.to;
 			pub.get(from, (err, data)=>{
 				if(!util.isEmpty(err)) {
@@ -169,10 +167,8 @@ io.on(events.CONNECTION, function(socket){
 									let toItem = JSON.parse(data);
 									_.remove(toItem.sub, {id:from});
 									toItem.sub.push({id:from, s:events.STATUS_REJECTED});
-
 									_.remove(fromItem.pub, {id:to});
 									fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
-									console.log('to ',to);
 									let toWebsocket = socketpool.getConnectionByID(to);
 									console.log('toWebsocket ',toWebsocket);
 									if(toWebsocket!==undefined && toWebsocket!==null) {

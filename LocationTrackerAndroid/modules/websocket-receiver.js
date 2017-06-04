@@ -8,7 +8,8 @@ import { EVENT_ON_MESSAGE_RECEIVE, LOCATION_SERVER,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
 	 TYPE_NA, TYPE_LOC} from './common/constants';
-import { updateLocation } from './actions/index';
+import { updateLocation, updateSubscriberStateAccepted,
+		updateSubscriberStateRejected } from './actions/index';
 import { ToastAndroid } from 'react-native';
 var socket = null;
 
@@ -17,46 +18,83 @@ export function startWebSocketReceiving(store) {
 	socket.on(EVENT_ON_MESSAGE_RECEIVE, (from, msg) => {
 		console.log('msg ', msg);
 		ToastAndroid.show(JSON.stringify(msg), ToastAndroid.LONG, ToastAndroid.TOP);
-		if(msg!==undefined && msg!==null) {
-			let obj = msg;
-			if(obj!==undefined && obj!==null
-				&& obj.t!==undefined && obj.t!==null) {
-				switch(obj.t) {
-					case TYPE_CONN_ACK:
+		let obj = msg;
+		if(obj!==undefined && obj!==null
+			&& obj.t!==undefined && obj.t!==null) {
+			switch(obj.t) {
+				case TYPE_CONN_ACK:
+					console.log('Connection established');
+					break;
+				case TYPE_ACK:
+					console.log('Ackowledged!');
+					break;
+				case TYPE_AUTH_REQ:
+					break;
+				case TYPE_AUTH_VALIDATE:
+					break;
+				case TYPE_AUTH_SUCCESS:
+					break;
+				case TYPE_AUTH_FAILURE:
+					break;
+				case TYPE_SUB_REQ:
 
-					case TYPE_ACK:
+					break;
+				case TYPE_SUB_REQ_APPROVED:
+					store.dispatch(updateSubscriberStateAccepted(from));
+					break;
+				case TYPE_SUB_REQ_DENIED:
+					store.dispatch(updateSubscriberStateRejected(from));
+					break;
+				case TYPE_NA:
+					ToastAndroid.show('User offline!', ToastAndroid.SHORT, ToastAndroid.TOP);
+					break;
+				case TYPE_LOC:
 
-					case TYPE_AUTH_REQ:
-
-					case TYPE_AUTH_VALIDATE:
-
-					case TYPE_AUTH_SUCCESS:
-
-					case TYPE_AUTH_FAILURE:
-
-					case TYPE_SUB_REQ:
-
-					case TYPE_SUB_REQ_APPROVED:
-
-					case TYPE_SUB_REQ_DENIED:
-
-					case TYPE_NA:
-
-					case TYPE_LOC:
-				}
+					break;
 			}
 		}
-		store.dispatch(updateLocation(msg));
 	});
-
+	socket.on("connect", function(){
+        console.log("client connected from server");
+        let state = store.getState();
+        if(state!==undefined && state!==null && 
+        	state.contactState!==undefined &&
+        	state.contactState!==null &&
+        	state.contactState.myContact!==undefined &&
+        	state.contactState.myContact!==null &&
+        	state.contactState.myContact!=='') {
+        	let from = state.contactState.myContact;
+        	if(from!==undefined && from!==null && from!=='') {
+	        	initConnection(from);
+	        }
+        }
+    });
+    socket.on("reconnect", function(){
+        console.log("client reconnected from server");
+        let state = store.getState();
+        if(state!==undefined && state!==null && 
+        	state.contactState!==undefined &&
+        	state.contactState!==null &&
+        	state.contactState.myContact!==undefined &&
+        	state.contactState.myContact!==null &&
+        	state.contactState.myContact!=='') {
+        	let from = state.contactState.myContact;
+        	if(from!==undefined && from!==null && from!=='') {
+	        	initConnection(from);
+	        }
+        }  
+    });
 	socket.on("disconnect", function(){
         console.log("client disconnected from server");
     });
 }
 
+export function initAuth(from) {
+	getSocket().emit(EVENT_ESTABLISH_AUTH, from);
+}
+
 export function initConnection(from) {
 	getSocket().emit(EVENT_CONNECTION_ESTABLISHED, from);
-	getSocket().emit(EVENT_ESTABLISH_AUTH, from);
 }
 
 export function subscriptionRequest(from, obj) {

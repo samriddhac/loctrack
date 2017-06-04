@@ -10,15 +10,18 @@ function websocket_pool() {
 					webSocketPool.push(conn);
 				}
 				else {
-					let exists = false;
+					let index = 0;
+					let counter = -1;
 					webSocketPool.forEach((item)=>{
+						index++;
 						if(item.id ==conn.id) {
-							exists = true;
+							counter = index;
 						}
 					});
-					if(!exists) {
-						webSocketPool.push(conn);
+					if(counter>-1) {
+						webSocketPool = webSocketPool.splice(counter, 1);
 					}
+					webSocketPool.push(conn);
 				}
 			}
 		},

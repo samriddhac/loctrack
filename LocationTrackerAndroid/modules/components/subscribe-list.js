@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import styles from '../styles/style';
 import { VIEW_MAP } from '../common/constants';
 import {changeView} from '../actions/index';
+import { getStatus } from '../utils/utilities';
 
 class SubscribeList extends Component {
 
@@ -54,7 +55,7 @@ class SubscribeList extends Component {
 			name = name + ' ' + data.familyName;
 		}
 		return(
-			<View style={styles.row}>
+			<View style={styles.rowSub}>
 				<View style={[styles.contactContainer]}>
 					<Image style={styles.thumb} source={thumbnail}
 		            defaultSource={require('../../modules/images/icons/default.jpg')} />
@@ -62,18 +63,25 @@ class SubscribeList extends Component {
 		              {name}
 		            </Text>
 				</View>
-				<TouchableOpacity onPress={()=>{
-						this._goToMap(data);
-					}}>
-					<MaterialCommunityIcons name="map-marker-multiple" size={35} 
-						style={[styles.mapButton]} />
-				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>{
-						this._stopSubscription(data);
-					}}>
-					<Octicons name="stop" size={35} 
-						style={[styles.stopButton]} />
-				</TouchableOpacity>
+				<View style={[styles.subRightContainer]}>
+					<View style={[styles.subRightBtnContainer]}>
+						<TouchableOpacity onPress={()=>{
+								this._goToMap(data);
+							}}>
+							<MaterialCommunityIcons name="map-marker-multiple" size={35} 
+								style={[styles.mapButton]} />
+						</TouchableOpacity>
+						<TouchableOpacity onPress={()=>{
+								this._stopSubscription(data);
+							}}>
+							<Octicons name="stop" size={35} 
+								style={[styles.stopButton]} />
+						</TouchableOpacity>
+					</View>
+					<View style={[styles.statusTextContainer]}>
+						<Text style={[styles.statusText]}>{getStatus(data.status)}</Text>
+					</View>
+				</View>
           	</View>
 		);
 	}

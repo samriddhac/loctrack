@@ -17,19 +17,10 @@ export function loadPersistedState(data) {
 		payload: data
 	};
 }
-
 export function setMyContact(contactno, state) {
-	return (dispatch) => {
-		let updatedState = {subscribedTo:state.subscribedTo,
-			publishingTo:state.publishingTo, myContact:contactno};
-		let serializedState = JSON.stringify(updatedState);
-		console.log('serializedState ', serializedState);
-		AsyncStorage.setItem(STATE, serializedState).then((result)=>{
-			 return dispatch({
-			 	type: SET_MY_CONTACT,
-			 	payload: contactno
-			 });
-		});
+	return {
+		type: SET_MY_CONTACT,
+		payload: contactno
 	};
 }
 export function changeView(value) {
@@ -40,11 +31,6 @@ export function changeView(value) {
 }
 
 export function requestLocation(data) {
-	let objData = {
-		to: data.phno,
-		from: '9717477347'
-	};
-	//getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, data.phno, JSON.stringify(objData));;
 	return {
 		type:ADD_TO_SUBSCRIBER,
 		payload: data

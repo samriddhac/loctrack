@@ -33,6 +33,7 @@ export const TYPE_SUB_REQ = 'sub_req';
 export const TYPE_SUB_REQ_APPROVED = 'sub_req_approved';
 export const TYPE_SUB_REQ_DENIED = 'sub_req_denied';
 export const TYPE_NA = 'na';
+export const TYPE_LOC = 'loc';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';

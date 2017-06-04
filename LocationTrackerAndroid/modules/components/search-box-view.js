@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import {Text, View, TextInput, 
 	ListView, Image, ScrollView, 
 	TouchableOpacity,
-	KeyboardAvoidingView} from 'react-native';
+	KeyboardAvoidingView,
+	ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import {changeView, requestLocation} from '../actions/index';
-import { VIEW_HOME } from '../common/constants';
+import { VIEW_HOME, STATUS_PENDING} from '../common/constants';
+import {subscriptionRequest} from '../websocket-receiver';
 
 class SearchBoxView extends Component {
 
@@ -40,6 +42,13 @@ class SearchBoxView extends Component {
 	}
 
 	_requestLocation(data) {
+		let from = this.props.myContact;
+		let obj = {
+			to: data.phno
+		};
+		subscriptionRequest(from, obj);
+		data.status = STATUS_PENDING;
+		ToastAndroid.showWithGravity('Location request sent!!', ToastAndroid.LONG, ToastAndroid.TOP);
 		this.props.requestLocation(data);
 	}
 	_publishLocation(data) {
@@ -87,14 +96,18 @@ class SearchBoxView extends Component {
 				<TouchableOpacity onPress={()=>{
 						this._publishLocation(data);
 					}}>
-					<Octicons name="broadcast" size={30} 
-						style={[styles.pubButton]} />
+					<View style={[styles.pubsubButtonContainer]}>
+						<Octicons name="broadcast" size={30} 
+							style={[styles.pubButton]} />
+					</View>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={()=>{
 						this._requestLocation(data);
 					}}>
-					<Ionicons name="ios-wifi-outline" size={30} 
-						style={[styles.subButton]} />
+					<View style={[styles.pubsubButtonContainer]}>
+						<Ionicons name="ios-wifi-outline" size={30} 
+							style={[styles.subButton]} />
+					</View>
 				</TouchableOpacity>
           	</View>
 		);
@@ -104,8 +117,12 @@ class SearchBoxView extends Component {
 		return(
 			<View style={styles.searchBoxContainer}>
 				<KeyboardAvoidingView style={styles.searchTextBox} behavior={this.state.behavior} >
-					<EvilIcons name="chevron-left" size={44} 
-						style={[styles.searchBack]} onPress={this._backHome}/>
+					<TouchableOpacity onPress={this._backHome}>
+						<View style={[styles.backContainer]}>
+							<EvilIcons name="chevron-left" size={44} 
+							style={[styles.searchBack]}/>
+						</View>
+					</TouchableOpacity>
 					<TextInput onChangeText={(text) => this._filterData(text)}
 						underlineColorAndroid='rgba(0,0,0,0)'
         				placeholder='Search Contacts...'
@@ -125,6 +142,9 @@ class SearchBoxView extends Component {
 }
 
 function mapStateToProps(state) {
-	return { contacts: state.contactState.contacts};
+	return { 
+		contacts: state.contactState.contacts,
+		myContact: state.contactState.myContact
+	};
 }
 export default connect(mapStateToProps, {changeView, requestLocation})(SearchBoxView);

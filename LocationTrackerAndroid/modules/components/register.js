@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, Button, KeyboardAvoidingView} from 'react-native';
+import {Text, View, TextInput, Button, 
+	KeyboardAvoidingView, AsyncStorage,
+	ToastAndroid} from 'react-native';
 import { connect } from 'react-redux';
-
 import styles from '../styles/style';
 import {setMyContact, changeView} from '../actions/index';
-import {VIEW_HOME} from '../common/constants';
+import {VIEW_HOME, STATE} from '../common/constants';
+import {initConnection} from '../websocket-receiver';
+import {trimNo} from '../utils/utilities';
+
 
 class RegisterView extends Component {
 
@@ -19,8 +23,18 @@ class RegisterView extends Component {
 
 	onButtonPress() {
 		if(this.state.no!=='') {
-			this.props.setMyContact(this.state.no, this.props.contactState);
-			this.props.changeView(VIEW_HOME);
+			let cn = trimNo(this.state.no);
+			let updatedState = {subscribedTo:this.props.contactState.subscribedTo,
+				publishingTo:this.props.contactState.publishingTo, myContact:cn};
+			let serializedState = JSON.stringify(updatedState);
+			AsyncStorage.setItem(STATE, serializedState).then((result)=>{
+				this.props.setMyContact(cn);
+				this.props.changeView(VIEW_HOME);
+				let from = cn;
+				initConnection(from);
+				ToastAndroid.showWithGravity('Registered Successfully!!', ToastAndroid.SHORT, ToastAndroid.TOP);
+			});
+			
 		}
 	}
 

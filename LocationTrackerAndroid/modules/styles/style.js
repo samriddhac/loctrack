@@ -90,6 +90,16 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#ffffff',
   },
+  rowSub: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    backgroundColor: '#ffffff',
+  },
   thumb:{
     width:50,
     height:50,
@@ -110,26 +120,29 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   pubButton: {
-    flex:1,
+    flex:2,
     backgroundColor:'#ffffff',
     color: '#4A44F2',
+    justifyContent: 'center',
     alignItems: 'center',
-    width:40,
-    height:40,
-    borderRadius:40
+    width:35,
+    height:35,
+    borderRadius:35,
+    paddingRight: 2,
+    paddingTop: 2
   },
   subButton: {
-    flex:1,
-    paddingLeft:6,
+    flex:2,
     backgroundColor:'#ffffff',
     color: '#4A44F2',
+    justifyContent: 'center',
     alignItems: 'center',
-    width:40,
-    height:40,
-    borderRadius:40
+    width:35,
+    height:35,
+    borderRadius:35
   },
   stopButton: {
-    flex:1,
+    flex:1.5,
     paddingLeft:6,
     backgroundColor:'#ffffff',
     color: '#CC1D23',
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius:40
   },
   mapButton: {
-    flex:1,
+    flex:1.5,
     paddingRight:6,
     backgroundColor:'#ffffff',
     color: '#CC1D23'
@@ -213,6 +226,42 @@ const styles = StyleSheet.create({
   },
   roundBtn: {
     borderRadius: 10
+  },
+  searchIconContainer: {
+    backgroundColor: 'transparent',
+    width: 26,
+    height: 26,
+    borderRadius: 26
+  },
+  backContainer: {
+    backgroundColor: 'transparent',
+    width: 45,
+    height: 45,
+    borderRadius: 45
+  },
+  pubsubButtonContainer: {
+    backgroundColor: 'transparent',
+    width: 36,
+    height: 36,
+    borderRadius: 36,
+    paddingLeft:5,
+    paddingRight:5
+  },
+  subRightContainer: {
+    flex: 3
+  },
+  subRightBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 3
+  },
+  statusText: {
+    color: 'blue'
+  },
+  statusTextContainer: {
+    flex:1,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
   }
 });
 export default styles;

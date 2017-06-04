@@ -22,10 +22,11 @@ class Header extends Component  {
 			<View style={styles.headerContent}>
 				<Text style={[styles.headerText, styles.defaultFont]}>WhereApp</Text>
 				<View style={ styles.headerIconBtn }>
-					<TouchableOpacity>
-						<OIcon name="search" size={24} 
-						style={[styles.headerIcon, styles.headerIconSearch]}
-						onPress={this._performSearch}/>
+					<TouchableOpacity onPress={this._performSearch}>
+						<View style={[styles.searchIconContainer]}>
+							<OIcon name="search" size={24} 
+							style={[styles.headerIcon, styles.headerIconSearch]}/>
+						</View>
 					</TouchableOpacity>
 					<TouchableOpacity>
 						<Icon name="dots-three-vertical" size={24} 

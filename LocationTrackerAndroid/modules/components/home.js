@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
-import Autocomplete from 'react-native-autocomplete-input';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
@@ -20,6 +19,10 @@ class Home extends Component {
 		      { key: '2', title: 'My subcribers' },
 		    ]
 		  };
+	}
+
+	componentWillMount() {
+		
 	}
 	
 	_handleChangeTab = index => this.setState({ index });
@@ -60,7 +63,8 @@ class Home extends Component {
 }
 function mapStateToProps(state) {
 	return { 
-		contacts: state.contactState.contacts
+		contacts: state.contactState.contacts,
+		myContact: state.contactState.myContact
 	};
 }
 export default connect(mapStateToProps)(Home);

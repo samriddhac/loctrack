@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { AsyncStorage } from 'react-native';
-import { STATE } from '../common/constants';
+import { STATE, STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED } from '../common/constants';
 
 export const saveState = async (state) => {
 	try {
@@ -48,7 +48,7 @@ function escapeRegExp(str) {
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
-function trimNo(input) {
+export function trimNo(input) {
 	let output = input.replace(/\s/g, '');
 	output = replaceAll(output,',','');
 	output = replaceAll(output,'-','');
@@ -62,14 +62,18 @@ export function mergedList(a1, a2) {
 	try{
 		if(a1!==undefined && a1!==null && a1.length>0) {
 			let exists = false;
+			let index = 0;
+			let counter = -1;
 			a1.forEach((item)=>{
+				index++;
 				if(item.recordID === a2.recordID){
-					exists = true;
+					counter = index;
 				}
 			});
-			if(!exists){
-				a1 = [...a1, a2];
+			if(counter>-1) {
+				a1 = a1.splice(counter, 1);
 			}
+			a1 = [a2, ...a1];
 		}
 		else {
 			a1 = [a2];
@@ -80,3 +84,19 @@ export function mergedList(a1, a2) {
 	}
     return a1; 
 } 
+
+export function getStatus(s) {
+	if(s !==undefined && s !== null && s !== '') {
+		switch(s) {
+			case STATUS_PENDING:
+				return "Pending";
+			case STATUS_APPROVED: 
+				return "Sharing";
+			case STATUS_REJECTED:
+				return "Not there";
+		}
+	}
+	else {
+		return 'Offline';
+	}
+}

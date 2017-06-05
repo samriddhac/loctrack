@@ -21,10 +21,6 @@ class Home extends Component {
 		  };
 	}
 
-	componentWillMount() {
-		
-	}
-	
 	_handleChangeTab = index => this.setState({ index });
 	_renderHeader = props => <TabBar {...props} />;
 
@@ -32,18 +28,7 @@ class Home extends Component {
 		'1': SubscribeList,
 		'2': PublishList
 	});
-	getPubContent(_this) {
-		return(
-			<View style={styles.searchResultContainer}>
-				<ListView
-		          dataSource={_this.state.pubdataSource}
-		          renderRow={_this._renderRow}
-		          renderSeparator={(sectionId, rowId) => <View style=
-{styles.separator} />}
-		        />
-			</View>
-		);
-	}
+	
 	render() {
 		return (
 		<View style={styles.homeContainer}>

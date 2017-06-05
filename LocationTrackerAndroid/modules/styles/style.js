@@ -157,6 +157,12 @@ const styles = StyleSheet.create({
     backgroundColor:'#ffffff',
     color: '#CC1D23'
   },
+  checkButton: {
+    flex:1.5,
+    paddingRight:6,
+    backgroundColor:'#ffffff',
+    color: '#215602'
+  },
   mapContainer: {
     flex: 1
   },
@@ -262,6 +268,21 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems: 'flex-end',
     justifyContent: 'flex-end'
-  }
+  },
+  globalShareButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor:'#215602',
+    width:55,
+    height:55,
+    borderRadius:55,
+    alignItems: 'center'
+  },
+  globalShareBackButton: {
+    paddingTop:5,
+    paddingRight:0,
+    color: '#ffffff'
+  },
 });
 export default styles;

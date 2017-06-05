@@ -61,6 +61,7 @@ export function trimNo(input) {
 
 export function mergedList(a1, a2) {
 	try{
+		let slist = [];
 		if(a1!==undefined && a1!==null && a1.length>0) {
 			let exists = false;
 			let index = 0;
@@ -79,11 +80,12 @@ export function mergedList(a1, a2) {
 		else {
 			a1 = [a2];
 		}
+		slist = [...a1];
 	}
 	catch(err) {
 		console.log(err);
 	}
-    return a1; 
+    return slist; 
 } 
 export function updateStatus(items, data) {
 	let itemList = [];

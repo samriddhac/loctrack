@@ -10,7 +10,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import {changeView, requestLocation} from '../actions/index';
+import {changeView, requestLocation, addToPublish} from '../actions/index';
 import { VIEW_HOME, STATUS_PENDING} from '../common/constants';
 import {subscriptionRequest} from '../websocket-receiver';
 
@@ -52,7 +52,8 @@ class SearchBoxView extends Component {
 		this.props.requestLocation(data);
 	}
 	_publishLocation(data) {
-		
+		data.status = STATUS_PENDING;
+		this.props.addToPublish(data);
 	}
 
 	_filterData(query) {
@@ -147,4 +148,4 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {changeView, requestLocation})(SearchBoxView);
+export default connect(mapStateToProps, {changeView, requestLocation, addToPublish})(SearchBoxView);

@@ -9,7 +9,8 @@ import { EVENT_ON_MESSAGE_RECEIVE, LOCATION_SERVER,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
 	 TYPE_NA, TYPE_LOC} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
-		updateSubscriberStateRejected } from './actions/index';
+		updateSubscriberStateRejected,
+		addToPublishContact } from './actions/index';
 import { ToastAndroid } from 'react-native';
 var socket = null;
 
@@ -37,7 +38,7 @@ export function startWebSocketReceiving(store) {
 				case TYPE_AUTH_FAILURE:
 					break;
 				case TYPE_SUB_REQ:
-
+					store.dispatch(addToPublishContact(obj.from));
 					break;
 				case TYPE_SUB_REQ_APPROVED:
 					store.dispatch(updateSubscriberStateAccepted(from));

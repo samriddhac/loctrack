@@ -1,7 +1,8 @@
 import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS, 
 	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER,
 	SET_MY_LOCATION, GET_PERSISTED_STATE,
-	SET_MY_CONTACT, UPDATE_SUBS_STATUS} from './action-types';
+	SET_MY_CONTACT, UPDATE_SUBS_STATUS,
+	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT} from './action-types';
 import {getSocket} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -11,6 +12,21 @@ import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
 	STATUS_APPROVED, STATUS_REJECTED, STATE} from '../common/constants';
 import {AsyncStorage} from 'react-native';
 
+export function addToPublish(data) {
+	return {
+		type: ADD_TO_PUBLISH,
+		payload: data
+	};
+}
+export function addToPublishContact(status, from) {
+	return {
+		type: ADD_TO_PUBLISH_CONTACT,
+		payload: {
+			status,
+			from
+		}
+	};
+}
 export function updateSubscriberStateAccepted(from) {
 	return updateSubscriberState(STATUS_APPROVED, from);
 }

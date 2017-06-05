@@ -102,6 +102,25 @@ export function updateStatus(items, data) {
 	}
 	return itemList;
 }
+export function updatePublish(items, contacts, data) {
+	let itemList = [];
+	let selectectedContact = {};
+	try {
+		if(contacts!==undefined && contacts!==null && contacts.length>0) {
+			contacts.forEach((contact)=>{
+				if(contact.phno === data.from){
+					selectectedContact = contact;
+					selectectedContact.status = data.status;
+				}
+			});
+			itemList = mergedList(items, selectectedContact);
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+	return itemList;
+}
 export function getStatus(s) {
 	if(s !==undefined && s !== null && s !== '') {
 		switch(s) {

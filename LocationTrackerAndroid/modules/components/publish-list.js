@@ -34,17 +34,20 @@ class PublishList extends Component {
 	}
 	_startPublish(data) {
 		subscriptionApproveRequest(this.props.myContact, {to:data.phno});
-		if(!isServiceRunning()) {
+		let isPublish = isServiceRunning();
+		if(isPublish === false) {
 			start();
 		}
 	}
 	_stopPublish(data) {
-		if(isServiceRunning()) {
+		let isPublish = isServiceRunning();
+		if(isPublish === true) {
 			stop();
 		}
 	}
 	_stopLocationPublish() {
-		if(isServiceRunning()) {
+		let isPublish = isServiceRunning();
+		if(isPublish === true) {
 			stop();
 		}
 	}

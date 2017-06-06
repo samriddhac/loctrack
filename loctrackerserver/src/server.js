@@ -312,8 +312,11 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 						approvedSubList.forEach((item)=>{
 							let websocket = socketpool.getConnectionByID(item.id);
 							if(websocket!==undefined && websocket!==null) {
-								message.t = events.TYPE_LOC;
-								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, message);
+								let obj = {
+									t:events.TYPE_LOC,
+									data: message
+								};
+								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
 							}
 						});
 					}

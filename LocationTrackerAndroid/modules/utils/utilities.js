@@ -108,18 +108,31 @@ export function updatePublish(items, contacts, data) {
 	let selectectedContact = {};
 	try {
 		if(contacts!==undefined && contacts!==null && contacts.length>0) {
+			let exist = false;
 			contacts.forEach((contact)=>{
 				if(contact.phno === data.from){
 					selectectedContact = contact;
 					selectectedContact.status = data.status;
+					exist = true;
 				}
 			});
+			if(!exist) {
+				selectectedContact = {
+					recordID:data.from,
+					givenName: data.from,
+					familyName: '',
+					thumbnailPath: '',
+					phno:data.from,
+					searchName: data.from
+				};
+			}
 			itemList = mergedList(items, selectectedContact);
 		}
 	}
 	catch(err) {
 		console.log(err);
 	}
+	console.log('itemList ',itemList);
 	return itemList;
 }
 export function getStatus(s) {

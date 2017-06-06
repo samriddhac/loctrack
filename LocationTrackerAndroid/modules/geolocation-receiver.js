@@ -1,6 +1,8 @@
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import {updateMyLocation} from './actions/index';
+import {publishLocation} from './websocket-receiver';
 
+var isBackgroundServiceRunning = false;
 export function configureGeolocation(store) {
 	BackgroundGeolocation.configure({
       desiredAccuracy: 1000,
@@ -16,7 +18,10 @@ export function configureGeolocation(store) {
       stopOnStillActivity: false
     });
     BackgroundGeolocation.on('location', (location) => {
-      store.dispatch(updateMyLocation(location));
+      let from = store.getState().contactState.myContact;
+      console.log('from ',from, 'location ', location);
+      publishLocation(from, location);
+      //store.dispatch(updateMyLocation({from, location}));
     });
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {
@@ -30,11 +35,17 @@ export function configureGeolocation(store) {
 
 export function start() {
 	BackgroundGeolocation.start(() => {
-      console.log('[DEBUG] BackgroundGeolocation started successfully');    
-    });
+    isBackgroundServiceRunning = true;
+    console.log('[DEBUG] BackgroundGeolocation started successfully');    
+  });
 }
 export function stop() {
 	BackgroundGeolocation.stop(() => {
-      console.log('[DEBUG] BackgroundGeolocation stopped successfully');    
-    });
+    isBackgroundServiceRunning = false;
+    console.log('[DEBUG] BackgroundGeolocation stopped successfully');    
+  });
+}
+
+export function isServiceRunning() {
+  return isBackgroundServiceRunning;
 }

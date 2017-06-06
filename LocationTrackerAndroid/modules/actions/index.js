@@ -3,7 +3,7 @@ import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS,
 	SET_MY_LOCATION, GET_PERSISTED_STATE,
 	SET_MY_CONTACT, UPDATE_SUBS_STATUS,
 	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT} from './action-types';
-import {getSocket} from '../websocket-receiver';
+import {publishLocation} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
 	EVENT_ALLOW_SUBSCRIPTION, EVENT_DENY_SUBSCRIPTION,
@@ -18,11 +18,11 @@ export function addToPublish(data) {
 		payload: data
 	};
 }
-export function addToPublishContact(status, from) {
+export function addToPublishContact(from) {
 	return {
 		type: ADD_TO_PUBLISH_CONTACT,
 		payload: {
-			status,
+			status:STATUS_PENDING,
 			from
 		}
 	};
@@ -66,10 +66,11 @@ export function requestLocation(data) {
 		payload: data
 	};
 }
-export function updateMyLocation(location) {
+export function updateMyLocation(data) {
+	//publishLocation(data.from, data.location);
 	return {
-		type:SET_MY_LOCATION,
-		payload:location
+		type:ADD_TO_SUBSCRIBER
+		//payload: data
 	};
 }
 export function updateLocation(data) {

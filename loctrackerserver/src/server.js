@@ -350,7 +350,9 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 						&& approvedSubList.length>0) {
 						approvedSubList.forEach((item)=>{
 							let websocket = socketpool.getConnectionByID(item.id);
-							if(websocket!==undefined && websocket!==null) {
+							if(websocket!==undefined && websocket!==null
+								&& websocket.socket!==undefined
+								&& websocket.socket!==null) {
 								let obj = {
 									t:events.TYPE_LOC,
 									data: message

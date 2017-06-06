@@ -284,5 +284,20 @@ const styles = StyleSheet.create({
     paddingRight:0,
     color: '#ffffff'
   },
+  globalStopButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 105,
+    backgroundColor:'#CC1D23',
+    width:55,
+    height:55,
+    borderRadius:55,
+    alignItems: 'center'
+  },
+  globalStopButton: {
+    paddingTop:5,
+    paddingRight:0,
+    color: '#ffffff'
+  },
 });
 export default styles;

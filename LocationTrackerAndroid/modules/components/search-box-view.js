@@ -11,7 +11,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import {changeView, requestLocation, addToPublish} from '../actions/index';
-import { VIEW_HOME, STATUS_PENDING} from '../common/constants';
+import { VIEW_HOME, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import {subscriptionRequest} from '../websocket-receiver';
 
 class SearchBoxView extends Component {
@@ -52,7 +52,7 @@ class SearchBoxView extends Component {
 		this.props.requestLocation(data);
 	}
 	_publishLocation(data) {
-		data.status = STATUS_PENDING;
+		data.status = STATUS_APPROVED;
 		this.props.addToPublish(data);
 	}
 

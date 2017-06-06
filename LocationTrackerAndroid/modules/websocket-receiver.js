@@ -1,8 +1,12 @@
 import io from 'socket.io-client';
 
-import { EVENT_ON_MESSAGE_RECEIVE, LOCATION_SERVER,
-	 EVENT_CONNECTION_ESTABLISHED, EVENT_ESTABLISH_AUTH,
+import { EVENT_ON_MESSAGE_RECEIVE, 
+	 LOCATION_SERVER,
+	 EVENT_CONNECTION_ESTABLISHED, 
+	 EVENT_ESTABLISH_AUTH,
 	 EVENT_REQUEST_SUBSCRIPTION,
+	 EVENT_REQUEST_SUBSCRIPTION_ACCEPTED,
+	 EVENT_PUBLISH_LOCATION,
 	 TYPE_CONN_ACK, TYPE_ACK, TYPE_AUTH_REQ,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
@@ -100,6 +104,15 @@ export function initConnection(from) {
 
 export function subscriptionRequest(from, obj) {
 	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, from, JSON.stringify(obj));
+}
+
+export function subscriptionApproveRequest(from, obj) {
+	console.log('obj ',obj);
+	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, from, JSON.stringify(obj));
+}
+
+export function publishLocation(from, location){
+	getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(location));
 }
 
 export function getSocket() {

@@ -287,9 +287,9 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 				let fromItem = JSON.parse(data);
 				let approvedSubList = [];
 				if(fromItem!==undefined && fromItem!==null 
-					&& fromItem.sub!==undefined && fromItem.sub!==null
-					&& fromItem.sub.length>0) {
-					fromItem.sub.forEach((item)=>{
+					&& fromItem.pub!==undefined && fromItem.pub!==null
+					&& fromItem.pub.length>0) {
+					fromItem.pub.forEach((item)=>{
 						if(item.s!==undefined && item.s!==null
 							&& item.s === events.STATUS_APPROVED) {
 							approvedSubList.push(item);

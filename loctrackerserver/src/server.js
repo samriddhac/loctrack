@@ -256,7 +256,12 @@ io.on(events.CONNECTION, function(socket){
 	});
 
 	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
-		pub.publish(from, data);
+		try {
+			pub.publish(from, data);
+		}
+		catch(err) {
+			console.log(err);
+		}
 	});
 
 	
@@ -269,61 +274,76 @@ io.on(events.CONNECTION, function(socket){
 	});
 
 	socket.on(events.DISCONNECT, ()=>{
-		console.log('Disconnecting socket ', socket.id);
-		socketpool.removeFromPoolBySocket(socket.id);
-		console.log('socketpool ',socketpoolgetAllConnection());
+		try {
+			console.log('Disconnecting socket ', socket.id);
+			socketpool.removeFromPoolBySocket(socket.id);
+			console.log('socketpool ',socketpoolgetAllConnection());
+		}
+		catch(err) 	
+			console.log(err);
+		}
 	});
 });
 
 sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 	console.log(channel);
 	console.log(message);
-	pub.get(channel, (err, data)=>{
-		if(!util.isEmpty(err)) {
-			console.log('SUBS EVENT_ON_MESSAGE_RECEIVE ', err);
-		}
-		else {
-			if(!util.isEmpty(data)) {
-				let fromItem = JSON.parse(data);
-				let approvedSubList = [];
-				if(fromItem!==undefined && fromItem!==null 
-					&& fromItem.pub!==undefined && fromItem.pub!==null
-					&& fromItem.pub.length>0) {
-					fromItem.pub.forEach((item)=>{
-						if(item.s!==undefined && item.s!==null
-							&& item.s === events.STATUS_APPROVED) {
-							approvedSubList.push(item);
-						}
-					});
-				}
-				if(approvedSubList!==undefined && approvedSubList!==null
-					&& approvedSubList.length>0) {
-					approvedSubList.forEach((item)=>{
-						let websocket = socketpool.getConnectionByID(to);
-						if(websocket!==undefined && websocket!==null) {
-							message.t = events.TYPE_LOC;
-							websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, message);
-						}
-					});
+	try{
+		pub.get(channel, (err, data)=>{
+			if(!util.isEmpty(err)) {
+				console.log('SUBS EVENT_ON_MESSAGE_RECEIVE ', err);
+			}
+			else {
+				if(!util.isEmpty(data)) {
+					let fromItem = JSON.parse(data);
+					let approvedSubList = [];
+					if(fromItem!==undefined && fromItem!==null 
+						&& fromItem.pub!==undefined && fromItem.pub!==null
+						&& fromItem.pub.length>0) {
+						fromItem.pub.forEach((item)=>{
+							if(item.s!==undefined && item.s!==null
+								&& item.s === events.STATUS_APPROVED) {
+								approvedSubList.push(item);
+							}
+						});
+					}
+					if(approvedSubList!==undefined && approvedSubList!==null
+						&& approvedSubList.length>0) {
+						approvedSubList.forEach((item)=>{
+							let websocket = socketpool.getConnectionByID(item.id);
+							if(websocket!==undefined && websocket!==null) {
+								message.t = events.TYPE_LOC;
+								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, message);
+							}
+						});
+					}
 				}
 			}
-		}
-	});
+		});
+	}
+	catch(err) {
+		console.log(err);
+	}
 });
 
 function releasePendingQueue(to) {
 	console.log(pendingmessages);
-	if(pendingmessages!==undefined && pendingmessages!==null) {
-		if(pendingmessages[to]!==undefined && pendingmessages[to]!==null
-			&& pendingmessages[to].length>0) {
-			let websocket = socketpool.getConnectionByID(to);
-			pendingmessages[to].forEach((obj)=>{
-				if(websocket!==undefined && websocket!==null) {
-					websocket.socket.emit(obj.event, obj.from, obj.data);
-				}
-			});
-			pendingmessages[to] = [];
+	try{
+		if(pendingmessages!==undefined && pendingmessages!==null) {
+			if(pendingmessages[to]!==undefined && pendingmessages[to]!==null
+				&& pendingmessages[to].length>0) {
+				let websocket = socketpool.getConnectionByID(to);
+				pendingmessages[to].forEach((obj)=>{
+					if(websocket!==undefined && websocket!==null) {
+						websocket.socket.emit(obj.event, obj.from, obj.data);
+					}
+				});
+				pendingmessages[to] = [];
+			}
 		}
+	}
+	catch(err) {
+		console.log(err);
 	}
 }
 

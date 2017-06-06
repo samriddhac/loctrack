@@ -271,6 +271,7 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.DISCONNECT, ()=>{
 		console.log('Disconnecting socket ', socket.id);
 		socketpool.removeFromPoolBySocket(socket.id);
+		console.log('socketpool ',socketpool);
 	});
 });
 

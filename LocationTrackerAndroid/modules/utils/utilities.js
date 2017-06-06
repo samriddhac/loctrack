@@ -60,10 +60,9 @@ export function trimNo(input) {
 }
 
 export function mergedList(a1, a2) {
+	let slist = [];
 	try{
-		let slist = [];
 		if(a1!==undefined && a1!==null && a1.length>0) {
-			let exists = false;
 			let index = 0;
 			let counter = -1;
 			a1.forEach((item)=>{

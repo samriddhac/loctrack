@@ -21,8 +21,7 @@ export default function(state=INITIAL_STATE, action) {
 		case ADD_TO_PUBLISH: 
 			let pubList = mergedList(state.publishingTo, action.payload);
 			return {...state, publishingTo: pubList};
-		case GET_PERSISTED_STATE: 
-			console.log('action.payload ',action.payload);
+		case GET_PERSISTED_STATE:
 			return {...state,
 				myContact: action.payload.myContact, 
 				subscribedTo: action.payload.subscribedTo,

@@ -1,5 +1,6 @@
 module.exports = {
 	CONNECTION:'connection',
+	DISCONNECT: 'disconnect',
 	EVENT_CONNECTION_ESTABLISHED: 'EVENT_CONNECTION_ESTABLISHED',
 	EVENT_ESTABLISH_AUTH: 'EVENT_ESTABLISH_AUTH',
 	EVENT_ON_MESSAGE_RECEIVE: 'message',
@@ -22,6 +23,7 @@ module.exports = {
 	TYPE_SUB_REQ_APPROVED: 'sub_req_approved',
 	TYPE_SUB_REQ_DENIED: 'sub_req_denied',
 	TYPE_NA: 'na',
+	TYPE_LOC: 'loc',
 
 	STATUS_PENDING: 'p',
 	STATUS_APPROVED: 'a',

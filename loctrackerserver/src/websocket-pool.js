@@ -41,6 +41,22 @@ function websocket_pool() {
 				}
 			}
 		},
+		removeFromPoolBySocket: function(socketId) {
+			if(webSocketPool!==undefined && webSocketPool!==null) {
+				if(webSocketPool.length > 0 ){
+					let matchIndex = -1;
+					for(let index=0; index<webSocketPool.length; index++) {
+						let item = webSocketPool[index];
+						if(item.websocket ==socketId) {
+							matchIndex = index;
+						}
+					}
+					if(matchIndex>0) {
+						webSocketPool.splice(matchIndex, 1);
+					}
+				}
+			}
+		},
 		getConnectionByID: function(id) {
 			let selectedConnection = {};
 			if(webSocketPool!==undefined && webSocketPool!==null

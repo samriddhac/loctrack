@@ -279,7 +279,7 @@ io.on(events.CONNECTION, function(socket){
 			socketpool.removeFromPoolBySocket(socket.id);
 			console.log('socketpool ',socketpoolgetAllConnection());
 		}
-		catch(err) 	
+		catch(err) {	
 			console.log(err);
 		}
 	});

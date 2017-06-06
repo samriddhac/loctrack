@@ -33,6 +33,9 @@ export default class App extends Component {
 		if(values.to!==undefined && values.to!==null) {
 			o.to = values.to;
 		}
+		if(values.data!==undefined && values.data!==null) {
+			o.data = values.data;
+		}
 		console.log('JSON.stringify(o) ',JSON.stringify(o));
 		if(values.from!==undefined && values.from!==null) {
 			getSocket().emit(values.events, values.from, JSON.stringify(o));

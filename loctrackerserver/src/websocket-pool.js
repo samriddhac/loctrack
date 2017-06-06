@@ -71,8 +71,10 @@ function websocket_pool() {
 		},
 		removeAllConnection(webSocketPool) {
 			webSocketPool =[];
+		},
+		getAllConnection() {
+			return webSocketPool;
 		}
-
 	}
 }
 

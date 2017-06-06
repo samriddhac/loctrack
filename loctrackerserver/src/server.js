@@ -231,7 +231,6 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_APPROVED});
-										sub.subscribe(from, to);
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -240,6 +239,7 @@ io.on(events.CONNECTION, function(socket){
 											data: {t:events.TYPE_SUB_REQ_APPROVED}
 										});
 									}
+									sub.subscribe(from);
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
 									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
@@ -271,7 +271,7 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.DISCONNECT, ()=>{
 		console.log('Disconnecting socket ', socket.id);
 		socketpool.removeFromPoolBySocket(socket.id);
-		console.log('socketpool ',socketpool);
+		console.log('socketpool ',socketpoolgetAllConnection());
 	});
 });
 

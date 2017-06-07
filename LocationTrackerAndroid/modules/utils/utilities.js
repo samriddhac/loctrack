@@ -135,6 +135,23 @@ export function updatePublish(items, contacts, data) {
 	console.log('itemList ',itemList);
 	return itemList;
 }
+export function updateSubLocations(items, obj) {
+	let returnList = [];
+	try {
+		if(items!==undefined && items!==null && items.length>0) {
+			items.forEach((item)=>{
+				if(item.phno === obj.from){
+					item.loc = obj.data;
+				}
+			});
+			returnList = [...items];
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+	return returnList;
+}
 export function getStatus(s) {
 	if(s !==undefined && s !== null && s !== '') {
 		switch(s) {

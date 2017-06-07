@@ -48,19 +48,19 @@ export function startWebSocketReceiving(store) {
 					store.dispatch(updateSubscriberStateAccepted(from));
 					break;
 				case TYPE_SUB_REQ_DENIED:
-					store.dispatch(updateSubscriberStateRejected(from));
+					store.dispatch(updateLocation(from, obj.data));
 					break;
 				case TYPE_NA:
 					ToastAndroid.show('User offline!', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_LOC:
-
+					store.dispatch(updateSubscriberStateRejected(from));
 					break;
 			}
 		}
 	});
 	socket.on("connect", function(){
-        console.log("client connected from server");
+        console.log("client connected to server");
         let state = store.getState();
         if(state!==undefined && state!==null && 
         	state.contactState!==undefined &&
@@ -107,7 +107,6 @@ export function subscriptionRequest(from, obj) {
 }
 
 export function subscriptionApproveRequest(from, obj) {
-	console.log('obj ',obj);
 	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, from, JSON.stringify(obj));
 }
 

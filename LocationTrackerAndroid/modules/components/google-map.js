@@ -30,6 +30,8 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
+const timeout = 4000;
+let animationTimeout;
 
 class GoogleMap extends Component {
 
@@ -62,6 +64,7 @@ class GoogleMap extends Component {
 		} else {
 			this.watchLocation();
 		}
+		this.addMarkers(this.props);
 	}
 
 	watchLocation() {
@@ -86,13 +89,32 @@ class GoogleMap extends Component {
 	    	console.log('[ERROR]: Geolocation error ',err);
 	    }, null);
 	}
+
+	componentWillReceiveProps(nextprops) {
+		this.addMarkers(nextprops);
+	}
 	componentWillUnmount() {
 		this.mounted = false;
 		if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
+		if (animationTimeout) {
+			clearTimeout(animationTimeout);
+		}
+	}
+
+	addMarkers(props) {
+		
+		animationTimeout = setTimeout(() => {
+	      this.focusMap([...this.state.markers], false);
+		}, timeout);
 	}
 
 	_goToHome() {
 		this.props.changeView(VIEW_HOME);
+	}
+
+	focusMap(markers, animated) {
+	    console.log(`Markers received to populate map: ${markers}`);
+	    this.map.fitToSuppliedMarkers(markers, animated);
 	}
 
 	render() {
@@ -101,7 +123,10 @@ class GoogleMap extends Component {
 				<MapView
 				ref={ref => { this.map = ref; }}
 				style={styles.map}
-				region={this.state.region}
+				initialRegion={this.state.region}
+				loadingEnabled
+		        loadingIndicatorColor="#666666"
+				loadingBackgroundColor="#eeeeee"
 				>
 					{this.state.markars.map((marker, i) => (
 					<MapView.Marker

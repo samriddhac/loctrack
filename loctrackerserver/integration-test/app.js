@@ -45,6 +45,23 @@ export default class App extends Component {
 		}
 		
 	}
+	sendLocation() {
+		let shareId = setInterval(()=>{
+			console.log('Sending data');
+			if(navigator && navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition((position) => {
+					let currentCoord = {};
+					currentCoord.lt = position.coords.latitude;
+					currentCoord.lg = position.coords.longitude;
+					let data = {
+						c:this.channelId,
+						p:currentCoord
+					};
+					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(position));
+				});
+			}
+		}, 10000);
+	}
 	secondUser(values) {
 		console.log('Success!', values);
 		let o = {}
@@ -155,6 +172,9 @@ export default class App extends Component {
 								  placeholder='Data'
 								/>
 					          <button type='submit'>Submit</button>
+					          <button type='button' onClick={ (e)=> {
+					          	this.sendLocation();
+					          }}>publish location</button>
 					        </form>
 					      )
 					    }}
@@ -162,68 +182,6 @@ export default class App extends Component {
 				</section>
 				<p/>
 				<p/>
-				<section>
-					<legend> User 2 </legend>
-					<Form
-					    onSubmit={(values) => {
-					      this.secondUser(values);
-					    }}
-					  >
-					    {({submitForm}) => {
-					      return (
-					        <form onSubmit={submitForm}>
-					          <span><label>No</label><Text field='from' /></span>
-					          <span><label>To</label><Text field='to' /></span>
-					          <Select // This is the built-in Select formInput 
-					              field='events'
-					              options={[{ // You can ship it some options like usual 
-					                label: 'EVENT_CONNECTION_ESTABLISHED',
-					                value: 'EVENT_CONNECTION_ESTABLISHED'
-					              }, {
-					                label: 'EVENT_ESTABLISH_AUTH',
-					                value: 'EVENT_ESTABLISH_AUTH'
-					              }, {
-					                label: 'message',
-					                value: 'message'
-					              }, {
-					                label: 'EVENT_ESTABLISH_AUTH_SUCCESS',
-					                value: 'EVENT_ESTABLISH_AUTH_SUCCESS'
-					              }, {
-					                label: 'EVENT_ESTABLISH_AUTH_FAILURE',
-					                value: 'EVENT_ESTABLISH_AUTH_FAILURE'
-					              }, {
-					                label: 'EVENT_REQUEST_SUBSCRIPTION',
-					                value: 'EVENT_REQUEST_SUBSCRIPTION'
-					              }, {
-					                label: 'EVENT_REQUEST_SUBSCRIPTION_ACCEPTED',
-					                value: 'EVENT_REQUEST_SUBSCRIPTION_ACCEPTED'
-					              }, {
-					                label: 'EVENT_REQUEST_SUBSCRIPTION_REJECTED',
-					                value: 'EVENT_REQUEST_SUBSCRIPTION_REJECTED'
-					              }, {
-					                label: 'EVENT_STOP_SUBSCRIPTION',
-					                value: 'EVENT_STOP_SUBSCRIPTION'
-					              }, {
-					                label: 'EVENT_PUBLISH_LOCATION',
-					                value: 'EVENT_PUBLISH_LOCATION'
-					              }, {
-					                label: 'EVENT_STOP_PUBLISH',
-					                value: 'EVENT_STOP_PUBLISH'
-					              }, {
-					                label: 'EVENT_ON_LOCATION_RECEIVE',
-					                value: 'EVENT_ON_LOCATION_RECEIVE'
-					              }]}
-					            />
-					             <Textarea
-								  field='data'
-								  placeholder='Data'
-								/>
-					          <button type='submit'>Submit</button>
-					        </form>
-					      )
-					    }}
-					  </Form>
-				</section>
 			</div>
 		);
 	}

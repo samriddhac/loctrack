@@ -73,10 +73,10 @@ export function updateMyLocation(data) {
 		//payload: data
 	};
 }
-export function updateLocation(data) {
+export function updateLocation(from, data) {
 	return {
 		type:ACTION_TYPE_LOC_UPDATE,
-		payload:data
+		payload:{ from, data }
 	};
 }
 function getContacts() {

@@ -19,9 +19,7 @@ export function configureGeolocation(store) {
     });
     BackgroundGeolocation.on('location', (location) => {
       let from = store.getState().contactState.myContact;
-      console.log('from ',from, 'location ', location);
       publishLocation(from, location);
-      //store.dispatch(updateMyLocation({from, location}));
     });
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {

@@ -54,10 +54,11 @@ export default class App extends Component {
 					currentCoord.lt = position.coords.latitude;
 					currentCoord.lg = position.coords.longitude;
 					let data = {
-						c:this.channelId,
-						p:currentCoord
+						latitude:position.coords.latitude,
+						longitude:position.coords.longitude
 					};
-					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(position));
+					console.log(JSON.stringify(data));
+					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(data));
 				});
 			}
 		}, 10000);

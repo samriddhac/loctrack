@@ -72,7 +72,7 @@ export function mergedList(a1, a2) {
 				}
 			});
 			if(counter>-1) {
-				a1 = a1.splice(counter, 1);
+				_.remove(a1, {recordID:a2.recordID});
 			}
 			a1 = [a2, ...a1];
 		}
@@ -139,12 +139,15 @@ export function updateSubLocations(items, obj) {
 	let returnList = [];
 	try {
 		if(items!==undefined && items!==null && items.length>0) {
+			let selecteditem = null;
 			items.forEach((item)=>{
 				if(item.phno === obj.from){
 					item.loc = obj.data;
+					selecteditem = item;
 				}
 			});
-			returnList = [...items];
+			_.remove(items, {recordID:selecteditem.recordID});
+			returnList = [...items, selecteditem];
 		}
 	}
 	catch(err) {

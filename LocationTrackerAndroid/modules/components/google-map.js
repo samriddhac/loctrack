@@ -38,12 +38,7 @@ class GoogleMap extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			region: {
-				latitude: LATITUDE,
-	            longitude: LONGITUDE,
-	            latitudeDelta: LATITUDE_DELTA,
-	            longitudeDelta: LONGITUDE_DELTA
-			},
+			region: null,
 			markars: []
 		};
 		this._goToHome = this._goToHome.bind(this);
@@ -55,33 +50,53 @@ class GoogleMap extends Component {
 	}
 
 	componentDidMount() {
+		console.log('component mounted');
 		this.mounted = true;
 		if (Platform.OS === 'android') {
 			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
 			.then(granted => {
-			  if (granted && this.mounted) this.watchLocation();
+			  if (granted && this.mounted) {
+			  	navigator.geolocation.getCurrentPosition((pos)=>{
+			  		let myPosition = {
+				      	position: pos.coords,
+				      	icon: '../../modules/images/icons/bluecircle.png'
+				      };
+			  		this.setState({ 
+			        	region: {
+			        		latitude: pos.coords.latitude,
+				            longitude: pos.coords.longitude,
+				            latitudeDelta: LATITUDE_DELTA,
+				            longitudeDelta: LONGITUDE_DELTA,
+			        	},
+			        	markars: [...this.state.markars, myPosition]
+			        });
+			        this.watchLocation();
+			  	});
+			  }
 			});
 		} else {
 			this.watchLocation();
 		}
-		this.addMarkers(this.props);
+	}
+
+	componentDidUpdate(){
+		console.log('component updated');
+		
 	}
 
 	watchLocation() {
 	    this.watchID = navigator.geolocation.watchPosition((position) => {
-	      const myLastPosition = this.state.myPosition;
-	      const myPosition = {
+	      let myLastPositionCoord = null;
+	      if(this.state.myPosition!==undefined && this.state.myPosition!==null) {
+	      	myLastPositionCoord = this.state.myPosition.position;
+	      }
+	      let myPosition = {
 	      	position: position.coords,
 	      	icon: '../../modules/images/icons/bluecircle.png'
 	      };
-	      if (!isEqual(myPosition, myLastPosition)) {
+	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
 	        this.setState({ 
-	        	region: {
-	        		latitude: myPosition.position.latitude,
-		            longitude: myPosition.position.longitude,
-		            latitudeDelta: LATITUDE_DELTA,
-		            longitudeDelta: LONGITUDE_DELTA,
-	        	},
+	        	...this.state,
 	        	markars: [...this.state.markars, myPosition]
 	        });
 	      }
@@ -91,9 +106,11 @@ class GoogleMap extends Component {
 	}
 
 	componentWillReceiveProps(nextprops) {
+		console.log('Component will receive props');
 		this.addMarkers(nextprops);
 	}
 	componentWillUnmount() {
+		console.log('component unmounted');
 		this.mounted = false;
 		if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
 		if (animationTimeout) {
@@ -102,10 +119,34 @@ class GoogleMap extends Component {
 	}
 
 	addMarkers(props) {
-		
-		animationTimeout = setTimeout(() => {
-	      this.focusMap([...this.state.markers], false);
-		}, timeout);
+		if(props.subscribedTo!==undefined && props.subscribedTo!==null
+			&& props.subscribedTo.length>0){
+			let markerArray = [];
+			props.subscribedTo.forEach((item)=>{
+				if(item!==undefined && item!==null
+					&& item.loc!==undefined && item.loc!==null) {
+					let m = {
+						position: item.loc,
+						icon: '../../modules/images/icons/bluecircle.png',
+						color: 'blue'
+					};
+					markerArray = [m, ...markerArray];
+					console.log('markerArray ',markerArray);
+					this.setState({ 
+			        	...this.state,
+			        	markars: [...this.state.markars, ...markerArray]
+			        });
+				}
+			});
+		}
+		console.log('this.state.markers ',this.state.markers);
+		if(this.state.markers!==undefined
+			&& this.state.markers!==null
+			&& this.state.markers.length>0) {
+			animationTimeout = setTimeout(() => {
+		      this.focusMap([...this.state.markers], false);
+			}, timeout);
+		}
 	}
 
 	_goToHome() {
@@ -118,34 +159,44 @@ class GoogleMap extends Component {
 	}
 
 	render() {
-		return(
-			<View style={[styles.mapContainer]}>
-				<MapView
-				ref={ref => { this.map = ref; }}
-				style={styles.map}
-				initialRegion={this.state.region}
-				loadingEnabled
-		        loadingIndicatorColor="#666666"
-				loadingBackgroundColor="#eeeeee"
-				>
-					{this.state.markars.map((marker, i) => (
-					<MapView.Marker
-					  key={i}
-					  coordinate={marker.position}
-					>
-					</MapView.Marker>
-					))}
-				</MapView>
-			    <View style={[styles.mapButtonContainer]}>
-					<TouchableOpacity onPress={()=>{
-							this._goToHome();
-						}}>
-						<Ionicons name="ios-arrow-back" size={40} 
-								style={[styles.mapBackButton]} />
-					</TouchableOpacity>
+		if(this.state.region === undefined) {
+			return (
+				<View style={[styles.loaderContainer]}>
+					<Image source={require('../../modules/images/icons/loader.gif')} />
 				</View>
-		    </View>
-		);
+			);
+		}
+		else {
+			return(
+				<View style={[styles.mapContainer]}>
+					<MapView
+					ref={ref => { this.map = ref; }}
+					style={styles.map}
+					region={this.state.region}
+					loadingEnabled
+			        loadingIndicatorColor="#666666"
+					loadingBackgroundColor="#eeeeee"
+					>
+						{this.state.markars.map((marker, i) => (
+						<MapView.Marker
+						  key={i}
+						  coordinate={marker.position}
+						  pinColor={marker.color}
+						>
+						</MapView.Marker>
+						))}
+					</MapView>
+				    <View style={[styles.mapButtonContainer]}>
+						<TouchableOpacity onPress={()=>{
+								this._goToHome();
+							}}>
+							<Ionicons name="ios-arrow-back" size={40} 
+									style={[styles.mapBackButton]} />
+						</TouchableOpacity>
+					</View>
+			    </View>
+			);
+		}
 	}
 }
 function mapStateToProps(state){

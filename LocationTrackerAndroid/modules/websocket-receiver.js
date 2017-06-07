@@ -48,13 +48,14 @@ export function startWebSocketReceiving(store) {
 					store.dispatch(updateSubscriberStateAccepted(from));
 					break;
 				case TYPE_SUB_REQ_DENIED:
-					store.dispatch(updateLocation(from, obj.data));
+					store.dispatch(updateSubscriberStateRejected(from));
 					break;
 				case TYPE_NA:
 					ToastAndroid.show('User offline!', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_LOC:
-					store.dispatch(updateSubscriberStateRejected(from));
+					let objloc = JSON.parse(obj.data);
+					store.dispatch(updateLocation(from, objloc));
 					break;
 			}
 		}

@@ -299,5 +299,11 @@ const styles = StyleSheet.create({
     paddingRight:0,
     color: '#ffffff'
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: '#ffffff',
+  }
 });
 export default styles;

@@ -142,24 +142,21 @@ const styles = StyleSheet.create({
     borderRadius:35
   },
   stopButton: {
-    flex:1.5,
-    paddingLeft:6,
+    flex:1,
+    paddingRight:4,
     backgroundColor:'#ffffff',
     color: '#CC1D23',
-    alignItems: 'center',
-    width:40,
-    height:40,
-    borderRadius:40
+    alignItems: 'center'
   },
   mapButton: {
-    flex:1.5,
+    flex:1,
     paddingRight:6,
     backgroundColor:'#ffffff',
     color: '#CC1D23'
   },
   checkButton: {
-    flex:1.5,
-    paddingRight:6,
+    flex:1,
+    paddingRight:0,
     backgroundColor:'#ffffff',
     color: '#215602'
   },
@@ -259,7 +256,7 @@ const styles = StyleSheet.create({
   subRightBtnContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    flex: 3
+    flex: 4
   },
   statusText: {
     color: 'blue'
@@ -304,6 +301,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     backgroundColor: '#ffffff',
+  },
+  plainView: {
+    width: 60,
   }
 });
 export default styles;

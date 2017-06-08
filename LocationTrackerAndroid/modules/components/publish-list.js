@@ -5,9 +5,10 @@ import {connect} from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import {addToPublishContact} from '../actions/index';
-import {subscriptionApproveRequest} from '../websocket-receiver';
+import {addToPublishContact, removePublishContact} from '../actions/index';
+import {subscriptionApproveRequest, removePubs} from '../websocket-receiver';
 import {isServiceRunning, start, stop} from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 
@@ -20,11 +21,28 @@ class PublishList extends Component {
 		this._startPublish = this._startPublish.bind(this);
 		this._stopPublish = this._stopPublish.bind(this);
 		this._stopLocationPublish = this._stopLocationPublish.bind(this);
+		this._shareLocation = this._shareLocation.bind(this);
 	}
 	componentWillMount() {
 		this.setDataSource(this.props);
 	}
 	componentWillReceiveProps(nextProps){
+		if(nextProps.publishingTo===undefined ||
+			nextProps.publishingTo===null ||
+			nextProps.publishingTo.length===0) {
+			this._stopService();
+		}
+		else {
+			let approvedCount = 0;
+			nextProps.publishingTo.forEach((pub)=>{
+				if(pub.status===STATUS_APPROVED){
+					approvedCount++;
+				}
+			});
+			if(approvedCount === 0) {
+				this._stopService();
+			}
+		}
 		this.setDataSource(nextProps);
 	}
 	setDataSource(props) {
@@ -34,31 +52,12 @@ class PublishList extends Component {
 		});
 	}
 	_startPublish(data) {
-		addToPublishContact(data.phno, STATUS_APPROVED);
+		this.props.addToPublishContact(data.phno, STATUS_APPROVED);
 		subscriptionApproveRequest(this.props.myContact, {to:data.phno});
-		let isPublish = isServiceRunning();
-		if(isPublish === false) {
-			start();
-		}
 	}
 	_stopPublish(data) {
-		if(this.props.publishingTo===undefined ||
-			this.props.publishingTo===null ||
-			this.props.publishingTo.length===0) {
-			this._stopService();
-		}
-		else {
-			let approvedCount = 0;
-			this.props.publishingTo.forEach((pub)=>{
-				if(pub.status===STATUS_APPROVED){
-					approvedCount++;
-				}
-			});
-			if(approvedCount === 0) {
-				this._stopService();
-			}
-		}
-		
+		this.props.removePublishContact(data.phno);
+		removePubs(this.props.myContact, {to:data.phno});
 	}
 	_stopService() {
 		let isPublish = isServiceRunning();
@@ -70,6 +69,12 @@ class PublishList extends Component {
 		let isPublish = isServiceRunning();
 		if(isPublish === true) {
 			stop();
+		}
+	}
+	_shareLocation() {
+		let isPublish = isServiceRunning();
+		if(isPublish === false) {
+			start();
 		}
 	}
 	_renderRow(data, sectionId, rowId, highlight) {
@@ -104,9 +109,9 @@ class PublishList extends Component {
 							style={[styles.checkButton]} />
 					</TouchableOpacity>
 					<TouchableOpacity onPress={()=>{
-							this._stopLocationPublish();
+							this._stopPublish(data);
 						}}>
-						<Octicons name="stop" size={35} 
+						<EvilIcons name="close-o" size={50} 
 							style={[styles.stopButton]} />
 					</TouchableOpacity>
 				</View>
@@ -125,7 +130,7 @@ class PublishList extends Component {
 		        />
 		        <View style={[styles.globalShareButtonContainer]}>
 					<TouchableOpacity onPress={()=>{
-						
+							this._shareLocation();
 						}}>
 						<Foundation name="share" size={40} 
 						style={[styles.globalShareBackButton]} />
@@ -135,7 +140,7 @@ class PublishList extends Component {
 					<TouchableOpacity onPress={()=>{
 							this._stopLocationPublish();
 						}}>
-						<Octicons name="stop" size={40} 
+						<Ionicons name="ios-close-circle-outline" size={45} 
 						style={[styles.globalStopButton]} />
 					</TouchableOpacity>
 				</View>
@@ -156,4 +161,4 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {addToPublishContact})(PublishList);
+export default connect(mapStateToProps, {addToPublishContact, removePublishContact})(PublishList);

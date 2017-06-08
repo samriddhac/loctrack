@@ -7,6 +7,8 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 EVENT_REQUEST_SUBSCRIPTION,
 	 EVENT_REQUEST_SUBSCRIPTION_ACCEPTED,
 	 EVENT_PUBLISH_LOCATION,
+	 EVENT_STOP_SUBSCRIPTION,
+	 EVENT_REMOVE_PUBLISH,
 	 TYPE_CONN_ACK, TYPE_ACK, TYPE_AUTH_REQ,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
@@ -105,6 +107,14 @@ export function initConnection(from) {
 
 export function subscriptionRequest(from, obj) {
 	getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, from, JSON.stringify(obj));
+}
+
+export function removeSubs(from, obj) {
+	getSocket().emit(EVENT_STOP_SUBSCRIPTION, from, JSON.stringify(obj));
+}
+
+export function removePubs(from, obj) {
+	getSocket().emit(EVENT_REMOVE_PUBLISH, from, JSON.stringify(obj));
 }
 
 export function subscriptionApproveRequest(from, obj) {

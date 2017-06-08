@@ -2,7 +2,8 @@ import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS,
 	CHANGE_VIEW, REQUEST_LOCATION, ADD_TO_SUBSCRIBER,
 	SET_MY_LOCATION, GET_PERSISTED_STATE,
 	SET_MY_CONTACT, UPDATE_SUBS_STATUS,
-	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT} from './action-types';
+	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT,
+	REMOVE_PUBLISH_CONTACT, REMOVE_SUBS_CONTACT} from './action-types';
 import {publishLocation} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -23,6 +24,22 @@ export function addToPublishContact(from, status=STATUS_PENDING) {
 		type: ADD_TO_PUBLISH_CONTACT,
 		payload: {
 			status,
+			from
+		}
+	};
+}
+export function removePublishContact(from) {
+	return {
+		type: REMOVE_PUBLISH_CONTACT,
+		payload: {
+			from
+		}
+	};
+}
+export function removeSubsContact(from) {
+	return {
+		type: REMOVE_SUBS_CONTACT,
+		payload: {
 			from
 		}
 	};

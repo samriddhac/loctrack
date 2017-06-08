@@ -18,9 +18,9 @@ export const EVENT_REQUEST_SUBSCRIPTION_ACCEPTED = 'EVENT_REQUEST_SUBSCRIPTION_A
 export const EVENT_REQUEST_SUBSCRIPTION_REJECTED = 'EVENT_REQUEST_SUBSCRIPTION_REJECTED';
 export const EVENT_ADD_TO_PUBLISH = 'EVENT_ADD_TO_PUBLISH';
 export const EVENT_PUBLISH_LOCATION = 'EVENT_PUBLISH_LOCATION';
-
 export const EVENT_STOP_SUBSCRIPTION = 'EVENT_STOP_SUBSCRIPTION';
-export const EVENT_STOP_PUBLISH ='EVENT_STOP_PUBLISH';
+export const EVENT_REMOVE_PUBLISH ='EVENT_REMOVE_PUBLISH';
+
 export const EVENT_ON_LOCATION_RECEIVE = 'message';
 
 export const TYPE_CONN_ACK = 'conn_ack';
@@ -34,6 +34,8 @@ export const TYPE_SUB_REQ_APPROVED = 'sub_req_approved';
 export const TYPE_SUB_REQ_DENIED = 'sub_req_denied';
 export const TYPE_NA = 'na';
 export const TYPE_LOC = 'loc';
+export const TYPE_SUB_REQ_REMOVED ='sub_req_rem';
+export const TYPE_PUB_REQ_REMOVED ='pub_req_rem';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';

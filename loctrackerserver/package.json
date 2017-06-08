@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:server": "forever src/server.js",
+    "start:server": "forever src/server.js  -o out.log -l loc.log -e error.log",
     "int:test": "webpack-dev-server --config integration-test/webpack.config.js"
   },
   "author": "Samriddha Chatterjee",

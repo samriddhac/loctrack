@@ -45,16 +45,7 @@ function websocket_pool() {
 		removeFromPoolBySocket: function(socketId) {
 			if(webSocketPool!==undefined && webSocketPool!==null) {
 				if(webSocketPool.length > 0 ){
-					let matchIndex = -1;
-					for(let index=0; index<webSocketPool.length; index++) {
-						let item = webSocketPool[index];
-						if(item.websocket ==socketId) {
-							matchIndex = index;
-						}
-					}
-					if(matchIndex>0) {
-						_.remove(webSocketPool, {websocket:socketId});
-					}
+					_.remove(webSocketPool, {websocket:socketId});
 				}
 			}
 		},

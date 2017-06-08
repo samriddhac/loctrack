@@ -67,10 +67,7 @@ class PublishList extends Component {
 		}
 	}
 	_stopLocationPublish() {
-		let isPublish = isServiceRunning();
-		if(isPublish === true) {
-			stop();
-		}
+		this._stopService();
 	}
 	_renderRow(data, sectionId, rowId, highlight) {
 		let thumbnail = require('../../modules/images/icons/default.jpg');

@@ -18,11 +18,11 @@ export function addToPublish(data) {
 		payload: data
 	};
 }
-export function addToPublishContact(from) {
+export function addToPublishContact(from, status=STATUS_PENDING) {
 	return {
 		type: ADD_TO_PUBLISH_CONTACT,
 		payload: {
-			status:STATUS_PENDING,
+			status,
 			from
 		}
 	};

@@ -6,9 +6,10 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import styles from '../styles/style';
-import {addToPublish} from '../actions/index';
+import {addToPublishContact} from '../actions/index';
 import {subscriptionApproveRequest} from '../websocket-receiver';
 import {isServiceRunning, start, stop} from '../geolocation-receiver';
+import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 
 class PublishList extends Component {
 
@@ -33,6 +34,7 @@ class PublishList extends Component {
 		});
 	}
 	_startPublish(data) {
+		addToPublishContact(data.phno, STATUS_APPROVED);
 		subscriptionApproveRequest(this.props.myContact, {to:data.phno});
 		let isPublish = isServiceRunning();
 		if(isPublish === false) {
@@ -40,6 +42,25 @@ class PublishList extends Component {
 		}
 	}
 	_stopPublish(data) {
+		if(this.props.publishingTo===undefined ||
+			this.props.publishingTo===null ||
+			this.props.publishingTo.length===0) {
+			this._stopService();
+		}
+		else {
+			let approvedCount = 0;
+			this.props.publishingTo.forEach((pub)=>{
+				if(pub.status===STATUS_APPROVED){
+					approvedCount++;
+				}
+			});
+			if(approvedCount === 0) {
+				this._stopService();
+			}
+		}
+		
+	}
+	_stopService() {
 		let isPublish = isServiceRunning();
 		if(isPublish === true) {
 			stop();
@@ -135,4 +156,4 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {addToPublish})(PublishList);
+export default connect(mapStateToProps, {addToPublishContact})(PublishList);

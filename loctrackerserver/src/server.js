@@ -315,7 +315,7 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			console.log('Disconnecting socket ', socket.id);
 			socketpool.removeFromPoolBySocket(socket.id);
-			console.log('socketpool ',socketpool.getAllConnection());
+			console.log('socketpool ',socketpool.getAllConnection().length);
 		}
 		catch(err) {	
 			console.log(err);

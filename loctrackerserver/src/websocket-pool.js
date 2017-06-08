@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 
 function websocket_pool() {
 	let webSocketPool =[];
@@ -52,7 +53,7 @@ function websocket_pool() {
 						}
 					}
 					if(matchIndex>0) {
-						webSocketPool.splice(matchIndex, 1);
+						_.remove(webSocketPool, {websocket:socketId});
 					}
 				}
 			}

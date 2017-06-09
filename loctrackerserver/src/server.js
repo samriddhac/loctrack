@@ -462,7 +462,6 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 });
 
 function releasePendingQueue(to) {
-	console.log(pendingmessages);
 	try{
 		if(pendingmessages!==undefined && pendingmessages!==null) {
 			if(pendingmessages[to]!==undefined && pendingmessages[to]!==null

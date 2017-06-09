@@ -170,3 +170,10 @@ export function getStatus(s) {
 		return 'Offline';
 	}
 }
+
+export function removeContact(items, obj) {
+	let returnList = [];
+	_.remove(items, {phno:obj.from});
+	returnList = [...items];
+	return returnList;
+}

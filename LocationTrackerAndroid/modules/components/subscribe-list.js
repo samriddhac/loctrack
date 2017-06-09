@@ -3,11 +3,13 @@ import {Text, View, TextInput, TouchableHighlight,
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
 import { VIEW_MAP } from '../common/constants';
-import {changeView} from '../actions/index';
+import {changeView, removeSubsContact} from '../actions/index';
 import { getStatus } from '../utils/utilities';
+import {removeSubs} from '../websocket-receiver';
 
 class SubscribeList extends Component {
 
@@ -35,8 +37,9 @@ class SubscribeList extends Component {
 		this.props.changeView(VIEW_MAP);
 	}
 
-	_stopSubscription() {
-
+	_stopSubscription(data) {
+		this.props.removeSubsContact(data.phno);
+		removeSubs(this.props.myContact, {to:data.phno});
 	}
 
 	_renderRow(data, sectionId, rowId, highlight) {
@@ -74,7 +77,7 @@ class SubscribeList extends Component {
 						<TouchableOpacity onPress={()=>{
 								this._stopSubscription(data);
 							}}>
-							<Octicons name="stop" size={35} 
+							<EvilIcons name="close-o" size={45} 
 								style={[styles.stopButton]} />
 						</TouchableOpacity>
 					</View>
@@ -116,7 +119,8 @@ function mapStateToProps(state) {
 		sub = state.contactState.subscribedTo;
 	}
 	return {
-		subscribedTo: sub
+		subscribedTo: sub,
+		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {changeView})(SubscribeList);
+export default connect(mapStateToProps, {changeView, removeSubsContact})(SubscribeList);

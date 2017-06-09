@@ -2,9 +2,16 @@ import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER,
 	 GET_PERSISTED_STATE, SET_MY_CONTACT,
 		UPDATE_SUBS_STATUS, ADD_TO_PUBLISH,
 		ADD_TO_PUBLISH_CONTACT,
-		ACTION_TYPE_LOC_UPDATE} from '../actions/action-types';
-import {convertContacts, mergedList,
-	updateStatus, updatePublish, updateSubLocations} from '../utils/utilities';
+		ACTION_TYPE_LOC_UPDATE,
+		REMOVE_PUBLISH_CONTACT, 
+		REMOVE_SUBS_CONTACT} from '../actions/action-types';
+import {convertContacts, 
+	mergedList,
+	updateStatus, 
+	updatePublish,
+	updateSubLocations, 
+	removeContact} from '../utils/utilities';
+	
 INITIAL_STATE = {
 	myContact:'',
 	contacts: [],
@@ -35,6 +42,10 @@ export default function(state=INITIAL_STATE, action) {
 			return {...state, publishingTo: updatePublish(state.publishingTo, state.contacts, action.payload)}; 
 		case ACTION_TYPE_LOC_UPDATE:
 			return {...state, subscribedTo: updateSubLocations(state.subscribedTo, action.payload)};
+		case REMOVE_PUBLISH_CONTACT:
+			return {...state, publishingTo: removeContact(state.publishingTo, action.payload)};
+		case REMOVE_SUBS_CONTACT:
+			return {...state, subscribedTo: removeContact(state.subscribedTo, action.payload)};
 		default:
 			return state;
 	}

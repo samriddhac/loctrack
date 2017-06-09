@@ -92,7 +92,8 @@ class GoogleMap extends Component {
 	      }
 	      let myPosition = {
 	      	position: position.coords,
-	      	icon: '../../modules/images/icons/bluecircle.png'
+	      	icon: '../../modules/images/icons/bluecircle.png',
+	      	name: 'Me'
 	      };
 	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
 	        this.setState({ 
@@ -128,7 +129,8 @@ class GoogleMap extends Component {
 					let m = {
 						position: item.loc,
 						icon: '../../modules/images/icons/bluecircle.png',
-						color: 'blue'
+						color: 'blue',
+						name: item.givenName
 					};
 					markerArray = [m, ...markerArray];
 					console.log('markerArray ',markerArray);
@@ -183,6 +185,11 @@ class GoogleMap extends Component {
 						  coordinate={marker.position}
 						  pinColor={marker.color}
 						>
+							<MapView.Callout style={styles.plainView}>
+				              <View>
+				                <Text>{marker.name}</Text>
+				              </View>
+				            </MapView.Callout>
 						</MapView.Marker>
 						))}
 					</MapView>

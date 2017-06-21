@@ -7,6 +7,7 @@ import Home from './home';
 import SearchBoxView from './search-box-view';
 import GoogleMap from './google-map';
 import Register from './register';
+import Display from 'react-native-display';
 
 class ViewStateManager extends Component {
 	constructor(props) {

@@ -7,6 +7,7 @@ import ViewStateManager from './view-state-manager';
 import {getAllContacts, loadPersistedState, changeView} from '../actions/index';
 import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
 import {initConnection} from '../websocket-receiver';
+import SplashScreen from 'react-native-splash-screen';
 
 class App extends Component {
 
@@ -51,6 +52,7 @@ class App extends Component {
 
 	componentDidMount() {
 		this.props.getAllContacts();
+		SplashScreen.hide();
 	}
 
 	render() {

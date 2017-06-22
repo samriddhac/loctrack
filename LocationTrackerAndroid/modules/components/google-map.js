@@ -59,7 +59,8 @@ class GoogleMap extends Component {
 			  	navigator.geolocation.getCurrentPosition((pos)=>{
 			  		let myPosition = {
 				      	position: pos.coords,
-				      	icon: '../../modules/images/icons/bluecircle.png'
+				      	icon: '../../modules/images/icons/bluecircle.png',
+	      				name: 'Me'
 				      };
 			  		this.setState({ 
 			        	region: {

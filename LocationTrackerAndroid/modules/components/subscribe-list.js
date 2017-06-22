@@ -68,18 +68,20 @@ class SubscribeList extends Component {
 				</View>
 				<View style={[styles.subRightContainer]}>
 					<View style={[styles.subRightBtnContainer]}>
-						<TouchableOpacity onPress={()=>{
+						<TouchableNativeFeedback onPress={()=>{
 								this._goToMap(data);
-							}}>
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 							<MaterialCommunityIcons name="map-marker-multiple" size={35} 
 								style={[styles.mapButton]} />
-						</TouchableOpacity>
-						<TouchableOpacity onPress={()=>{
+						</TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={()=>{
 								this._stopSubscription(data);
-							}}>
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 							<EvilIcons name="close-o" size={45} 
 								style={[styles.stopButton]} />
-						</TouchableOpacity>
+						</TouchableNativeFeedback>
 					</View>
 					<View style={[styles.statusTextContainer]}>
 						<Text style={[styles.statusText]}>{getStatus(data.status)}</Text>
@@ -99,12 +101,13 @@ class SubscribeList extends Component {
 {styles.separator} />}
 		        />
 		        <View style={[styles.globalmapButtonContainer]}>
-					<TouchableOpacity onPress={()=>{
+					<TouchableNativeFeedback onPress={()=>{
 							this._goToMap(null);
-						}}>
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<MaterialCommunityIcons name="map-marker-multiple" size={40} 
 						style={[styles.globalmapBackButton]} />
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 				</View>
 			</View>
 		);

@@ -99,18 +99,20 @@ class PublishList extends Component {
 		            </Text>
 				</View>
 				<View style={[styles.subRightBtnContainer]}>
-					<TouchableOpacity onPress={()=>{
+					<TouchableNativeFeedback onPress={()=>{
 							this._startPublish(data);
-						}}>
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<EvilIcons name="check" size={50} 
 							style={[styles.checkButton]} />
-					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>{
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback onPress={()=>{
 							this._stopPublish(data);
-						}}>
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<EvilIcons name="close-o" size={50} 
 							style={[styles.stopButton]} />
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 				</View>
           	</View>
 		);
@@ -126,20 +128,22 @@ class PublishList extends Component {
 {styles.separator} />}
 		        />
 		        <View style={[styles.globalShareButtonContainer]}>
-					<TouchableOpacity onPress={()=>{
+					<TouchableNativeFeedback onPress={()=>{
 							this._shareLocation();
-						}}>
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<Foundation name="share" size={40} 
 						style={[styles.globalShareBackButton]} />
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 				</View>
 				<View style={[styles.globalStopButtonContainer]}>
-					<TouchableOpacity onPress={()=>{
+					<TouchableNativeFeedback onPress={()=>{
 							this._stopLocationPublish();
-						}}>
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<Ionicons name="ios-close-circle-outline" size={45} 
 						style={[styles.globalStopButton]} />
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 				</View>
 			</View>
 		);

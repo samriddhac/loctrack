@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, 
-	TouchableOpacity,
+	TouchableNativeFeedback,
 	Image,
 	Text,
 	PermissionsAndroid,
@@ -194,12 +194,13 @@ class GoogleMap extends Component {
 						))}
 					</MapView>
 				    <View style={[styles.mapButtonContainer]}>
-						<TouchableOpacity onPress={()=>{
+						<TouchableNativeFeedback onPress={()=>{
 								this._goToHome();
-							}}>
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 							<Ionicons name="ios-arrow-back" size={40} 
 									style={[styles.mapBackButton]} />
-						</TouchableOpacity>
+						</TouchableNativeFeedback>
 					</View>
 			    </View>
 			);

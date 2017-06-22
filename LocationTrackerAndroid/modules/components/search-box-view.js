@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {Text, View, TextInput, 
 	ListView, Image, ScrollView, 
 	TouchableOpacity,
+	TouchableNativeFeedback,
 	KeyboardAvoidingView,
 	ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -94,22 +95,24 @@ class SearchBoxView extends Component {
 		              {name}
 		            </Text>
 				</View>
-				<TouchableOpacity onPress={()=>{
+				<TouchableNativeFeedback onPress={()=>{
 						this._publishLocation(data);
-					}}>
+					}}
+					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 					<View style={[styles.pubsubButtonContainer]}>
 						<Octicons name="broadcast" size={30} 
 							style={[styles.pubButton]} />
 					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>{
+				</TouchableNativeFeedback>
+				<TouchableNativeFeedback onPress={()=>{
 						this._requestLocation(data);
-					}}>
+					}}
+					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 					<View style={[styles.pubsubButtonContainer]}>
 						<Ionicons name="ios-wifi-outline" size={30} 
 							style={[styles.subButton]} />
 					</View>
-				</TouchableOpacity>
+				</TouchableNativeFeedback>
           	</View>
 		);
 	}
@@ -118,12 +121,13 @@ class SearchBoxView extends Component {
 		return(
 			<View style={styles.searchBoxContainer}>
 				<KeyboardAvoidingView style={styles.searchTextBox} behavior={this.state.behavior} >
-					<TouchableOpacity onPress={this._backHome}>
+					<TouchableNativeFeedback onPress={this._backHome}
+					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<View style={[styles.backContainer]}>
 							<EvilIcons name="chevron-left" size={44} 
 							style={[styles.searchBack]}/>
 						</View>
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 					<TextInput onChangeText={(text) => this._filterData(text)}
 						underlineColorAndroid='rgba(0,0,0,0)'
         				placeholder='Search Contacts...'

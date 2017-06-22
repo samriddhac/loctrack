@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, Image, TouchableOpacity} from 'react-native';
+import {Text, View, Image, TouchableNativeFeedback} from 'react-native';
 import styles from '../styles/style';
 import Icon from 'react-native-vector-icons/Entypo';
 import OIcon from 'react-native-vector-icons/Octicons';
@@ -22,16 +22,18 @@ class Header extends Component  {
 			<View style={styles.headerContent}>
 				<Text style={[styles.headerText, styles.defaultFont]}>WhereApp</Text>
 				<View style={ styles.headerIconBtn }>
-					<TouchableOpacity onPress={this._performSearch}>
+					<TouchableNativeFeedback onPress={this._performSearch}
+					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<View style={[styles.searchIconContainer]}>
 							<OIcon name="search" size={24} 
 							style={[styles.headerIcon, styles.headerIconSearch]}/>
 						</View>
-					</TouchableOpacity>
-					<TouchableOpacity>
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback
+					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<Icon name="dots-three-vertical" size={24} 
 						style={[styles.headerIcon,styles.headerIconThreeDots]}/>
-					</TouchableOpacity>
+					</TouchableNativeFeedback>
 				</View>
 			</View>
 		);

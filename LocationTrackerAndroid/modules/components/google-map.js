@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {View, 
+import {
 	TouchableNativeFeedback,
 	Image,
-	Text,
 	PermissionsAndroid,
 	Platform,
   	Dimensions} from 'react-native';
@@ -14,6 +13,7 @@ import styles from '../styles/style';
 import { VIEW_HOME } from '../common/constants';
 import {changeView} from '../actions/index';
 import myLocIcon from '../images/icons/bluecircle.png';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
 const ANCHOR = { x: 0.5, y: 0.5 };
@@ -171,7 +171,7 @@ class GoogleMap extends Component {
 		}
 		else {
 			return(
-				<View style={[styles.mapContainer]}>
+				<View animation="zoomInRight" delay={3000} style={[styles.mapContainer]}>
 					<MapView
 					ref={ref => { this.map = ref; }}
 					style={styles.map}

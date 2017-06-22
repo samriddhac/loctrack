@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Text, View, TextInput, 
+import {TextInput, 
 	ListView, Image, ScrollView, 
 	TouchableOpacity,
 	TouchableNativeFeedback,
@@ -14,6 +14,7 @@ import styles from '../styles/style';
 import {changeView, requestLocation, addToPublish} from '../actions/index';
 import { VIEW_HOME, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import {subscriptionRequest} from '../websocket-receiver';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 class SearchBoxView extends Component {
 
@@ -119,7 +120,7 @@ class SearchBoxView extends Component {
 
 	render() {
 		return(
-			<View style={styles.searchBoxContainer}>
+			<View animation="zoomInRight" delay={3000} style={styles.searchBoxContainer}>
 				<KeyboardAvoidingView style={styles.searchTextBox} behavior={this.state.behavior} >
 					<TouchableNativeFeedback onPress={this._backHome}
 					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>

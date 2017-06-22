@@ -55,7 +55,11 @@ const styles = StyleSheet.create({
     alignItems: 'stretch'
   },
   content: {
-    flex: 11
+    flex: 11,
+    backgroundColor: '#6918CC'
+  },
+  tabBar: {
+    color: '#6918CC'
   },
   searchBoxContainer: {
     flex: 1,
@@ -241,9 +245,9 @@ const styles = StyleSheet.create({
   },
   backContainer: {
     backgroundColor: 'transparent',
-    width: 45,
-    height: 45,
-    borderRadius: 45
+    width: 44,
+    height: 44,
+    borderRadius: 44
   },
   pubsubButtonContainer: {
     backgroundColor: 'transparent',

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, TouchableHighlight, 
+import {TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,6 +10,7 @@ import { VIEW_MAP } from '../common/constants';
 import {changeView, removeSubsContact} from '../actions/index';
 import { getStatus } from '../utils/utilities';
 import {removeSubs} from '../websocket-receiver';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 class SubscribeList extends Component {
 
@@ -93,7 +94,7 @@ class SubscribeList extends Component {
 
 	render() {
 		return(
-			<View style={styles.searchResultContainer}>
+			<View animation="zoomInRight" delay={3000} style={styles.searchResultContainer}>
 				<ListView
 		          dataSource={this.state.subdataSource}
 		          renderRow={this._renderRow}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, TextInput, TouchableHighlight, 
+import {TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import {connect} from 'react-redux';
@@ -7,6 +7,7 @@ import styles from '../styles/style';
 import Header from './header';
 import SubscribeList from './subscribe-list';
 import PublishList from './publish-list';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 class Home extends Component {
 
@@ -22,7 +23,7 @@ class Home extends Component {
 	}
 
 	_handleChangeTab = index => this.setState({ index });
-	_renderHeader = props => <TabBar {...props} />;
+	_renderHeader = props => <TabBar  style={{ backgroundColor: '#6918CC' }} />;
 
 	_renderScene = SceneMap({
 		'1': SubscribeList,
@@ -31,7 +32,7 @@ class Home extends Component {
 	
 	render() {
 		return (
-		<View style={styles.homeContainer}>
+		<View animation="zoomInRight" delay={3000} style={styles.homeContainer}>
 			<View style={styles.header}>
 				<Header/>
 			</View>

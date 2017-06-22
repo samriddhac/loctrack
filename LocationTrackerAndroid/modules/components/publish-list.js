@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, TouchableHighlight, 
+import {TextInput, TouchableHighlight, 
 	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
 import {connect} from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -11,6 +11,7 @@ import {addToPublishContact, removePublishContact} from '../actions/index';
 import {subscriptionApproveRequest, removePubs} from '../websocket-receiver';
 import {isServiceRunning, start, stop} from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
+import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 class PublishList extends Component {
 
@@ -120,7 +121,7 @@ class PublishList extends Component {
 
 	render() {
 		return(
-			<View style={styles.searchResultContainer}>
+			<View animation="zoomInRight" delay={3000} style={styles.searchResultContainer}>
 				<ListView
 		          dataSource={this.state.pubdataSource}
 		          renderRow={this._renderRow}

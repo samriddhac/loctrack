@@ -49,13 +49,15 @@ class SearchBoxView extends Component {
 			to: data.phno
 		};
 		subscriptionRequest(from, obj);
-		data.status = STATUS_PENDING;
+		let dObj = JSON.parse(JSON.stringify(data));
+		dObj.status = STATUS_PENDING;
 		ToastAndroid.showWithGravity('Location request sent!!', ToastAndroid.LONG, ToastAndroid.TOP);
-		this.props.requestLocation(data);
+		this.props.requestLocation(dObj);
 	}
 	_publishLocation(data) {
-		data.status = STATUS_APPROVED;
-		this.props.addToPublish(data);
+		let dObj = JSON.parse(JSON.stringify(data));
+		dObj.status = STATUS_APPROVED;
+		this.props.addToPublish(dObj);
 	}
 
 	_filterData(query) {

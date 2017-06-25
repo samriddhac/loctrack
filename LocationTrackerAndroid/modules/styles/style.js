@@ -207,7 +207,8 @@ const styles = StyleSheet.create({
     width:35,
     height:35,
     borderRadius:35,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight:10
   },
   globalmapBackButton: {
     paddingTop:5,

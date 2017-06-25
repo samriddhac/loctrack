@@ -24,7 +24,7 @@ export function startWebSocketReceiving(store) {
 	let socket = getSocket(); 
 	socket.on(EVENT_ON_MESSAGE_RECEIVE, (from, msg) => {
 		console.log('msg ', msg);
-		ToastAndroid.show(JSON.stringify(msg), ToastAndroid.LONG, ToastAndroid.TOP);
+		//ToastAndroid.show(JSON.stringify(msg), ToastAndroid.LONG, ToastAndroid.TOP);
 		let obj = msg;
 		if(obj!==undefined && obj!==null
 			&& obj.t!==undefined && obj.t!==null) {

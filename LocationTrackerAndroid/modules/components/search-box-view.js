@@ -5,6 +5,7 @@ import {TextInput,
 	TouchableOpacity,
 	TouchableNativeFeedback,
 	KeyboardAvoidingView,
+	TouchableHighlight,
 	ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -90,33 +91,35 @@ class SearchBoxView extends Component {
 			name = name + ' ' + data.familyName;
 		}
 		return(
-			<View style={styles.row}>
-				<View style={[styles.contactContainer]}>
-					<Image style={styles.thumb} source={thumbnail}
-		            defaultSource={require('../../modules/images/icons/default.jpg')} />
-		            <Text style={[styles.rowText, , styles.defaultFont]}>
-		              {name}
-		            </Text>
-				</View>
-				<TouchableNativeFeedback onPress={()=>{
-						this._publishLocation(data);
-					}}
-					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-					<View style={[styles.pubsubButtonContainer]}>
-						<Octicons name="broadcast" size={30} 
-							style={[styles.pubButton]} />
+			<TouchableHighlight onPress={() => {}} underlayColor='#CC62BA'>
+				<View style={styles.row}>
+					<View style={[styles.contactContainer]}>
+						<Image style={styles.thumb} source={thumbnail}
+			            defaultSource={require('../../modules/images/icons/default.jpg')} />
+			            <Text style={[styles.rowText, , styles.defaultFont]}>
+			              {name}
+			            </Text>
 					</View>
-				</TouchableNativeFeedback>
-				<TouchableNativeFeedback onPress={()=>{
-						this._requestLocation(data);
-					}}
-					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-					<View style={[styles.pubsubButtonContainer]}>
-						<Ionicons name="ios-wifi-outline" size={30} 
-							style={[styles.subButton]} />
-					</View>
-				</TouchableNativeFeedback>
-          	</View>
+					<TouchableNativeFeedback onPress={()=>{
+							this._publishLocation(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<View style={[styles.pubsubButtonContainer]}>
+							<Octicons name="broadcast" size={30} 
+								style={[styles.pubButton]} />
+						</View>
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback onPress={()=>{
+							this._requestLocation(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<View style={[styles.pubsubButtonContainer]}>
+							<Ionicons name="ios-wifi-outline" size={30} 
+								style={[styles.subButton]} />
+						</View>
+					</TouchableNativeFeedback>
+	          	</View>
+          	</TouchableHighlight>
 		);
 	}
 

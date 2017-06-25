@@ -203,13 +203,10 @@ const styles = StyleSheet.create({
     color: '#4A44F2'
   },
   globalmapButtonContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
     backgroundColor:'#CC1D23',
-    width:55,
-    height:55,
-    borderRadius:55,
+    width:35,
+    height:35,
+    borderRadius:35,
     alignItems: 'center'
   },
   globalmapBackButton: {
@@ -293,14 +290,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   globalShareButtonContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
     backgroundColor:'#215602',
-    width:55,
-    height:55,
-    borderRadius:55,
-    alignItems: 'center'
+    width:35,
+    height:35,
+    borderRadius:35,
+    alignItems: 'center',
+    marginRight:20
   },
   globalShareBackButton: {
     paddingTop:5,
@@ -308,14 +303,12 @@ const styles = StyleSheet.create({
     color: '#ffffff'
   },
   globalStopButtonContainer: {
-    position: 'absolute',
-    bottom: 30,
-    right: 105,
     backgroundColor:'#CC1D23',
-    width:55,
-    height:55,
-    borderRadius:55,
-    alignItems: 'center'
+    width:35,
+    height:35,
+    borderRadius:35,
+    alignItems: 'center',
+    marginRight:10
   },
   globalStopButton: {
     paddingTop:5,
@@ -330,6 +323,15 @@ const styles = StyleSheet.create({
   },
   plainView: {
     width: 60,
+  },
+  listViewContainer: {
+    flex: 9
+  },
+  globalButtonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingRight:10
   }
 });
 export default styles;

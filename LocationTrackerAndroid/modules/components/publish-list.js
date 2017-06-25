@@ -142,30 +142,34 @@ class PublishList extends Component {
 	render() {
 		return(
 			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
-				<ListView
-		          dataSource={this.state.pubdataSource}
-		          renderRow={this._renderRow}
-		          renderSeparator={(sectionId, rowId) => <View style=
-{styles.separator} />}
-		        />
-		        <View style={[styles.globalShareButtonContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._shareLocation();
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<Foundation name="share" size={40} 
-						style={[styles.globalShareBackButton]} />
-					</TouchableNativeFeedback>
-				</View>
-				<View style={[styles.globalStopButtonContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._stopLocationPublish();
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<Ionicons name="ios-close-circle-outline" size={45} 
-						style={[styles.globalStopButton]} />
-					</TouchableNativeFeedback>
-				</View>
+				<View style={styles.listViewContainer}>
+					<ListView
+			          dataSource={this.state.pubdataSource}
+			          renderRow={this._renderRow}
+			          renderSeparator={(sectionId, rowId) => <View style=
+	{styles.separator} />}
+			        />
+		        </View>
+		        <View style={styles.globalButtonContainer}>
+		        	<View style={[styles.globalShareButtonContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+								this._shareLocation();
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<Foundation name="share" size={25} 
+							style={[styles.globalShareBackButton]} />
+						</TouchableNativeFeedback>
+					</View>
+					<View style={[styles.globalStopButtonContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+								this._stopLocationPublish();
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<Ionicons name="ios-close-circle-outline" size={25} 
+							style={[styles.globalStopButton]} />
+						</TouchableNativeFeedback>
+					</View>
+		        </View>
 			</View>
 		);
 	}

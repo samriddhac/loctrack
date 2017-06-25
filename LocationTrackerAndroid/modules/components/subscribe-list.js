@@ -95,20 +95,24 @@ class SubscribeList extends Component {
 	render() {
 		return(
 			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
-				<ListView
-		          dataSource={this.state.subdataSource}
-		          renderRow={this._renderRow}
-		          renderSeparator={(sectionId, rowId) => <View style=
-{styles.separator} />}
-		        />
-		        <View style={[styles.globalmapButtonContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._goToMap(null);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<MaterialCommunityIcons name="map-marker-multiple" size={40} 
-						style={[styles.globalmapBackButton]} />
-					</TouchableNativeFeedback>
+				<View style={styles.listViewContainer}>
+					<ListView
+			          dataSource={this.state.subdataSource}
+			          renderRow={this._renderRow}
+			          renderSeparator={(sectionId, rowId) => <View style=
+	{styles.separator} />}
+			        />
+		        </View>
+		        <View style={styles.globalButtonContainer}>
+			        <View style={[styles.globalmapButtonContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+								this._goToMap(null);
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<MaterialCommunityIcons name="map-marker-multiple" size={25} 
+							style={[styles.globalmapBackButton]} />
+						</TouchableNativeFeedback>
+					</View>
 				</View>
 			</View>
 		);

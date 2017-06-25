@@ -94,7 +94,7 @@ class SubscribeList extends Component {
 
 	render() {
 		return(
-			<View animation="zoomInRight" delay={3000} style={styles.searchResultContainer}>
+			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
 				<ListView
 		          dataSource={this.state.subdataSource}
 		          renderRow={this._renderRow}

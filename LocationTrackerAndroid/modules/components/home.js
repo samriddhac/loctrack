@@ -16,14 +16,20 @@ class Home extends Component {
 		this.state = {
 		    index: 0,
 		    routes: [
-		      { key: '1', title: 'My subscriptions' },
-		      { key: '2', title: 'My subcribers' },
+		      { key: '1', title: 'My Subscriptions' },
+		      { key: '2', title: 'My Subcribers' },
 		    ]
 		  };
 	}
 
 	_handleChangeTab = index => this.setState({ index });
-	_renderHeader = props => <TabBar  style={{ backgroundColor: '#6918CC' }} />;
+	_renderHeader = props => <TabBar {...props} style={styles.tabBarContent}
+		indicatorStyle={styles.indicatorStyle}
+		labelStyle={styles.labelStyle} 
+		getLabelText={(scene)=>{
+			let title = scene.route.title ? scene.route.title : null;
+			return title;
+		}}/>;
 
 	_renderScene = SceneMap({
 		'1': SubscribeList,
@@ -32,7 +38,7 @@ class Home extends Component {
 	
 	render() {
 		return (
-		<View animation="zoomInRight" delay={3000} style={styles.homeContainer}>
+		<View animation="fadeInRight" delay={100} style={styles.homeContainer}>
 			<View style={styles.header}>
 				<Header/>
 			</View>

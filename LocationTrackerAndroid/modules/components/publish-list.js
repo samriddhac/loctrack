@@ -75,6 +75,41 @@ class PublishList extends Component {
 			start();
 		}
 	}
+	_renderApprove(data) {
+		if(data.status !== STATUS_APPROVED) {
+			return (
+				<View style={[styles.subRightBtnContainer]}>
+					<TouchableNativeFeedback onPress={()=>{
+							this._startPublish(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<EvilIcons name="check" size={50} 
+							style={[styles.checkButton]} />
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback onPress={()=>{
+							this._stopPublish(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<EvilIcons name="close-o" size={50} 
+							style={[styles.stopButton]} />
+					</TouchableNativeFeedback>
+				</View>
+			);
+		}
+		else {
+			return (
+				<View style={[styles.subRightStopBtnContainer]}>
+					<TouchableNativeFeedback onPress={()=>{
+							this._stopPublish(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<EvilIcons name="close-o" size={50} 
+							style={[styles.stopButtonSingle]} />
+					</TouchableNativeFeedback>
+				</View>
+			);
+		}
+	}
 	_renderRow(data, sectionId, rowId, highlight) {
 		let thumbnail = require('../../modules/images/icons/default.jpg');
 		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
@@ -99,29 +134,14 @@ class PublishList extends Component {
 		              {name}
 		            </Text>
 				</View>
-				<View style={[styles.subRightBtnContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._startPublish(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<EvilIcons name="check" size={50} 
-							style={[styles.checkButton]} />
-					</TouchableNativeFeedback>
-					<TouchableNativeFeedback onPress={()=>{
-							this._stopPublish(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<EvilIcons name="close-o" size={50} 
-							style={[styles.stopButton]} />
-					</TouchableNativeFeedback>
-				</View>
+				{this._renderApprove(data)}
           	</View>
 		);
 	}
 
 	render() {
 		return(
-			<View animation="zoomInRight" delay={3000} style={styles.searchResultContainer}>
+			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
 				<ListView
 		          dataSource={this.state.pubdataSource}
 		          renderRow={this._renderRow}

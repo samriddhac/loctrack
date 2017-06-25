@@ -55,11 +55,16 @@ const styles = StyleSheet.create({
     alignItems: 'stretch'
   },
   content: {
-    flex: 11,
-    backgroundColor: '#6918CC'
+    flex: 11
   },
-  tabBar: {
-    color: '#6918CC'
+  tabBarContent: {
+    backgroundColor: '#4A44F2'
+  },
+  indicatorStyle:{
+    backgroundColor: '#ffffff'
+  },
+  labelStyle: {
+    fontFamily: 'notoserif'
   },
   searchBoxContainer: {
     flex: 1,
@@ -153,6 +158,15 @@ const styles = StyleSheet.create({
     paddingRight:4,
     backgroundColor:'#ffffff',
     color: '#CC1D23',
+    alignItems: 'center'
+  },
+  stopButtonSingle: {
+    flex:1,
+    flexDirection: 'row',
+    paddingRight:4,
+    backgroundColor:'#ffffff',
+    color: '#CC1D23',
+    justifyContent:'flex-end',
     alignItems: 'center'
   },
   mapButton: {
@@ -262,8 +276,13 @@ const styles = StyleSheet.create({
   },
   subRightBtnContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     flex: 4
+  },
+  subRightStopBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flex: 1.5
   },
   statusText: {
     color: 'blue'

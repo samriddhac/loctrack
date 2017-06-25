@@ -171,7 +171,7 @@ class GoogleMap extends Component {
 		}
 		else {
 			return(
-				<View animation="zoomInRight" delay={3000} style={[styles.mapContainer]}>
+				<View animation="fadeInRight" delay={100} style={[styles.mapContainer]}>
 					<MapView
 					ref={ref => { this.map = ref; }}
 					style={styles.map}

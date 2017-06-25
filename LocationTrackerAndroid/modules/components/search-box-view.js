@@ -120,7 +120,7 @@ class SearchBoxView extends Component {
 
 	render() {
 		return(
-			<View animation="zoomInRight" delay={3000} style={styles.searchBoxContainer}>
+			<View animation="fadeInRight" delay={100} style={styles.searchBoxContainer}>
 				<KeyboardAvoidingView style={styles.searchTextBox} behavior={this.state.behavior} >
 					<TouchableNativeFeedback onPress={this._backHome}
 					background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>

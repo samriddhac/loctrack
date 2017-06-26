@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
-import { VIEW_MAP } from '../common/constants';
+import { VIEW_MAP, STATUS_APPROVED } from '../common/constants';
 import {changeView, removeSubsContact} from '../actions/index';
 import { getStatus } from '../utils/utilities';
 import {removeSubs} from '../websocket-receiver';
@@ -34,7 +34,7 @@ class SubscribeList extends Component {
 			subdataSource:subdataSource.cloneWithRows(props.subscribedTo)
 		});
 	}
-	_goToMap() {
+	_goToMap(data) {
 		this.props.changeView(VIEW_MAP);
 	}
 
@@ -42,7 +42,31 @@ class SubscribeList extends Component {
 		this.props.removeSubsContact(data.phno);
 		removeSubs(this.props.myContact, {to:data.phno});
 	}
-
+	_renderApprove(data) {
+		return (
+			<View style={[styles.subRightContainer]}>
+				<View style={[styles.subRightBtnContainer]}>
+					<TouchableNativeFeedback onPress={()=>{
+							this._goToMap(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<MaterialCommunityIcons name="map-marker-multiple" size={35} 
+							style={[styles.mapButton]} />
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback onPress={()=>{
+							this._stopSubscription(data);
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+						<EvilIcons name="close-o" size={45} 
+							style={[styles.stopButton]} />
+					</TouchableNativeFeedback>
+				</View>
+				<View style={[styles.statusTextContainer]}>
+					<Text style={[styles.statusText]}>{getStatus(data.status)}</Text>
+				</View>
+			</View>
+		);
+	}
 	_renderRow(data, sectionId, rowId, highlight) {
 		let thumbnail = require('../../modules/images/icons/default.jpg');
 		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
@@ -67,27 +91,7 @@ class SubscribeList extends Component {
 		              {name}
 		            </Text>
 				</View>
-				<View style={[styles.subRightContainer]}>
-					<View style={[styles.subRightBtnContainer]}>
-						<TouchableNativeFeedback onPress={()=>{
-								this._goToMap(data);
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<MaterialCommunityIcons name="map-marker-multiple" size={35} 
-								style={[styles.mapButton]} />
-						</TouchableNativeFeedback>
-						<TouchableNativeFeedback onPress={()=>{
-								this._stopSubscription(data);
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<EvilIcons name="close-o" size={45} 
-								style={[styles.stopButton]} />
-						</TouchableNativeFeedback>
-					</View>
-					<View style={[styles.statusTextContainer]}>
-						<Text style={[styles.statusText]}>{getStatus(data.status)}</Text>
-					</View>
-				</View>
+				{this._renderApprove(data)}
           	</View>
 		);
 	}

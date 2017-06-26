@@ -169,6 +169,15 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end',
     alignItems: 'center'
   },
+  stopButtonSingleX: {
+    flex:1,
+    flexDirection: 'row',
+    paddingRight:2,
+    backgroundColor:'#ffffff',
+    color: '#CC1D23',
+    justifyContent:'flex-end',
+    alignItems: 'center'
+  },
   mapButton: {
     flex:1,
     paddingRight:6,
@@ -281,6 +290,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     flex: 1.5
+  },
+  subRightContainerX: {
+    flex: 1.5
+  },
+  subRightStopBtnContainerX: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1
   },
   statusText: {
     color: 'blue'

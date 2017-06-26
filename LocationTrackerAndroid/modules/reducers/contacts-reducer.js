@@ -25,8 +25,6 @@ export default function(state=INITIAL_STATE, action) {
 			return {...state, contacts:convertContacts(action.payload)};
 		case ADD_TO_SUBSCRIBER: 
 			let subsList = mergedList(state.subscribedTo, action.payload);
-			console.log('state.subscribedTo ', state.subscribedTo);
-			console.log('state.publishingTo ', state.publishingTo);
 			return {...state, subscribedTo: subsList};
 		case ADD_TO_PUBLISH: 
 			let pubList = mergedList(state.publishingTo, action.payload);

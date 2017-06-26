@@ -63,7 +63,7 @@ class RegisterView extends Component {
 	        					style= {[styles.roundBtn]}
 					            onPress={this.onButtonPress}
 					            title="Enter!"
-					            color="#841584"
+					            color="#4A44F2"
 					            accessibilityLabel="Enter!"
 					          />
 	        			</View>

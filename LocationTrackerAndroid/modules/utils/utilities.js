@@ -28,12 +28,14 @@ export function convertContacts(cntList) {
 				if(phno !== undefined && phno !== null && phno!==0) {
 				let phStr = trimNo(phno);
 				let obj = {
+						key:item.recordID,
 						recordID:item.recordID,
 						givenName: item.givenName,
 						familyName: item.familyName,
 						thumbnailPath: item.thumbnailPath,
 						phno:phStr,
-						searchName: item.givenName + ' ' + item.familyName
+						searchName: item.givenName + ' ' + item.familyName,
+						selected: false
 					};
 					contacts = [...contacts, obj];
 				}

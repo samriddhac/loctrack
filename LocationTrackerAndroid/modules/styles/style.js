@@ -333,6 +333,59 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingRight:10
+  },
+  selected: {
+    backgroundColor: '#d6d5f2'
+  },
+  unselected: {
+    backgroundColor: '#ffffff'
+  },
+  countText: {
+    fontSize: 20,
+    marginLeft: 20,
+    fontFamily: 'notoserif',
+    paddingBottom: 10
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    height: 60,
+    width: "100%",
+    backgroundColor: '#ffffff'
+  },
+  bottombarBtn: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width:140,
+    height:40,
+    borderRadius:30,
+    margin: 10,
+    paddingTop:10
+  },
+  violet: {
+    backgroundColor: '#4A44F2'
+  },
+  green: {
+    backgroundColor:'#ffffff',
+    borderWidth:1,
+    borderColor: '#4A44F2'
+  },
+  bottomText: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: 'notoserif',
+    fontSize: 12
+  },
+  bottomTextWhite: {
+    color: '#ffffff'
+  },
+  bottomTextBlue: {
+    color: '#4A44F2'
   }
 });
 export default styles;

@@ -1,39 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {TextInput, 
-	ListView, Image, ScrollView, 
+	Image,
 	TouchableOpacity,
 	TouchableNativeFeedback,
 	KeyboardAvoidingView,
 	TouchableHighlight,
+	FlatList,
+	Button,
 	ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import _ from 'lodash';
 import styles from '../styles/style';
 import {changeView, requestLocation, addToPublish} from '../actions/index';
-import { VIEW_HOME, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
+import { VIEW_HOME, VIEW_SEARCH_BOX, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import {subscriptionRequest} from '../websocket-receiver';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import ContactListItem from './contact-list-item';
 
-class SearchBoxView extends Component {
+class SearchBoxView extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
 		this.state = { 
 			text: '',
-			behavior: 'padding' 
+			behavior: 'padding',
+			currentList: [],
+			selectionCount:0
 		};
+
+		this.listData = [];
+		this.selectedData = [];
+
 		this._backHome = this._backHome.bind(this);
 		this._renderRow = this._renderRow.bind(this);
 		this._requestLocation = this._requestLocation.bind(this);
 		this._publishLocation = this._publishLocation.bind(this);
+		this._onRowPressed = this._onRowPressed.bind(this);
 	}
 
 	componentWillMount() {
-		let dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.setState({dataSource:dataSource.cloneWithRows(this.props.contacts)});
+		this.listData = this.props.contacts;
+		this._refreshDataSource(this.listData);
 	}
 
 	onSegmentChange(segment) {
@@ -44,83 +55,121 @@ class SearchBoxView extends Component {
 		this.props.changeView(VIEW_HOME);
 	}
 
-	_requestLocation(data) {
-		let from = this.props.myContact;
-		let obj = {
-			to: data.phno
-		};
-		subscriptionRequest(from, obj);
-		let dObj = JSON.parse(JSON.stringify(data));
-		dObj.status = STATUS_PENDING;
-		ToastAndroid.showWithGravity('Location request sent!!', ToastAndroid.LONG, ToastAndroid.TOP);
-		this.props.requestLocation(dObj);
+	_requestLocation() {
+		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			this.selectedData.forEach((data)=> {
+				let from = this.props.myContact;
+				let obj = {
+					to: data.phno
+				};
+				subscriptionRequest(from, obj);
+				let dObj = JSON.parse(JSON.stringify(data));
+				dObj.status = STATUS_PENDING;
+				this.props.requestLocation(dObj);
+			});
+			ToastAndroid.showWithGravity('Location request sent!!', ToastAndroid.LONG, ToastAndroid.TOP);	
+		}
+		
 	}
-	_publishLocation(data) {
-		let dObj = JSON.parse(JSON.stringify(data));
-		dObj.status = STATUS_APPROVED;
-		this.props.addToPublish(dObj);
+	_publishLocation() {
+		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			this.selectedData.forEach((data)=> {
+				let dObj = JSON.parse(JSON.stringify(data));
+				dObj.status = STATUS_APPROVED;
+				this.props.addToPublish(dObj);
+			});
+		}
 	}
 
 	_filterData(query) {
-		let dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		if (query === '') {
-	      this.setState({...this.state, dataSource:dataSource.cloneWithRows(this.props.contacts)});
+		  this.listData = this.props.contacts;
+	      this._refreshDataSource(this.listData);
 	    }
 	    else {
 	    	this.setState({...this.state, text:query});
 			const { contacts } = this.props;
 			const regex = new RegExp(`${query.trim()}`, 'i');
 			let data = contacts.filter(contact => contact.searchName.search(regex) >= 0);
-			this.setState({...this.state, dataSource:dataSource.cloneWithRows(data)});
+			this.listData = data;
+			this._refreshDataSource(this.listData);
 	    }
 	}
 
-	_renderRow(data, sectionId, rowId, highlight) {
-		let thumbnail = require('../../modules/images/icons/default.jpg');
-		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
-			&& data.thumbnailPath!=='') {
-			thumbnail = {uri:data.thumbnailPath};
+	_refreshDataSource(listData) {
+		let newList = [...listData];
+		this.setState({...this.state, currentList:newList});
+	}
+
+	_onRowPressed(data) {
+		if(data!==undefined) {
+			_.remove(this.selectedData, {recordID:data.recordID});
+			if(data.selected !==undefined
+			&& data.selected === true) {
+				this.selectedData = [data, ...this.selectedData];
+			}
 		}
-		let name = '';
-		if(data.givenName!==undefined && data.givenName!==null 
-			&& data.givenName!=='') {
-			name = data.givenName;
-		}
-		if(data.familyName!==undefined && data.familyName!==null 
-			&& data.familyName!=='') {
-			name = name + ' ' + data.familyName;
-		}
+		let newCount = this.selectedData.length;
+		this.setState({...this.state, selectionCount:newCount});
+	}
+
+	_renderRow(record) {
+		let data = record.item;
 		return(
-			<TouchableHighlight onPress={() => {}} underlayColor='#CC62BA'>
-				<View style={styles.row}>
-					<View style={[styles.contactContainer]}>
-						<Image style={styles.thumb} source={thumbnail}
-			            defaultSource={require('../../modules/images/icons/default.jpg')} />
-			            <Text style={[styles.rowText, , styles.defaultFont]}>
-			              {name}
-			            </Text>
-					</View>
-					<TouchableNativeFeedback onPress={()=>{
-							this._publishLocation(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<View style={[styles.pubsubButtonContainer]}>
-							<Octicons name="broadcast" size={30} 
-								style={[styles.pubButton]} />
-						</View>
-					</TouchableNativeFeedback>
-					<TouchableNativeFeedback onPress={()=>{
-							this._requestLocation(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<View style={[styles.pubsubButtonContainer]}>
-							<Ionicons name="ios-wifi-outline" size={30} 
-								style={[styles.subButton]} />
-						</View>
-					</TouchableNativeFeedback>
-	          	</View>
-          	</TouchableHighlight>
+			<ContactListItem data={data} _onRowPressed={this._onRowPressed}/>
 		);
+	}
+
+	_renderHeader() {
+		if(this.state.selectionCount>0) {
+			return (
+				<Text style={styles.countText}>{this.state.selectionCount}</Text>
+			);
+		}
+		else {
+			return (
+			<TextInput onChangeText={(text) => this._filterData(text)}
+				underlineColorAndroid='rgba(0,0,0,0)'
+				placeholder='Search Contacts...'
+				style={[styles.TextInputStyle]} />
+			);
+		}
+	}
+
+	renderSeparator() {
+		return (
+		  <View
+		    style={styles.separator}
+		  />
+		);
+	}
+
+	_renderBottomBar() {
+		if(this.state.selectionCount>0){
+			return (
+				<View animation="slideInUp" style={styles.bottomBar}>
+					<TouchableHighlight onPress={() => {this._requestLocation();}} 
+					underlayColor='#CC62BA'>
+						<View style={[styles.bottombarBtn, styles.green]}>
+							<Text style={[styles.bottomText, styles.bottomTextBlue]}>
+								Request Location
+							</Text>
+						</View>
+					</TouchableHighlight>
+					<TouchableHighlight onPress={() => {this._publishLocation();}} 
+					underlayColor='#CC62BA'>
+						<View style={[styles.bottombarBtn, styles.violet]}>
+							<Text style={[styles.bottomText, styles.bottomTextWhite]}>
+								Allow Location Access
+							</Text>
+						</View>
+					</TouchableHighlight>
+				</View>
+			);
+		}
+		else {
+			return null;
+		}
 	}
 
 	render() {
@@ -134,19 +183,17 @@ class SearchBoxView extends Component {
 							style={[styles.searchBack]}/>
 						</View>
 					</TouchableNativeFeedback>
-					<TextInput onChangeText={(text) => this._filterData(text)}
-						underlineColorAndroid='rgba(0,0,0,0)'
-        				placeholder='Search Contacts...'
-        				style={[styles.TextInputStyle]} />
+					{this._renderHeader()}
 				</KeyboardAvoidingView>
 				<View style={styles.searchResultContainer}>
-					<ListView
-			          dataSource={this.state.dataSource}
-			          renderRow={this._renderRow}
-			          renderSeparator={(sectionId, rowId) => <View style=
-    {styles.separator} />}
+					<FlatList
+			          data={this.state.currentList}
+			          renderItem={this._renderRow}
+			          pagingEnabled={true}
+			          ItemSeparatorComponent={this.renderSeparator}
 			        />
 				</View>
+				{this._renderBottomBar()}
 			</View>
 		);
 	}

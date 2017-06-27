@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     flex: 9
   },
   globalButtonContainer: {
-    flex: 1,
+    flex: 1.4,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingRight:10
@@ -403,6 +403,17 @@ const styles = StyleSheet.create({
   },
   bottomTextBlue: {
     color: '#4A44F2'
+  },
+  globalmapButtonTxtContainer: {
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  btnBottomText: {
+    color: '#4A44F2',
+    fontFamily: 'notoserif',
+    fontSize: 12,
+    alignItems: 'center',
+    marginRight:15
   }
 });
 export default styles;

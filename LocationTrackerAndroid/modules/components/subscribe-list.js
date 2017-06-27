@@ -108,14 +108,17 @@ class SubscribeList extends Component {
 			        />
 		        </View>
 		        <View style={styles.globalButtonContainer}>
-			        <View style={[styles.globalmapButtonContainer]}>
-						<TouchableNativeFeedback onPress={()=>{
-								this._goToMap(null);
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<MaterialCommunityIcons name="map-marker-multiple" size={25} 
-							style={[styles.globalmapBackButton]} />
-						</TouchableNativeFeedback>
+		        	<View style={[styles.globalmapButtonTxtContainer]}>
+				        <View style={[styles.globalmapButtonContainer]}>
+							<TouchableNativeFeedback onPress={()=>{
+									this._goToMap(null);
+								}}
+								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+								<MaterialCommunityIcons name="map-marker-multiple" size={25} 
+								style={[styles.globalmapBackButton]} />
+							</TouchableNativeFeedback>
+						</View>
+						<Text style={styles.btnBottomText}>Map</Text>
 					</View>
 				</View>
 			</View>

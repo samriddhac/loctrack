@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {TextInput, TouchableHighlight, 
-	TouchableNativeFeedback, TouchableOpacity, ListView, Image} from 'react-native';
+	TouchableNativeFeedback, 
+	TouchableOpacity, 
+	ListView, 
+	Image,
+	ToastAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -68,11 +72,15 @@ class PublishList extends Component {
 	}
 	_stopLocationPublish() {
 		this._stopService();
+		ToastAndroid.showWithGravity('Stopped location sharing', 
+			ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	_shareLocation() {
 		let isPublish = isServiceRunning();
 		if(isPublish === false) {
 			start();
+			ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
+			ToastAndroid.SHORT, ToastAndroid.TOP);
 		}
 	}
 	_renderApprove(data) {

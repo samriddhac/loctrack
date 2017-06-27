@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
   },
   bottomBar: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     position: 'absolute',
     bottom: 0,
     right: 0,

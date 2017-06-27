@@ -148,44 +148,56 @@ class PublishList extends Component {
 	}
 
 	render() {
-		return(
-			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
-				<View style={styles.listViewContainer}>
-					<ListView
-			          dataSource={this.state.pubdataSource}
-			          renderRow={this._renderRow}
-			          renderSeparator={(sectionId, rowId) => <View style=
-	{styles.separator} />}
-			        />
-		        </View>
-		        <View style={styles.globalButtonContainer}>
-		        	<View style={styles.globalShareButtonTxtContainer}>
-			        	<View style={[styles.globalShareButtonContainer]}>
-							<TouchableNativeFeedback onPress={()=>{
-									this._shareLocation();
-								}}
-								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-								<Foundation name="share" size={25} 
-								style={[styles.globalShareBackButton]} />
-							</TouchableNativeFeedback>
+		if(this.props.publishingTo==undefined || this.props.publishingTo==null
+			|| this.props.publishingTo.length==0) {
+			return (
+				<View style={[styles.regItems]}>
+					<Text style={[styles.welcomeStyle]}>
+						Please search in your contact, and allow your friends to receive your location.
+					</Text>
+				</View>
+			);
+		}
+		else {
+			return(
+				<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
+					<View style={styles.listViewContainer}>
+						<ListView
+				          dataSource={this.state.pubdataSource}
+				          renderRow={this._renderRow}
+				          renderSeparator={(sectionId, rowId) => <View style=
+		{styles.separator} />}
+				        />
+			        </View>
+			        <View style={styles.globalButtonContainer}>
+			        	<View style={styles.globalShareButtonTxtContainer}>
+				        	<View style={[styles.globalShareButtonContainer]}>
+								<TouchableNativeFeedback onPress={()=>{
+										this._shareLocation();
+									}}
+									background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+									<Foundation name="share" size={25} 
+									style={[styles.globalShareBackButton]} />
+								</TouchableNativeFeedback>
+							</View>
+							<Text style={styles.pubBtnTxtStyle}>Share Location</Text>
 						</View>
-						<Text style={styles.pubBtnTxtStyle}>Share Location</Text>
-					</View>
-					<View style={styles.globalStopButtonTxtContainer}>
-						<View style={[styles.globalStopButtonContainer]}>
-							<TouchableNativeFeedback onPress={()=>{
-									this._stopLocationPublish();
-								}}
-								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-								<Ionicons name="ios-close-circle-outline" size={25} 
-								style={[styles.globalStopButton]} />
-							</TouchableNativeFeedback>
+						<View style={styles.globalStopButtonTxtContainer}>
+							<View style={[styles.globalStopButtonContainer]}>
+								<TouchableNativeFeedback onPress={()=>{
+										this._stopLocationPublish();
+									}}
+									background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+									<Ionicons name="ios-close-circle-outline" size={25} 
+									style={[styles.globalStopButton]} />
+								</TouchableNativeFeedback>
+							</View>
+							<Text style={styles.pubBtnTxtStyle}>Stop Sharing</Text>
 						</View>
-						<Text style={styles.pubBtnTxtStyle}>Stop Sharing</Text>
-					</View>
-		        </View>
-			</View>
-		);
+			        </View>
+				</View>
+			);
+		}
 	}
 }
 

@@ -8,9 +8,10 @@ import {
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash/isEqual';
+import _ from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import { VIEW_HOME } from '../common/constants';
+import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED } from '../common/constants';
 import {changeView} from '../actions/index';
 import myLocIcon from '../images/icons/bluecircle.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
@@ -124,14 +125,34 @@ class GoogleMap extends Component {
 		if(props.subscribedTo!==undefined && props.subscribedTo!==null
 			&& props.subscribedTo.length>0){
 			let markerArray = [];
-			props.subscribedTo.forEach((item)=>{
-				if(item!==undefined && item!==null
-					&& item.loc!==undefined && item.loc!==null) {
+			if(props.selected === ALL_FRIEND) {
+				props.subscribedTo.forEach((item)=>{
+					if(item!==undefined && item!==null
+						&& item.loc!==undefined && item.loc!==null) {
+						let m = {
+							position: item.loc,
+							icon: '../../modules/images/icons/bluecircle.png',
+							color: 'blue',
+							name: item.givenName
+						};
+						markerArray = [m, ...markerArray];
+						console.log('markerArray ',markerArray);
+						this.setState({ 
+				        	...this.state,
+				        	markars: [...this.state.markars, ...markerArray]
+				        });
+					}
+				});
+			}
+			else if(props.selected>=0) {
+				let obj = _.find(props.subscribedTo, {recordID: props.selected});
+				if(obj!==undefined && obj!==null && obj.status===STATUS_APPROVED
+					&& obj.loc!==undefined && obj.loc!==null) {
 					let m = {
-						position: item.loc,
+						position: obj.loc,
 						icon: '../../modules/images/icons/bluecircle.png',
 						color: 'blue',
-						name: item.givenName
+						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
 					console.log('markerArray ',markerArray);
@@ -140,9 +161,8 @@ class GoogleMap extends Component {
 			        	markars: [...this.state.markars, ...markerArray]
 			        });
 				}
-			});
+			}
 		}
-		console.log('this.state.markers ',this.state.markers);
 		if(this.state.markers!==undefined
 			&& this.state.markers!==null
 			&& this.state.markers.length>0) {
@@ -210,7 +230,8 @@ class GoogleMap extends Component {
 }
 function mapStateToProps(state){
 	return {
-		subscribedTo: state.contactState.subscribedTo
+		subscribedTo: state.contactState.subscribedTo,
+		selected: state.contactState.selectedRecord
 	};
 }
 export default connect(mapStateToProps, {changeView})(GoogleMap);

@@ -67,7 +67,7 @@ class SearchBoxView extends React.PureComponent {
 				dObj.status = STATUS_PENDING;
 				this.props.requestLocation(dObj);
 			});
-			ToastAndroid.showWithGravity('Location request sent!!', ToastAndroid.LONG, ToastAndroid.TOP);	
+			ToastAndroid.showWithGravity('Location request sent', ToastAndroid.LONG, ToastAndroid.TOP);	
 		}
 		
 	}
@@ -78,6 +78,7 @@ class SearchBoxView extends React.PureComponent {
 				dObj.status = STATUS_APPROVED;
 				this.props.addToPublish(dObj);
 			});
+			ToastAndroid.showWithGravity('Added as your subscriber', ToastAndroid.LONG, ToastAndroid.TOP);
 		}
 	}
 

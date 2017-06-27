@@ -4,7 +4,8 @@ import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER,
 		ADD_TO_PUBLISH_CONTACT,
 		ACTION_TYPE_LOC_UPDATE,
 		REMOVE_PUBLISH_CONTACT, 
-		REMOVE_SUBS_CONTACT} from '../actions/action-types';
+		REMOVE_SUBS_CONTACT,
+		ADD_SELECTED_TO_MAP} from '../actions/action-types';
 import {convertContacts, 
 	mergedList,
 	updateStatus, 
@@ -16,7 +17,8 @@ INITIAL_STATE = {
 	myContact:'',
 	contacts: [],
 	subscribedTo:[],
-	publishingTo:[]
+	publishingTo:[],
+	selectedRecord: -999
 }
 
 export default function(state=INITIAL_STATE, action) {
@@ -46,6 +48,8 @@ export default function(state=INITIAL_STATE, action) {
 			return {...state, publishingTo: removeContact(state.publishingTo, action.payload)};
 		case REMOVE_SUBS_CONTACT:
 			return {...state, subscribedTo: removeContact(state.subscribedTo, action.payload)};
+		case ADD_SELECTED_TO_MAP:
+			return {...state, selectedRecord: action.payload};
 		default:
 			return state;
 	}

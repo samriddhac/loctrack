@@ -43,3 +43,5 @@ export const STATUS_REJECTED = 'r';
 
 export const MY_CONTACT = 'contantno';
 export const STATE = 'state';
+
+export const ALL_FRIEND = -1;

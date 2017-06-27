@@ -6,8 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
-import { VIEW_MAP, STATUS_APPROVED } from '../common/constants';
-import {changeView, removeSubsContact} from '../actions/index';
+import { VIEW_MAP, STATUS_APPROVED, ALL_FRIEND } from '../common/constants';
+import {changeView, removeSubsContact, addToMap} from '../actions/index';
 import { getStatus } from '../utils/utilities';
 import {removeSubs} from '../websocket-receiver';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
@@ -35,6 +35,7 @@ class SubscribeList extends Component {
 		});
 	}
 	_goToMap(data) {
+		this.props.addToMap(data);
 		this.props.changeView(VIEW_MAP);
 	}
 
@@ -47,7 +48,7 @@ class SubscribeList extends Component {
 			<View style={[styles.subRightContainer]}>
 				<View style={[styles.subRightBtnContainer]}>
 					<TouchableNativeFeedback onPress={()=>{
-							this._goToMap(data);
+							this._goToMap(data.recordID);
 						}}
 						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 						<MaterialCommunityIcons name="map-marker-multiple" size={35} 
@@ -97,32 +98,44 @@ class SubscribeList extends Component {
 	}
 
 	render() {
-		return(
-			<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
-				<View style={styles.listViewContainer}>
-					<ListView
-			          dataSource={this.state.subdataSource}
-			          renderRow={this._renderRow}
-			          renderSeparator={(sectionId, rowId) => <View style=
-	{styles.separator} />}
-			        />
-		        </View>
-		        <View style={styles.globalButtonContainer}>
-		        	<View style={[styles.globalmapButtonTxtContainer]}>
-				        <View style={[styles.globalmapButtonContainer]}>
-							<TouchableNativeFeedback onPress={()=>{
-									this._goToMap(null);
-								}}
-								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-								<MaterialCommunityIcons name="map-marker-multiple" size={25} 
-								style={[styles.globalmapBackButton]} />
-							</TouchableNativeFeedback>
+		if(this.props.subscribedTo==undefined || this.props.subscribedTo==null
+			|| this.props.subscribedTo.length==0) {
+			return (
+				<View style={[styles.regItems]}>
+					<Text style={[styles.welcomeStyle]}>
+						Please search in your contact, and request your friends for location sharing.
+					</Text>
+				</View>
+			);
+		}
+		else {
+			return(
+				<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
+					<View style={styles.listViewContainer}>
+						<ListView
+				          dataSource={this.state.subdataSource}
+				          renderRow={this._renderRow}
+				          renderSeparator={(sectionId, rowId) => <View style=
+		{styles.separator} />}
+				        />
+			        </View>
+			        <View style={styles.globalButtonContainer}>
+			        	<View style={[styles.globalmapButtonTxtContainer]}>
+					        <View style={[styles.globalmapButtonContainer]}>
+								<TouchableNativeFeedback onPress={()=>{
+										this._goToMap(ALL_FRIEND);
+									}}
+									background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+									<MaterialCommunityIcons name="map-marker-multiple" size={25} 
+									style={[styles.globalmapBackButton]} />
+								</TouchableNativeFeedback>
+							</View>
+							<Text style={styles.btnBottomText}>Map</Text>
 						</View>
-						<Text style={styles.btnBottomText}>Map</Text>
 					</View>
 				</View>
-			</View>
-		);
+			);
+		}
 	}
 }
 
@@ -138,4 +151,5 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {changeView, removeSubsContact})(SubscribeList);
+export default connect(mapStateToProps, {changeView, 
+	removeSubsContact, addToMap})(SubscribeList);

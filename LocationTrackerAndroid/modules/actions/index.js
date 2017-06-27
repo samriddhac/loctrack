@@ -3,7 +3,8 @@ import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS,
 	SET_MY_LOCATION, GET_PERSISTED_STATE,
 	SET_MY_CONTACT, UPDATE_SUBS_STATUS,
 	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT,
-	REMOVE_PUBLISH_CONTACT, REMOVE_SUBS_CONTACT} from './action-types';
+	REMOVE_PUBLISH_CONTACT, REMOVE_SUBS_CONTACT,
+	ADD_SELECTED_TO_MAP} from './action-types';
 import {publishLocation} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -12,6 +13,13 @@ import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
 	EVENT_ON_MESSAGE_RECEIVE, STATUS_SENT, STATUS_PENDING,
 	STATUS_APPROVED, STATUS_REJECTED, STATE} from '../common/constants';
 import {AsyncStorage} from 'react-native';
+
+export function addToMap(data) {
+	return {
+		type: ADD_SELECTED_TO_MAP,
+		payload: data
+	};
+}
 
 export function addToPublish(data) {
 	return {

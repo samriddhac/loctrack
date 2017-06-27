@@ -411,9 +411,24 @@ const styles = StyleSheet.create({
   btnBottomText: {
     color: '#4A44F2',
     fontFamily: 'notoserif',
-    fontSize: 12,
+    fontSize: 12, 
     alignItems: 'center',
     marginRight:15
+  },
+  globalShareButtonTxtContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  globalStopButtonTxtContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  pubBtnTxtStyle: {
+    color: '#4A44F2',
+    fontFamily: 'notoserif',
+    fontSize: 12
   }
 });
 export default styles;

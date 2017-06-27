@@ -151,23 +151,29 @@ class PublishList extends Component {
 			        />
 		        </View>
 		        <View style={styles.globalButtonContainer}>
-		        	<View style={[styles.globalShareButtonContainer]}>
-						<TouchableNativeFeedback onPress={()=>{
-								this._shareLocation();
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<Foundation name="share" size={25} 
-							style={[styles.globalShareBackButton]} />
-						</TouchableNativeFeedback>
+		        	<View style={styles.globalShareButtonTxtContainer}>
+			        	<View style={[styles.globalShareButtonContainer]}>
+							<TouchableNativeFeedback onPress={()=>{
+									this._shareLocation();
+								}}
+								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+								<Foundation name="share" size={25} 
+								style={[styles.globalShareBackButton]} />
+							</TouchableNativeFeedback>
+						</View>
+						<Text style={styles.pubBtnTxtStyle}>Share Location</Text>
 					</View>
-					<View style={[styles.globalStopButtonContainer]}>
-						<TouchableNativeFeedback onPress={()=>{
-								this._stopLocationPublish();
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<Ionicons name="ios-close-circle-outline" size={25} 
-							style={[styles.globalStopButton]} />
-						</TouchableNativeFeedback>
+					<View style={styles.globalStopButtonTxtContainer}>
+						<View style={[styles.globalStopButtonContainer]}>
+							<TouchableNativeFeedback onPress={()=>{
+									this._stopLocationPublish();
+								}}
+								background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+								<Ionicons name="ios-close-circle-outline" size={25} 
+								style={[styles.globalStopButton]} />
+							</TouchableNativeFeedback>
+						</View>
+						<Text style={styles.pubBtnTxtStyle}>Stop Sharing</Text>
 					</View>
 		        </View>
 			</View>

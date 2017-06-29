@@ -213,9 +213,9 @@ const styles = StyleSheet.create({
   },
   globalmapButtonContainer: {
     backgroundColor:'#CC1D23',
-    width:35,
-    height:35,
-    borderRadius:35,
+    width:45,
+    height:45,
+    borderRadius:45,
     alignItems: 'center',
     marginRight:10
   },
@@ -309,9 +309,9 @@ const styles = StyleSheet.create({
   },
   globalShareButtonContainer: {
     backgroundColor:'#215602',
-    width:35,
-    height:35,
-    borderRadius:35,
+    width:45,
+    height:45,
+    borderRadius:45,
     alignItems: 'center',
     marginRight:20
   },
@@ -322,9 +322,9 @@ const styles = StyleSheet.create({
   },
   globalStopButtonContainer: {
     backgroundColor:'#CC1D23',
-    width:35,
-    height:35,
-    borderRadius:35,
+    width:45,
+    height:45,
+    borderRadius:45,
     alignItems: 'center',
     marginRight:10
   },
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     flex: 9
   },
   globalButtonContainer: {
-    flex: 1.4,
+    flex: 1.5,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingRight:10
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     fontFamily: 'notoserif',
     fontSize: 12, 
     alignItems: 'center',
-    marginRight:15
+    marginRight:20
   },
   globalShareButtonTxtContainer: {
     flex: 1,

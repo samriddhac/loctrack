@@ -3,6 +3,7 @@ import {updateMyLocation} from './actions/index';
 import {publishLocation} from './websocket-receiver';
 
 var isBackgroundServiceRunning = false;
+
 export function configureGeolocation(store) {
 	BackgroundGeolocation.configure({
       desiredAccuracy: 1000,
@@ -10,7 +11,7 @@ export function configureGeolocation(store) {
       distanceFilter: 50,
       locationTimeout: 30,
       startOnBoot: false,
-      stopOnTerminate: false,
+      stopOnTerminate: true,
       locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
       interval: 10000,
       fastestInterval: 10000,
@@ -29,19 +30,32 @@ export function configureGeolocation(store) {
     BackgroundGeolocation.on('error', (error) => {
       console.log('[ERROR] BackgroundGeolocation error:', error);
     });
+    isGeolocationConfigured = true;
 } 
 
 export function start() {
-	BackgroundGeolocation.start(() => {
-    isBackgroundServiceRunning = true;
-    console.log('[DEBUG] BackgroundGeolocation started successfully');    
-  });
+  try{
+    BackgroundGeolocation.start(() => {
+      isBackgroundServiceRunning = true;
+      console.log('[DEBUG] BackgroundGeolocation started successfully');    
+    });
+  }
+	catch(e) {
+    console.log(e);
+  }
 }
 export function stop() {
-	BackgroundGeolocation.stop(() => {
-    isBackgroundServiceRunning = false;
-    console.log('[DEBUG] BackgroundGeolocation stopped successfully');    
-  });
+  try{
+    if(isBackgroundServiceRunning) {
+      BackgroundGeolocation.stop(() => {
+        isBackgroundServiceRunning = false;
+        console.log('[DEBUG] BackgroundGeolocation stopped successfully');    
+      });
+    }
+  }
+  catch(e) {
+    console.log(e);
+  }
 }
 
 export function isServiceRunning() {

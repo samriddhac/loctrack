@@ -18,6 +18,7 @@ import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
 		addToPublishContact } from './actions/index';
 import { ToastAndroid } from 'react-native';
+
 var socket = null;
 
 export function startWebSocketReceiving(store) {

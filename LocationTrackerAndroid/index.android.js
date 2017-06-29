@@ -12,7 +12,8 @@ import styles from './modules/styles/style';
 import store from './modules/store';
 import App from './modules/components/App';
 import {startWebSocketReceiving} from './modules/websocket-receiver';
-import {configureGeolocation, start} from './modules/geolocation-receiver';
+import {configureGeolocation, isServiceRunning} from './modules/geolocation-receiver';
+import {configureNotification} from './modules/pushnotification';
 
 export default class LocationTrackerAndroid extends Component {
   render() {
@@ -25,4 +26,5 @@ export default class LocationTrackerAndroid extends Component {
 }
 startWebSocketReceiving(store);
 configureGeolocation(store);
+configureNotification();
 AppRegistry.registerComponent('LocationTrackerAndroid', () => LocationTrackerAndroid);

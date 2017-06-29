@@ -16,6 +16,7 @@ import {subscriptionApproveRequest, removePubs} from '../websocket-receiver';
 import {isServiceRunning, start, stop} from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import {sendGeoTrackingNotification, stopGeoTrackingNotification} from '../pushnotification';
 
 class PublishList extends Component {
 
@@ -68,6 +69,7 @@ class PublishList extends Component {
 		let isPublish = isServiceRunning();
 		if(isPublish === true) {
 			stop();
+			stopGeoTrackingNotification();
 		}
 	}
 	_stopLocationPublish() {
@@ -81,6 +83,7 @@ class PublishList extends Component {
 			start();
 			ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
 			ToastAndroid.SHORT, ToastAndroid.TOP);
+			sendGeoTrackingNotification();
 		}
 	}
 	_renderApprove(data) {

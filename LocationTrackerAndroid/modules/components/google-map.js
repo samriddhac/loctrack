@@ -136,7 +136,6 @@ class GoogleMap extends Component {
 							name: item.givenName
 						};
 						markerArray = [m, ...markerArray];
-						console.log('markerArray ',markerArray);
 						this.setState({ 
 				        	...this.state,
 				        	markars: [...this.state.markars, ...markerArray]
@@ -155,7 +154,6 @@ class GoogleMap extends Component {
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
-					console.log('markerArray ',markerArray);
 					this.setState({ 
 			        	...this.state,
 			        	markars: [...this.state.markars, ...markerArray]

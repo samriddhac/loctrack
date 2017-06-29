@@ -34,6 +34,7 @@ export function startWebSocketReceiving(store) {
 			switch(obj.t) {
 				case TYPE_CONN_ACK:
 					isOnline = true;
+					releasePendingQueue();
 					console.log('Connection established');
 					break;
 				case TYPE_ACK:
@@ -118,6 +119,12 @@ export function initAuth(from) {
 		getSocket().emit(EVENT_ESTABLISH_AUTH, from);
 		return true;
 	}
+	else {
+		addToPendingQueue({
+			event:EVENT_ESTABLISH_AUTH,
+			from:from
+		});
+	}
 	return false;	
 }
 
@@ -125,6 +132,13 @@ export function subscriptionRequest(from, obj) {
 	if(checkStatus()===true) {
 		getSocket().emit(EVENT_REQUEST_SUBSCRIPTION, from, JSON.stringify(obj));
 		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_REQUEST_SUBSCRIPTION,
+			from:from,
+			data:JSON.stringify(obj)
+		});
 	}
 	return false;
 }
@@ -134,6 +148,13 @@ export function removeSubs(from, obj) {
 		getSocket().emit(EVENT_STOP_SUBSCRIPTION, from, JSON.stringify(obj));
 		return true;
 	}
+	else {
+		addToPendingQueue({
+			event:EVENT_STOP_SUBSCRIPTION,
+			from:from,
+			data:JSON.stringify(obj)
+		});
+	}
 	return false;
 }
 
@@ -141,6 +162,13 @@ export function removePubs(from, obj) {
 	if(checkStatus()===true) {
 		getSocket().emit(EVENT_REMOVE_PUBLISH, from, JSON.stringify(obj));
 		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_REMOVE_PUBLISH,
+			from:from,
+			data:JSON.stringify(obj)
+		});
 	}
 	return false;
 }
@@ -150,6 +178,13 @@ export function subscriptionApproveRequest(from, obj) {
 		getSocket().emit(EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, from, JSON.stringify(obj));
 		return true;
 	}
+	else {
+		addToPendingQueue({
+			event:EVENT_REQUEST_SUBSCRIPTION_ACCEPTED,
+			from:from,
+			data:JSON.stringify(obj)
+		});
+	}
 	return false;
 }
 
@@ -157,6 +192,13 @@ export function publishLocation(from, location){
 	if(checkStatus()===true) {
 		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(location));
 		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_PUBLISH_LOCATION,
+			from:from,
+			data:JSON.stringify(obj)
+		});
 	}
 	return false;
 }
@@ -166,4 +208,21 @@ export function getSocket() {
 		socket = io.connect(LOCATION_SERVER, {reconnect: true});
 	}
 	return socket;
+}
+
+function addToPendingQueue(obj) {
+	pendingEvents.push(obj);
+}
+
+function releasePendingQueue() {
+	if(pendingEvents!==undefined && pendingEvents!==null &&
+		pendingEvents.length>0) {
+		pendingEvents.reverse();
+		pendingEvents.forEach((obj)=>{
+			if(obj!==undefined && obj!==null) {
+				getSocket().emit(obj.event, obj.from, obj.data);
+			}
+		});
+		pendingEvents = [];
+	}
 }

@@ -9,7 +9,7 @@ export function configureNotification() {
 
 	    // (required) Called when a remote or local notification is opened or received
 	    onNotification: function(notification) {
-	        console.log( 'NOTIFICATION:', notification );
+	        //console.log( 'NOTIFICATION:', notification );
 	    },
 
 	    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)

@@ -17,7 +17,7 @@ import _ from 'lodash';
 import styles from '../styles/style';
 import {changeView, requestLocation, addToPublish} from '../actions/index';
 import { VIEW_HOME, VIEW_SEARCH_BOX, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
-import {subscriptionRequest} from '../websocket-receiver';
+import {subscriptionRequest, subscriptionApproveRequest} from '../websocket-receiver';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import ContactListItem from './contact-list-item';
 
@@ -57,28 +57,37 @@ class SearchBoxView extends React.PureComponent {
 
 	_requestLocation() {
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			let status = false;
 			this.selectedData.forEach((data)=> {
 				let from = this.props.myContact;
 				let obj = {
 					to: data.phno
 				};
-				subscriptionRequest(from, obj);
+				status = subscriptionRequest(from, obj);
 				let dObj = JSON.parse(JSON.stringify(data));
 				dObj.status = STATUS_PENDING;
 				this.props.requestLocation(dObj);
 			});
-			ToastAndroid.showWithGravity('Location request sent', ToastAndroid.LONG, ToastAndroid.TOP);	
+			if(status === true)
+				ToastAndroid.showWithGravity('Location request sent', ToastAndroid.SHORT, ToastAndroid.TOP);	
 		}
 		
 	}
 	_publishLocation() {
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			let status = false;
 			this.selectedData.forEach((data)=> {
+				let from = this.props.myContact;
+				let obj = {
+					to: data.phno
+				};
+				status = subscriptionApproveRequest(from, obj);
 				let dObj = JSON.parse(JSON.stringify(data));
 				dObj.status = STATUS_APPROVED;
 				this.props.addToPublish(dObj);
 			});
-			ToastAndroid.showWithGravity('Added as your subscriber', ToastAndroid.LONG, ToastAndroid.TOP);
+			if(status === true)
+				ToastAndroid.showWithGravity('Added as your subscriber', ToastAndroid.SHORT, ToastAndroid.TOP);
 		}
 	}
 

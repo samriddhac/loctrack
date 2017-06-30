@@ -69,3 +69,7 @@ export function stop() {
 export function isServiceRunning() {
   return isBackgroundServiceRunning;
 }
+
+export function setServiceRunning(val) {
+  isBackgroundServiceRunning = val;
+}

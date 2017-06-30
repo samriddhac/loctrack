@@ -9,7 +9,8 @@ import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
 import {initConnection} from '../websocket-receiver';
 import SplashScreen from 'react-native-splash-screen';
 import {sendAppCloseNotification, sendGeoTrackingNotification} from '../pushnotification';
-import {configureGeolocation, start, isServiceRunning} from '../geolocation-receiver';
+import {configureGeolocation, start, 
+	isServiceRunning, setServiceRunning} from '../geolocation-receiver';
 
 class App extends Component {
 
@@ -65,6 +66,7 @@ class App extends Component {
 	componentWillUnmount() {
 		if(isServiceRunning()===true) {
 			sendAppCloseNotification();
+			setServiceRunning(false);
 		}
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}

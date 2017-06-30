@@ -5,7 +5,8 @@ import {publishLocation} from './websocket-receiver';
 var isBackgroundServiceRunning = false;
 
 export function configureGeolocation(store) {
-	BackgroundGeolocation.configure({
+  try{ 
+    BackgroundGeolocation.configure({
       desiredAccuracy: 1000,
       stationaryRadius: 50,
       distanceFilter: 50,
@@ -18,7 +19,9 @@ export function configureGeolocation(store) {
       activitiesInterval: 10000,
       stopOnStillActivity: false
     });
+    console.log(BackgroundGeolocation);
     BackgroundGeolocation.on('location', (location) => {
+      console.log(location);
       let from = store.getState().contactState.myContact;
       publishLocation(from, location);
     });
@@ -31,6 +34,11 @@ export function configureGeolocation(store) {
       console.log('[ERROR] BackgroundGeolocation error:', error);
     });
     isGeolocationConfigured = true;
+  }
+  catch(e) {
+    console.log(e);
+  }
+	
 } 
 
 export function start() {

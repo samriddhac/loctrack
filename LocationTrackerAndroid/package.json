@@ -9,7 +9,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "react": "16.0.0-alpha.6",
-    "react-native": "0.44.0",
+    "react-native": "^0.44.0",
     "react-native-animatable": "^1.2.2",
     "react-native-autocomplete-input": "^3.2.1",
     "react-native-contacts": "^0.8.1",

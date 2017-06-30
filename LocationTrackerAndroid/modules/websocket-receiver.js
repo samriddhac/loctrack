@@ -104,7 +104,7 @@ export function startWebSocketReceiving(store) {
     });
 }
 
-function checkStatus() {
+export function checkStatus() {
 	return isOnline;
 }
 

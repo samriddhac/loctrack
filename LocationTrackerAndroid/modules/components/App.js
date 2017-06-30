@@ -8,6 +8,8 @@ import {getAllContacts, loadPersistedState, changeView} from '../actions/index';
 import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
 import {initConnection} from '../websocket-receiver';
 import SplashScreen from 'react-native-splash-screen';
+import {sendAppCloseNotification, sendGeoTrackingNotification} from '../pushnotification';
+import {configureGeolocation, start, isServiceRunning} from '../geolocation-receiver';
 
 class App extends Component {
 
@@ -18,7 +20,7 @@ class App extends Component {
 			persistedLoaded: false,
 			appState: ''
 		}
-
+		this.myContact = '';
 		this._handleAppStateChange = this._handleAppStateChange.bind(this);
 	}
 
@@ -36,6 +38,7 @@ class App extends Component {
 					 	data.contactState.myContact!=='') {
 					 	_parent.props.changeView(VIEW_HOME);
 					 	let from = data.contactState.myContact;
+					 	_parent.myContact = from;
 						initConnection(from);
 					}
 					else {
@@ -54,21 +57,21 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		console.log('Root component mounted ');
 		this.props.getAllContacts();
 		SplashScreen.hide();
 		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
 	componentWillUnmount() {
-		console.log('Root component unmounted ');
+		if(isServiceRunning()===true) {
+			sendAppCloseNotification();
+		}
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
 	_handleAppStateChange(nextAppState) {
-		console.log('Next state ', nextAppState);
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			console.log('App has come to the foreground!')
+			console.log('App has come to the foreground!');
 		}
 		this.setState({...this.state, appState: nextAppState});
 	}

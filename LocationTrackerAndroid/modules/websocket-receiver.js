@@ -105,9 +105,6 @@ export function startWebSocketReceiving(store) {
 }
 
 function checkStatus() {
-	if(isOnline === false) {
-		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
-	}
 	return isOnline;
 }
 
@@ -140,6 +137,7 @@ export function subscriptionRequest(from, obj) {
 			from:from,
 			data:JSON.stringify(obj)
 		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	return false;
 }
@@ -155,6 +153,7 @@ export function removeSubs(from, obj) {
 			from:from,
 			data:JSON.stringify(obj)
 		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	return false;
 }
@@ -170,6 +169,7 @@ export function removePubs(from, obj) {
 			from:from,
 			data:JSON.stringify(obj)
 		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	return false;
 }
@@ -185,6 +185,7 @@ export function subscriptionApproveRequest(from, obj) {
 			from:from,
 			data:JSON.stringify(obj)
 		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	return false;
 }
@@ -200,6 +201,7 @@ export function publishLocation(from, location){
 			from:from,
 			data:JSON.stringify(obj)
 		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
 	}
 	return false;
 }

@@ -32,9 +32,7 @@ class RegisterView extends Component {
 				this.props.changeView(VIEW_HOME);
 				let from = cn;
 				initConnection(from);
-				let status = initAuth(from);
-				if(status===true)
-					ToastAndroid.showWithGravity('Registered Successfully!!', ToastAndroid.SHORT, ToastAndroid.TOP);
+				initAuth(from);
 			});
 			
 		}

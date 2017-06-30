@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, StatusBar, AsyncStorage} from 'react-native';
+import {Text, View, StatusBar, AsyncStorage, AppState} from 'react-native';
 import { connect } from 'react-redux';
 
 import styles from '../styles/style';
@@ -15,8 +15,11 @@ class App extends Component {
 		super(props);
 
 		this.state = {
-			persistedLoaded: false
+			persistedLoaded: false,
+			appState: ''
 		}
+
+		this._handleAppStateChange = this._handleAppStateChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -51,8 +54,23 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		console.log('Root component mounted ');
 		this.props.getAllContacts();
 		SplashScreen.hide();
+		AppState.addEventListener('change', this._handleAppStateChange);
+	}
+
+	componentWillUnmount() {
+		console.log('Root component unmounted ');
+		AppState.removeEventListener('change', this._handleAppStateChange);
+	}
+
+	_handleAppStateChange(nextAppState) {
+		console.log('Next state ', nextAppState);
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			console.log('App has come to the foreground!')
+		}
+		this.setState({...this.state, appState: nextAppState});
 	}
 
 	render() {

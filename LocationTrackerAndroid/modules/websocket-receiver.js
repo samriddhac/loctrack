@@ -43,6 +43,7 @@ export function startWebSocketReceiving(store) {
 				case TYPE_AUTH_REQ:
 					break;
 				case TYPE_AUTH_VALIDATE:
+					ToastAndroid.showWithGravity('Registered Successfully!!', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_AUTH_SUCCESS:
 					break;
@@ -115,7 +116,7 @@ export function initConnection(from) {
 }
 
 export function initAuth(from) {
-	if(checkStatus()===true) {
+	if(isOnline===true) {
 		getSocket().emit(EVENT_ESTABLISH_AUTH, from);
 		return true;
 	}

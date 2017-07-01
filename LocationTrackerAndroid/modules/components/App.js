@@ -62,12 +62,15 @@ class App extends Component {
 		this.props.getAllContacts();
 		SplashScreen.hide();
 		AppState.addEventListener('change', this._handleAppStateChange);
+		if(isServiceRunning()===true) {
+			start();
+			sendGeoTrackingNotification();
+		}
 	}
 
 	componentWillUnmount() {
 		if(isServiceRunning()===true) {
 			sendAppCloseNotification();
-			setServiceRunning(false);
 		}
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}

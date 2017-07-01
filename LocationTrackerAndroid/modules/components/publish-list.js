@@ -12,7 +12,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import {addToPublishContact, removePublishContact} from '../actions/index';
-import {subscriptionApproveRequest, removePubs} from '../websocket-receiver';
+import {subscriptionApproveRequest, removePubs, stopPublishLocation} from '../websocket-receiver';
 import {isServiceRunning, start, stop} from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
@@ -70,6 +70,7 @@ class PublishList extends Component {
 		if(isPublish === true) {
 			stop();
 			stopGeoTrackingNotification();
+			stopPublishLocation(this.props.myContact, {});
 		}
 	}
 	_stopLocationPublish() {

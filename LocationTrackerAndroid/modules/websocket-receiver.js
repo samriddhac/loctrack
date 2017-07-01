@@ -213,6 +213,26 @@ export function publishLocation(from, location){
 	return false;
 }
 
+export function stopPublishLocation(from, location){
+	let obj = {
+		t:TYPE_LOC_STOP,
+		data:location
+	};
+	if(checkStatus()===true) {
+		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(obj));
+		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_PUBLISH_LOCATION,
+			from:from,
+			data:JSON.stringify(obj)
+		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
+	}
+	return false;
+}
+
 export function getSocket() {
 	if(socket===null) {
 		socket = io.connect(LOCATION_SERVER, {reconnect: true});

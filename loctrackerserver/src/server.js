@@ -30,6 +30,7 @@ io.on(events.CONNECTION, function(socket){
 			socketpool.addToPool({id:from, websocket:socket.id, socket:socket});
 			console.log('Connection received from ', from, 'socket id ', socket.id);
 			socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
+			logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id:from,t:events.TYPE_CONN_ACK});
 			releasePendingQueue(from);
 		}
 		catch(err) {
@@ -47,9 +48,11 @@ io.on(events.CONNECTION, function(socket){
 					otp: "1235"
 				}
 			};
+			console.log(events.EVENT_ESTABLISH_AUTH, ' received from ', from, 'data ', data);
 			pub.set(from, JSON.stringify(obj));
 			obj.t = events.TYPE_AUTH_VALIDATE;
 			socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 		}
 		catch(err) {
 			console.log(err);
@@ -57,6 +60,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
 		try {
+			console.log(events.EVENT_ESTABLISH_AUTH_SUCCESS, ' received from ', from, 'data ', data);
 			pub.get(from, (err, data)=>{
 				if(!util.isEmpty(err)) {
 					console.log('EVENT_ESTABLISH_AUTH_SUCCESS ', err);
@@ -67,6 +71,10 @@ io.on(events.CONNECTION, function(socket){
 						obj.auth  = {isAuth: true};
 						obj.t = events.TYPE_ACK;
 						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -77,9 +85,11 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_ESTABLISH_AUTH_FAILURE, (from, data)=>{
 		try {
+			console.log(events.EVENT_ESTABLISH_AUTH_FAILURE, ' received from ', from, 'data ', data);
 			pub.get(from, (err, data)=>{
 				if(!util.isEmpty(err)) {
 					console.log('EVENT_ESTABLISH_AUTH_FAILURE ', err);
+					dataRetrieveFailure(from);
 				}
 				else {
 					if(!util.isEmpty(data)) {
@@ -87,6 +97,10 @@ io.on(events.CONNECTION, function(socket){
 						obj.auth  = {isAuth: false};
 						obj.t = events.TYPE_ACK;
 						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -97,6 +111,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		try {
+			console.log(events.EVENT_REQUEST_SUBSCRIPTION, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			let to = toObj.to;
 			pub.get(from, (err, data)=>{
@@ -120,8 +135,10 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, to, 
 											{from:from, t:events.TYPE_SUB_REQ});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {from:from, t:events.TYPE_SUB_REQ});
 										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 												{t:events.TYPE_ACK});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 										_.remove(toItem.pub, {id:from});
 										toItem.pub.push({id:from, s:events.STATUS_PENDING});
 									}
@@ -133,12 +150,19 @@ io.on(events.CONNECTION, function(socket){
 										});
 										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 												{t:events.TYPE_NA});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_NA});
 									}
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
 								}
+								else {
+									dataRetrieveFailure(to);
+								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -149,6 +173,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, (from, data)=>{
 		try {
+			console.log(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			let to = toObj.to;
 			pub.get(from, (err, data)=>{
@@ -174,6 +199,7 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_DENIED});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_DENIED});
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -184,10 +210,17 @@ io.on(events.CONNECTION, function(socket){
 									}
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+								}
+								else {
+									dataRetrieveFailure(to);
 								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -198,6 +231,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, (from, data)=>{
 		try {
+			console.log(events.EVENT_REQUEST_SUBSCRIPTION_ACCEPTED, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
@@ -224,6 +258,7 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_APPROVED});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -235,10 +270,17 @@ io.on(events.CONNECTION, function(socket){
 									sub.subscribe(from);
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+								}
+								else {
+									dataRetrieveFailure(to);
 								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -249,6 +291,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_PUBLISH_LOCATION, (from, data)=>{
 		try {
+			console.log(events.EVENT_PUBLISH_LOCATION, ' received from ', from, 'data ', data);
 			pub.publish(from, data);
 		}
 		catch(err) {
@@ -257,6 +300,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_ADD_TO_PUBLISH, (from, data)=>{
 		try {
+			console.log(events.EVENT_ADD_TO_PUBLISH, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
@@ -283,6 +327,7 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_APPROVED});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -294,10 +339,17 @@ io.on(events.CONNECTION, function(socket){
 									sub.subscribe(from);
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+								}
+								else {
+									dataRetrieveFailure(to);
 								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -309,6 +361,7 @@ io.on(events.CONNECTION, function(socket){
 	
 	socket.on(events.EVENT_STOP_SUBSCRIPTION, (from, data)=>{
 		try {
+			console.log(events.EVENT_STOP_SUBSCRIPTION, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
@@ -333,6 +386,7 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_PUB_REQ_REMOVED});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_PUB_REQ_REMOVED});
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -343,10 +397,17 @@ io.on(events.CONNECTION, function(socket){
 									}
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+								}
+								else {
+									dataRetrieveFailure(to);
 								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -357,6 +418,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_REMOVE_PUBLISH, (from, data)=>{
 		try {
+			console.log(events.EVENT_REMOVE_PUBLISH, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
@@ -381,6 +443,7 @@ io.on(events.CONNECTION, function(socket){
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_REMOVED});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_REMOVED});
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -392,9 +455,16 @@ io.on(events.CONNECTION, function(socket){
 									pub.set(to, JSON.stringify(toItem));
 									pub.set(from, JSON.stringify(fromItem));
 									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+								}
+								else {
+									dataRetrieveFailure(to);
 								}
 							}
 						});
+					}
+					else {
+						dataRetrieveFailure(from);
 					}
 				}
 			});
@@ -416,8 +486,7 @@ io.on(events.CONNECTION, function(socket){
 });
 
 sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
-	console.log(channel);
-	console.log(message);
+	console.log(events.EVENT_ON_MESSAGE_RECEIVE, ' Received for channel',channel, 'data ',message);
 	try{
 		pub.get(channel, (err, data)=>{
 			if(!util.isEmpty(err)) {
@@ -437,6 +506,7 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 							}
 						});
 					}
+					console.log('Approved list for channel ', channel, ' ',approvedSubList);
 					if(approvedSubList!==undefined && approvedSubList!==null
 						&& approvedSubList.length>0) {
 						approvedSubList.forEach((item)=>{
@@ -449,9 +519,13 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 									data: message.data
 								};
 								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+								logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
 							}
 						});
 					}
+				}
+				else {
+					dataRetrieveFailure(channel);
 				}
 			}
 		});
@@ -463,6 +537,7 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 
 function releasePendingQueue(to) {
 	try{
+		console.log('Releasing pending queue for ', to);
 		if(pendingmessages!==undefined && pendingmessages!==null) {
 			if(pendingmessages[to]!==undefined && pendingmessages[to]!==null
 				&& pendingmessages[to].length>0) {
@@ -471,6 +546,7 @@ function releasePendingQueue(to) {
 				pendingmessages[to].forEach((obj)=>{
 					if(websocket!==undefined && websocket!==null) {
 						websocket.socket.emit(obj.event, obj.from, obj.data);
+						logEmits(obj.event, obj.from, obj.data);
 					}
 				});
 				pendingmessages[to] = [];
@@ -480,6 +556,14 @@ function releasePendingQueue(to) {
 	catch(err) {
 		console.log(err);
 	}
+}
+
+function dataRetrieveFailure(id) {
+	console.log('Failed to retrive data for id ', id);
+}
+
+function logEmits(event, from, data) {
+	console.log('Emitting event ', event, 'from ', from, 'data ', data);
 }
 
 http.listen(7000, function(){

@@ -59,10 +59,12 @@ class GoogleMap extends Component {
 			  if (granted && this.mounted) {
 			  	navigator.geolocation.getCurrentPosition((pos)=>{
 			  		let myPosition = {
+			  			id:-1,
 				      	position: pos.coords,
 				      	icon: '../../modules/images/icons/bluecircle.png',
 	      				name: 'Me'
 				      };
+				    _.remove(this.state.markars, {id:-1});  
 			  		this.setState({ 
 			        	region: {
 			        		latitude: pos.coords.latitude,
@@ -93,11 +95,13 @@ class GoogleMap extends Component {
 	      	myLastPositionCoord = this.state.myPosition.position;
 	      }
 	      let myPosition = {
+	      	id:-1,
 	      	position: position.coords,
 	      	icon: '../../modules/images/icons/bluecircle.png',
 	      	name: 'Me'
 	      };
 	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
+	      	_.remove(this.state.markars, {id:-1});
 	        this.setState({ 
 	        	...this.state,
 	        	markars: [...this.state.markars, myPosition]
@@ -130,12 +134,14 @@ class GoogleMap extends Component {
 					if(item!==undefined && item!==null
 						&& item.loc!==undefined && item.loc!==null) {
 						let m = {
+							id: item.recordID,
 							position: item.loc,
 							icon: '../../modules/images/icons/bluecircle.png',
 							color: 'blue',
 							name: item.givenName
 						};
 						markerArray = [m, ...markerArray];
+						_.remove(this.state.markars, {id:item.recordID});
 						this.setState({ 
 				        	...this.state,
 				        	markars: [...this.state.markars, ...markerArray]
@@ -154,6 +160,7 @@ class GoogleMap extends Component {
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
+					_.remove(this.state.markars, {id:obj.recordID});
 					this.setState({ 
 			        	...this.state,
 			        	markars: [...this.state.markars, ...markerArray]

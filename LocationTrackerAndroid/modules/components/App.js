@@ -8,6 +8,7 @@ import {getAllContacts, loadPersistedState, changeView} from '../actions/index';
 import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
 import {initConnection} from '../websocket-receiver';
 import SplashScreen from 'react-native-splash-screen';
+import { MenuContext } from 'react-native-popup-menu';
 import {sendAppCloseNotification, sendGeoTrackingNotification} from '../pushnotification';
 import {configureGeolocation, start, 
 	isServiceRunning, setServiceRunning} from '../geolocation-receiver';
@@ -80,13 +81,15 @@ class App extends Component {
 
 	render() {
 		return (
-			<View style={styles.container}>
-				<StatusBar
-			     backgroundColor="#10003F"
-			     barStyle="light-content"
-			   />
-				<ViewStateManager />
-			</View>
+			<MenuContext>
+				<View style={styles.container}>
+					<StatusBar
+				     backgroundColor="#10003F"
+				     barStyle="light-content"
+				   />
+					<ViewStateManager />
+				</View>
+			</MenuContext>
 		);
 	}
 }

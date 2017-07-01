@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {VIEW_HOME, VIEW_MAP, VIEW_MEDIA, VIEW_ABOUT, 
-	VIEW_SEARCH_BOX, VIEW_REGISTER} from '../common/constants';
+	VIEW_SEARCH_BOX, VIEW_REGISTER, VIEW_PRIVACY_POLICY
+	} from '../common/constants';
 import Home from './home';
 import SearchBoxView from './search-box-view';
 import GoogleMap from './google-map';
 import Register from './register';
+import PrivacyPolicy from './privacy-policy';
 import Display from 'react-native-display';
 
 class ViewStateManager extends Component {
@@ -25,6 +27,9 @@ class ViewStateManager extends Component {
 		}
 		else if(this.props.viewId === VIEW_MAP) {
 			return(<GoogleMap />);
+		}
+		else if(this.props.viewId === VIEW_PRIVACY_POLICY) {
+			return(<PrivacyPolicy />);
 		}
 		return (<Home />);
 	}

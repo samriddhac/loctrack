@@ -6,6 +6,7 @@ export const VIEW_MAP = 2;
 export const VIEW_MEDIA = 3;
 export const VIEW_ABOUT = 4;
 export const VIEW_SEARCH_BOX = 5;
+export const VIEW_PRIVACY_POLICY = 6;
 
 export const CONNECTION = 'connection';
 export const EVENT_CONNECTION_ESTABLISHED = 'EVENT_CONNECTION_ESTABLISHED';
@@ -45,3 +46,5 @@ export const MY_CONTACT = 'contantno';
 export const STATE = 'state';
 
 export const ALL_FRIEND = -1;
+
+export const PRIVACY_LINK = 'https://www.dropbox.com/s/tcypnkjona7ax5a/Getting%20Started.pdf?dl=0';

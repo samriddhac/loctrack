@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
   },
   headerIconThreeDots: {
     justifyContent:'flex-end',
-    paddingLeft:10
+    paddingLeft:5,
+    paddingRight:10
   },
   headerIconSearch: {
     justifyContent:'flex-start'
@@ -429,6 +430,16 @@ const styles = StyleSheet.create({
     color: '#4A44F2',
     fontFamily: 'notoserif',
     fontSize: 12
+  },
+  optionStyles: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 30
+  },
+  menuOptionTextStyle: {
+    fontFamily: 'notoserif',
+    fontSize: 20,
+    paddingLeft: 25
   }
 });
 export default styles;

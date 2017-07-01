@@ -19,7 +19,6 @@ export function configureGeolocation(store) {
       activitiesInterval: 10000,
       stopOnStillActivity: false
     });
-    console.log(BackgroundGeolocation);
     BackgroundGeolocation.on('location', (location) => {
       console.log(location);
       let from = store.getState().contactState.myContact;

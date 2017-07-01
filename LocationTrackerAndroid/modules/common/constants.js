@@ -37,10 +37,12 @@ export const TYPE_NA = 'na';
 export const TYPE_LOC = 'loc';
 export const TYPE_SUB_REQ_REMOVED ='sub_req_rem';
 export const TYPE_PUB_REQ_REMOVED ='pub_req_rem';
+export const TYPE_LOC_STOP = 'loc_stop';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';
 export const STATUS_REJECTED = 'r';
+export const STATUS_LIVE = 'l';
 
 export const MY_CONTACT = 'contantno';
 export const STATE = 'state';

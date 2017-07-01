@@ -13,7 +13,7 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
-	 TYPE_NA, TYPE_LOC} from './common/constants';
+	 TYPE_NA, TYPE_LOC, TYPE_LOC_STOP} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
 		addToPublishContact } from './actions/index';
@@ -64,6 +64,9 @@ export function startWebSocketReceiving(store) {
 				case TYPE_LOC:
 					let objloc = JSON.parse(obj.data);
 					store.dispatch(updateLocation(from, objloc));
+					break;
+				case TYPE_LOC_STOP:
+					store.dispatch(updateSubscriberStateAccepted(from));
 					break;
 			}
 		}
@@ -191,8 +194,12 @@ export function subscriptionApproveRequest(from, obj) {
 }
 
 export function publishLocation(from, location){
+	let obj = {
+		t:TYPE_LOC,
+		data:location
+	};
 	if(checkStatus()===true) {
-		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(location));
+		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(obj));
 		return true;
 	}
 	else {

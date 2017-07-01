@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { AsyncStorage } from 'react-native';
-import { STATE, STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED } from '../common/constants';
+import { STATE, STATUS_PENDING, 
+	STATUS_APPROVED, STATUS_REJECTED, STATUS_LIVE } from '../common/constants';
 
 export const saveState = async (state) => {
 	try {
@@ -145,6 +146,7 @@ export function updateSubLocations(items, obj) {
 			items.forEach((item)=>{
 				if(item.phno === obj.from){
 					item.loc = obj.data;
+					item.status = STATUS_LIVE;
 					selecteditem = item;
 				}
 			});
@@ -163,7 +165,9 @@ export function getStatus(s) {
 			case STATUS_PENDING:
 				return "Pending";
 			case STATUS_APPROVED: 
-				return "Sharing";
+				return "Approved";
+			case STATUS_LIVE: 
+				return "Live";
 			case STATUS_REJECTED:
 				return "Not there";
 		}

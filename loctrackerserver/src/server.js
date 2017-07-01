@@ -445,8 +445,8 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 								&& websocket.socket!==undefined
 								&& websocket.socket!==null) {
 								let obj = {
-									t:events.TYPE_LOC,
-									data: message
+									t:message.t,
+									data: message.data
 								};
 								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
 							}

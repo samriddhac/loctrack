@@ -562,7 +562,7 @@ function dataRetrieveFailure(id, socket) {
 	console.log('Failed to retrive data for id ', id);
 	if(socket!==undefined && socket!==null) {
 		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, null, {id:id, t:events.TYPE_NR}});
-		logEmits(events.EVENT_ON_MESSAGE_RECEIVE, null, {id:id, t:events.TYPE_NR}});
+		logEmits(events.EVENT_ON_MESSAGE_RECEIVE, null, {id:id, t:events.TYPE_NR});
 	}
 }
 

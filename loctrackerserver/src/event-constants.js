@@ -28,6 +28,7 @@ module.exports = {
 	TYPE_LOC: 'loc',
 	TYPE_SUB_REQ_REMOVED: 'sub_req_rem',
 	TYPE_PUB_REQ_REMOVED: 'pub_req_rem',
+	TYPE_NR: 'nr',
 
 	STATUS_PENDING: 'p',
 	STATUS_APPROVED: 'a',

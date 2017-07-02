@@ -74,7 +74,7 @@ io.on(events.CONNECTION, function(socket){
 						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -100,7 +100,7 @@ io.on(events.CONNECTION, function(socket){
 						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -156,13 +156,13 @@ io.on(events.CONNECTION, function(socket){
 									pub.set(from, JSON.stringify(fromItem));
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -214,13 +214,13 @@ io.on(events.CONNECTION, function(socket){
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -274,13 +274,13 @@ io.on(events.CONNECTION, function(socket){
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -343,13 +343,13 @@ io.on(events.CONNECTION, function(socket){
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -401,13 +401,13 @@ io.on(events.CONNECTION, function(socket){
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -458,13 +458,13 @@ io.on(events.CONNECTION, function(socket){
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
 								else {
-									dataRetrieveFailure(to);
+									dataRetrieveFailure(to, socket);
 								}
 							}
 						});
 					}
 					else {
-						dataRetrieveFailure(from);
+						dataRetrieveFailure(from, socket);
 					}
 				}
 			});
@@ -558,8 +558,12 @@ function releasePendingQueue(to) {
 	}
 }
 
-function dataRetrieveFailure(id) {
+function dataRetrieveFailure(id, socket) {
 	console.log('Failed to retrive data for id ', id);
+	if(socket!==undefined && socket!==null) {
+		socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, null, {id:id, t:events.TYPE_NR}});
+		logEmits(events.EVENT_ON_MESSAGE_RECEIVE, null, {id:id, t:events.TYPE_NR}});
+	}
 }
 
 function logEmits(event, from, data) {

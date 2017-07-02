@@ -13,7 +13,7 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
-	 TYPE_NA, TYPE_LOC, TYPE_LOC_STOP} from './common/constants';
+	 TYPE_NA, TYPE_LOC, TYPE_LOC_STOP, TYPE_NR} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
 		addToPublishContact } from './actions/index';
@@ -67,6 +67,9 @@ export function startWebSocketReceiving(store) {
 					break;
 				case TYPE_LOC_STOP:
 					store.dispatch(updateSubscriberStateAccepted(from));
+					break;
+				case TYPE_NR:
+					ToastAndroid.showWithGravity('User is not registered with WhereApp', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 			}
 		}

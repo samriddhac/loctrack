@@ -38,6 +38,7 @@ export const TYPE_LOC = 'loc';
 export const TYPE_SUB_REQ_REMOVED ='sub_req_rem';
 export const TYPE_PUB_REQ_REMOVED ='pub_req_rem';
 export const TYPE_LOC_STOP = 'loc_stop';
+export const TYPE_NR = 'nr';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';

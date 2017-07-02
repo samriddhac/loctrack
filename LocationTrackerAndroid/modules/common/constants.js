@@ -49,4 +49,4 @@ export const STATE = 'state';
 
 export const ALL_FRIEND = -1;
 
-export const PRIVACY_LINK = 'https://www.dropbox.com/s/tcypnkjona7ax5a/Getting%20Started.pdf?dl=0';
+export const PRIVACY_LINK = 'https://samriddhac.github.io/loctrack-privacy-policy/index.html';

@@ -54,8 +54,8 @@ export default class App extends Component {
 					currentCoord.lt = position.coords.latitude;
 					currentCoord.lg = position.coords.longitude;
 					let data = {
-						latitude:position.coords.latitude,
-						longitude:position.coords.longitude
+						latitude:22.5691,
+						longitude:88.4090
 					};
 					let obj = {
 						t:'loc',

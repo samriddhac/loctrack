@@ -61,7 +61,6 @@ class GoogleMap extends Component {
 			  		let myPosition = {
 			  			id:-1,
 				      	position: pos.coords,
-				      	icon: '../../modules/images/icons/bluecircle.png',
 	      				name: 'Me'
 				      };
 				    _.remove(this.state.markars, {id:-1});  
@@ -97,7 +96,6 @@ class GoogleMap extends Component {
 	      let myPosition = {
 	      	id:-1,
 	      	position: position.coords,
-	      	icon: '../../modules/images/icons/bluecircle.png',
 	      	name: 'Me'
 	      };
 	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
@@ -126,10 +124,9 @@ class GoogleMap extends Component {
 	}
 
 	addMarkers(props) {
+		let markerArray = [];
 		if(props.subscribedTo!==undefined && props.subscribedTo!==null
 			&& props.subscribedTo.length>0){
-			let markerArray = [];
-			console.log(props.selected);
 			if(props.selected === ALL_FRIEND) {
 				props.subscribedTo.forEach((item)=>{
 					if(item!==undefined && item!==null
@@ -137,44 +134,48 @@ class GoogleMap extends Component {
 						let m = {
 							id: item.recordID,
 							position: item.loc,
-							icon: '../../modules/images/icons/bluecircle.png',
 							color: 'blue',
 							name: item.givenName
 						};
 						markerArray = [m, ...markerArray];
-						_.remove(this.state.markars, {id:item.recordID});
-						this.setState({ 
-				        	...this.state,
-				        	markars: [...this.state.markars, ...markerArray]
-				        });
 					}
 				});
+				let me = _.find(this.state.markars, {id: -1});
+				if(me!==undefined && me!==null) {
+					markerArray = [me, ...markerArray];
+				}
+				this.setState({ 
+		        	...this.state,
+		        	markars: [...markerArray]
+		        });
 			}
 			else if(props.selected>=0) {
 				let obj = _.find(props.subscribedTo, {recordID: props.selected});
-				console.log(obj);
 				if(obj!==undefined && obj!==null && obj.status===STATUS_LIVE
 					&& obj.loc!==undefined && obj.loc!==null) {
 					let m = {
+						id: obj.recordID,
 						position: obj.loc,
-						icon: '../../modules/images/icons/bluecircle.png',
 						color: 'blue',
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
-					_.remove(this.state.markars, {id:obj.recordID});
 					this.setState({ 
 			        	...this.state,
-			        	markars: [...this.state.markars, ...markerArray]
+			        	markars: [...markerArray]
 			        });
 				}
 			}
 		}
-		if(this.state.markers!==undefined
-			&& this.state.markers!==null
-			&& this.state.markers.length>0) {
+		if(markerArray!==undefined
+			&& markerArray!==null
+			&& markerArray.length>0) {
+			let markerIDs = [];
+			markerArray.forEach((item)=>{
+				markerIDs.push(item.id.toString());
+			});
 			animationTimeout = setTimeout(() => {
-		      this.focusMap([...this.state.markers], false);
+		      this.focusMap(markerIDs, true);
 			}, timeout);
 		}
 	}
@@ -184,7 +185,7 @@ class GoogleMap extends Component {
 	}
 
 	focusMap(markers, animated) {
-	    console.log(`Markers received to populate map: ${markers}`);
+	    console.log('Markers received to populate map: ', markers);
 	    this.map.fitToSuppliedMarkers(markers, animated);
 	}
 
@@ -202,14 +203,14 @@ class GoogleMap extends Component {
 					<MapView
 					ref={ref => { this.map = ref; }}
 					style={styles.map}
-					region={this.state.region}
+					initialRegion={this.state.region}
 					loadingEnabled
 			        loadingIndicatorColor="#666666"
 					loadingBackgroundColor="#eeeeee"
 					>
 						{this.state.markars.map((marker, i) => (
 						<MapView.Marker
-						  key={i}
+						  identifier={marker.id.toString()}
 						  coordinate={marker.position}
 						  pinColor={marker.color}
 						>

@@ -63,6 +63,7 @@ export function startWebSocketReceiving(store) {
 					break;
 				case TYPE_LOC:
 					let objloc = JSON.parse(obj.data);
+					console.log('Received location from ', from, 'data ', objloc);
 					store.dispatch(updateLocation(from, objloc));
 					break;
 				case TYPE_LOC_STOP:

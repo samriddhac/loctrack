@@ -167,7 +167,7 @@ export function getStatus(s) {
 			case STATUS_APPROVED: 
 				return "Approved";
 			case STATUS_LIVE: 
-				return "Live";
+				return "Sharing";
 			case STATUS_REJECTED:
 				return "Not there";
 		}

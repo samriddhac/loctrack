@@ -57,8 +57,12 @@ export default class App extends Component {
 						latitude:position.coords.latitude,
 						longitude:position.coords.longitude
 					};
-					console.log(JSON.stringify(data));
-					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(data));
+					let obj = {
+						t:'loc',
+						data:data
+					};
+					console.log(JSON.stringify(obj));
+					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(obj));
 				});
 			}
 		}, 10000);

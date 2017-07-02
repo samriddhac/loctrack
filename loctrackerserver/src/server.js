@@ -514,9 +514,10 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 							if(websocket!==undefined && websocket!==null
 								&& websocket.socket!==undefined
 								&& websocket.socket!==null) {
+								let locObj = JSON.parse(message);
 								let obj = {
-									t:message.t,
-									data: message.data
+									t:locObj.t,
+									data: locObj.data
 								};
 								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
 								logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);

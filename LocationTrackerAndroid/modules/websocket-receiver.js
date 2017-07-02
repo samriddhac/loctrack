@@ -62,7 +62,7 @@ export function startWebSocketReceiving(store) {
 					ToastAndroid.showWithGravity('User offline!', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_LOC:
-					let objloc = JSON.parse(obj.data);
+					let objloc = obj.data;
 					console.log('Received location from ', from, 'data ', objloc);
 					store.dispatch(updateLocation(from, objloc));
 					break;

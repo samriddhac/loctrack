@@ -11,7 +11,7 @@ import isEqual from 'lodash/isEqual';
 import _ from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED } from '../common/constants';
+import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
 import {changeView} from '../actions/index';
 import myLocIcon from '../images/icons/bluecircle.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
@@ -129,6 +129,7 @@ class GoogleMap extends Component {
 		if(props.subscribedTo!==undefined && props.subscribedTo!==null
 			&& props.subscribedTo.length>0){
 			let markerArray = [];
+			console.log(props.selected);
 			if(props.selected === ALL_FRIEND) {
 				props.subscribedTo.forEach((item)=>{
 					if(item!==undefined && item!==null
@@ -151,7 +152,8 @@ class GoogleMap extends Component {
 			}
 			else if(props.selected>=0) {
 				let obj = _.find(props.subscribedTo, {recordID: props.selected});
-				if(obj!==undefined && obj!==null && obj.status===STATUS_APPROVED
+				console.log(obj);
+				if(obj!==undefined && obj!==null && obj.status===STATUS_LIVE
 					&& obj.loc!==undefined && obj.loc!==null) {
 					let m = {
 						position: obj.loc,

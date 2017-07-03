@@ -47,7 +47,7 @@ class GoogleMap extends Component {
 	}
 
 	onRegionChange(region) {
-	  this.setState({ region });
+	  console.log('new region ',region);
 	}
 
 	componentDidMount() {
@@ -160,23 +160,32 @@ class GoogleMap extends Component {
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
+					let region = {
+		        		latitude: obj.loc.latitude,
+			            longitude: obj.loc.longitude,
+			            latitudeDelta: LATITUDE_DELTA,
+			            longitudeDelta: LONGITUDE_DELTA,
+		        	};
 					this.setState({ 
-			        	...this.state,
+			        	region:region,
 			        	markars: [...markerArray]
 			        });
+			        this.map.animateToRegion(region, timeout);
 				}
 			}
 		}
 		if(markerArray!==undefined
 			&& markerArray!==null
 			&& markerArray.length>0) {
-			let markerIDs = [];
-			markerArray.forEach((item)=>{
-				markerIDs.push(item.id.toString());
-			});
-			animationTimeout = setTimeout(() => {
-		      this.focusMap(markerIDs, true);
-			}, timeout);
+			if(props.selected === ALL_FRIEND) {
+				let markerIDs = [];
+				markerArray.forEach((item)=>{
+					markerIDs.push(item.id.toString());
+				});
+				animationTimeout = setTimeout(() => {
+			      this.focusMap(markerIDs, true);
+				}, timeout);
+			}
 		}
 	}
 
@@ -203,7 +212,8 @@ class GoogleMap extends Component {
 					<MapView
 					ref={ref => { this.map = ref; }}
 					style={styles.map}
-					initialRegion={this.state.region}
+					region={this.state.region}
+					onRegionChangeComplete={(region)=>{this.onRegionChange(region);}}
 					loadingEnabled
 			        loadingIndicatorColor="#666666"
 					loadingBackgroundColor="#eeeeee"

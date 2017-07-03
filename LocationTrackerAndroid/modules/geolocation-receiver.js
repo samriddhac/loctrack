@@ -14,7 +14,7 @@ export function configureGeolocation(store) {
       startOnBoot: false,
       stopOnTerminate: true,
       locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
-      interval: 20000,
+      interval: 10000,
       fastestInterval: 10000,
       activitiesInterval: 10000,
       stopOnStillActivity: false

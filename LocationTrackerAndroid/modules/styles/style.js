@@ -203,9 +203,9 @@ const styles = StyleSheet.create({
     left: 30,
     backgroundColor:'#4A44F2',
     opacity:0.4,
-    width:40,
-    height:40,
-    borderRadius:40,
+    width:45,
+    height:45,
+    borderRadius:45,
     alignItems: 'center'
   },
   mapBackButton: {

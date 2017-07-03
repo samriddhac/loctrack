@@ -237,8 +237,10 @@ class GoogleMap extends Component {
 								this._goToHome();
 							}}
 							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<Ionicons name="ios-arrow-back" size={40} 
+							<View>
+							<Ionicons name="ios-arrow-back" size={45} 
 									style={[styles.mapBackButton]} />
+							</View>
 						</TouchableNativeFeedback>
 					</View>
 			    </View>

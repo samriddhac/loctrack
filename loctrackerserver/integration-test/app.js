@@ -46,6 +46,8 @@ export default class App extends Component {
 		
 	}
 	sendLocation() {
+		let l = 0.01;
+		let lat = 22.5691;
 		let shareId = setInterval(()=>{
 			console.log('Sending data');
 			if(navigator && navigator.geolocation) {
@@ -53,8 +55,9 @@ export default class App extends Component {
 					let currentCoord = {};
 					currentCoord.lt = position.coords.latitude;
 					currentCoord.lg = position.coords.longitude;
+
 					let data = {
-						latitude:22.5691,
+						latitude:lat,
 						longitude:88.4090
 					};
 					let obj = {
@@ -63,6 +66,7 @@ export default class App extends Component {
 					};
 					console.log(JSON.stringify(obj));
 					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(obj));
+					lat = lat + l;
 				});
 			}
 		}, 10000);

@@ -220,6 +220,7 @@ class GoogleMap extends Component {
 					>
 						{this.state.markars.map((marker, i) => (
 						<MapView.Marker
+						  key={marker.id}
 						  identifier={marker.id.toString()}
 						  coordinate={marker.position}
 						  pinColor={marker.color}

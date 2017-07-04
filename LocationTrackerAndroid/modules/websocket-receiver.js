@@ -25,6 +25,7 @@ import { ToastAndroid } from 'react-native';
 
 var socket = null;
 var isOnline = false;
+var isFcmRegistered = false;
 
 var pendingEvents = [];
 
@@ -39,6 +40,25 @@ export function startWebSocketReceiving(store) {
 				case TYPE_CONN_ACK:
 					isOnline = true;
 					releasePendingQueue();
+					if(isFcmRegistered==false) {
+						let state = store.getState();
+				        if(state!==undefined && state!==null && 
+				        	state.contactState!==undefined &&
+				        	state.contactState!==null &&
+				        	state.contactState.myContact!==undefined &&
+				        	state.contactState.myContact!==null &&
+				        	state.contactState.myContact!=='' &&
+				        	state.deviceState!==undefined &&
+				        	state.deviceState!==null &&
+				        	state.deviceState.fcmToken!==undefined &&
+				        	state.deviceState.fcmToken!==null &&
+				        	state.deviceState.fcmToken!=='') {
+				        	let from = state.contactState.myContact;
+				        	let fcmToken = state.deviceState.fcmToken;
+				        	setFcmToken(from, fcmToken);
+				        	isFcmRegistered = true;
+				        }
+					}
 					console.log('Connection established');
 					break;
 				case TYPE_ACK:

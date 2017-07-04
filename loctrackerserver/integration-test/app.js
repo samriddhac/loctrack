@@ -46,7 +46,7 @@ export default class App extends Component {
 		
 	}
 	sendLocation() {
-		let l = 0.01;
+		let l = 0.001;
 		let lat = 22.5691;
 		let shareId = setInterval(()=>{
 			console.log('Sending data');

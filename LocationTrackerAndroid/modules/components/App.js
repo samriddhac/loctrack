@@ -6,7 +6,7 @@ import styles from '../styles/style';
 import ViewStateManager from './view-state-manager';
 import {getAllContacts, loadPersistedState, changeView} from '../actions/index';
 import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
-import {initConnection} from '../websocket-receiver';
+import {initConnection, setFcmToken} from '../websocket-receiver';
 import SplashScreen from 'react-native-splash-screen';
 import { MenuContext } from 'react-native-popup-menu';
 import {sendAppCloseNotification, sendGeoTrackingNotification} from '../pushnotification';
@@ -99,6 +99,9 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-	return { myContact: state.contactState.myContact}
+	return { 
+		myContact: state.contactState.myContact,
+		fcmToken: state.deviceState.fcmToken
+	}
 }
 export default connect(mapStateToProps, {getAllContacts, loadPersistedState, changeView})(App);

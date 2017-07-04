@@ -47,11 +47,9 @@ class GoogleMap extends Component {
 	}
 
 	onRegionChange(region) {
-	  console.log('new region ',region);
 	}
 
 	componentDidMount() {
-		console.log('component mounted');
 		this.mounted = true;
 		if (Platform.OS === 'android') {
 			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
@@ -82,10 +80,7 @@ class GoogleMap extends Component {
 		}
 	}
 
-	componentDidUpdate(){
-		console.log('component updated');
-		
-	}
+	componentDidUpdate(){}
 
 	watchLocation() {
 	    this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -111,11 +106,9 @@ class GoogleMap extends Component {
 	}
 
 	componentWillReceiveProps(nextprops) {
-		console.log('Component will receive props');
 		this.addMarkers(nextprops);
 	}
 	componentWillUnmount() {
-		console.log('component unmounted');
 		this.mounted = false;
 		if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
 		if (animationTimeout) {

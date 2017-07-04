@@ -564,6 +564,10 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 	}
 });
 
+function sendFcmNotification(token, data) {
+
+}
+
 function releasePendingQueue(to) {
 	try{
 		console.log('Releasing pending queue for ', to);

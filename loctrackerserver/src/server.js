@@ -8,6 +8,7 @@ const _ = require('lodash');
 const events = require('./event-constants');
 const socketpool = require('./websocket-pool');
 const util = require('./util');
+const request = require('request');
 
 var counter = 0;
 
@@ -565,6 +566,33 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 });
 
 function sendFcmNotification(token, data) {
+	let jsonData = {
+	    id: '101',
+	    ticker: "WhereApp notification",
+	    autoCancel: true,
+	    largeIcon: "ic_launcher",
+	    smallIcon: "ic_notification",
+	    bigText: data.message,
+	    subText: "WhereApp notification",
+	    vibrate: true,
+	    vibration: 300,
+	    title: data.title,
+	    message: data.message,
+	    playSound: false,
+	};
+	let key = "key="+token;
+	request({
+	    url: "https://fcm.googleapis.com/fcm/send",
+	    method: "POST",
+	    headers: {
+        	"Content-Type":"application/json",
+        	"Authorization":key
+    	},
+	    json: true,
+	    body: jsonData
+	}, function (error, response, body){
+	    console.log(response);
+	});
 
 }
 

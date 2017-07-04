@@ -55,6 +55,9 @@ export function startWebSocketReceiving(store) {
 				case TYPE_SUB_REQ_APPROVED:
 					store.dispatch(updateSubscriberStateAccepted(from));
 					break;
+				case EVENT_ADD_TO_PUBLISH:
+					store.dispatch(updateSubscriberStateAccepted(from));
+					break;
 				case TYPE_SUB_REQ_DENIED:
 					store.dispatch(updateSubscriberStateRejected(from));
 					break;
@@ -189,6 +192,22 @@ export function subscriptionApproveRequest(from, obj) {
 	else {
 		addToPendingQueue({
 			event:EVENT_REQUEST_SUBSCRIPTION_ACCEPTED,
+			from:from,
+			data:JSON.stringify(obj)
+		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
+	}
+	return false;
+}
+
+export function addDataToPublish(from, obj) {
+	if(checkStatus()===true) {
+		getSocket().emit(EVENT_ADD_TO_PUBLISH, from, JSON.stringify(obj));
+		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_ADD_TO_PUBLISH,
 			from:from,
 			data:JSON.stringify(obj)
 		});

@@ -311,6 +311,9 @@ io.on(events.CONNECTION, function(socket){
 				else {
 					if(!util.isEmpty(data)) {
 						let fromItem = JSON.parse(data);
+						_.remove(fromItem.pub, {id:to});
+						fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
+						pub.set(from, JSON.stringify(fromItem));
 						pub.get(to, (err, data)=>{
 							if(!util.isEmpty(err)) {
 								console.log('EVENT_ADD_TO_PUBLISH ', err);
@@ -320,8 +323,6 @@ io.on(events.CONNECTION, function(socket){
 									let toItem = JSON.parse(data);
 									_.remove(toItem.sub, {id:from});
 									toItem.sub.push({id:from, s:events.STATUS_APPROVED});
-									_.remove(fromItem.pub, {id:to});
-									fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
 									let toWebsocket = socketpool.getConnectionByID(to);
 									if(toWebsocket!==undefined && toWebsocket!==null) {
 										let toSocketId = toWebsocket.websocket;
@@ -336,9 +337,7 @@ io.on(events.CONNECTION, function(socket){
 											data: {t:events.TYPE_SUB_REQ_APPROVED}
 										});
 									}
-									sub.subscribe(from);
 									pub.set(to, JSON.stringify(toItem));
-									pub.set(from, JSON.stringify(fromItem));
 									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}
@@ -347,6 +346,7 @@ io.on(events.CONNECTION, function(socket){
 								}
 							}
 						});
+						sub.subscribe(from);
 					}
 					else {
 						dataRetrieveFailure(from, socket);

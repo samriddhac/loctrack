@@ -17,7 +17,7 @@ import _ from 'lodash';
 import styles from '../styles/style';
 import {changeView, requestLocation, addToPublish} from '../actions/index';
 import { VIEW_HOME, VIEW_SEARCH_BOX, STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
-import {subscriptionRequest, subscriptionApproveRequest} from '../websocket-receiver';
+import {subscriptionRequest, subscriptionApproveRequest, addDataToPublish} from '../websocket-receiver';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import ContactListItem from './contact-list-item';
 
@@ -81,7 +81,7 @@ class SearchBoxView extends React.PureComponent {
 				let obj = {
 					to: data.phno
 				};
-				status = subscriptionApproveRequest(from, obj);
+				status = addDataToPublish(from, obj);
 				let dObj = JSON.parse(JSON.stringify(data));
 				dObj.status = STATUS_APPROVED;
 				this.props.addToPublish(dObj);

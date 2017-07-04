@@ -89,16 +89,46 @@ export function mergedList(a1, a2) {
 	}
     return slist; 
 } 
-export function updateStatus(items, data) {
+export function updateStatus(items, data, contacts) {
 	let itemList = [];
 	try {
 		if(items!==undefined && items!==null && items.length>0) {
+			let found = false;
 			items.forEach((item)=>{
 				if(item.phno === data.from){
 					item.status = data.status;
+					found = true;
 				}
 			});
-			itemList = [...items];
+			if(found==false) {
+				let foundInContacts = false;
+				contacts.forEach((contact)=>{
+					if(contact.phno === data.from){
+						let contactItem = contact;
+						contactItem.status = data.status;
+						items = [contactItem, ...items];
+						foundInContacts = true;
+					}
+				});
+				if(foundInContacts===false) {
+					let selectectedContact = {
+						recordID:data.from,
+						givenName: data.from,
+						familyName: '',
+						thumbnailPath: '',
+						phno:data.from,
+						searchName: data.from,
+						status: data.status
+					};
+					itemList = [selectectedContact, ...items];
+				}
+				else {
+					itemList = [...items];
+				}
+			}
+			else {
+				itemList = [...items];
+			}
 		}
 	}
 	catch(err) {
@@ -119,7 +149,7 @@ export function updatePublish(items, contacts, data) {
 					exist = true;
 				}
 			});
-			if(!exist) {
+			if(exist===false) {
 				selectectedContact = {
 					recordID:data.from,
 					givenName: data.from,

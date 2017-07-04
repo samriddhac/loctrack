@@ -39,7 +39,7 @@ export default function(state=INITIAL_STATE, action) {
 		case SET_MY_CONTACT:
 			return {...state, myContact: action.payload};
 		case UPDATE_SUBS_STATUS: 
-			return {...state, subscribedTo: updateStatus(state.subscribedTo, action.payload)};
+			return {...state, subscribedTo: updateStatus(state.subscribedTo, action.payload, state.contacts)};
 		case ADD_TO_PUBLISH_CONTACT:
 			return {...state, publishingTo: updatePublish(state.publishingTo, state.contacts, action.payload)}; 
 		case ACTION_TYPE_LOC_UPDATE:

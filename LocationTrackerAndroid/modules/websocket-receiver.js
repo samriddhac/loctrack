@@ -9,14 +9,17 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 EVENT_PUBLISH_LOCATION,
 	 EVENT_STOP_SUBSCRIPTION,
 	 EVENT_REMOVE_PUBLISH,
+	 EVENT_ADD_TO_PUBLISH,
 	 TYPE_CONN_ACK, TYPE_ACK, TYPE_AUTH_REQ,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
-	 TYPE_NA, TYPE_LOC, TYPE_LOC_STOP, TYPE_NR} from './common/constants';
+	 TYPE_NA, TYPE_LOC, 
+	 TYPE_LOC_STOP, TYPE_NR,
+	 TYPE_PUB_REQ_REMOVED, TYPE_SUB_REQ_REMOVED} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
-		addToPublishContact } from './actions/index';
+		addToPublishContact, removePublishContact, removeSubsContact } from './actions/index';
 import { ToastAndroid } from 'react-native';
 
 var socket = null;
@@ -43,7 +46,7 @@ export function startWebSocketReceiving(store) {
 				case TYPE_AUTH_REQ:
 					break;
 				case TYPE_AUTH_VALIDATE:
-					ToastAndroid.showWithGravity('Registered Successfully!!', ToastAndroid.SHORT, ToastAndroid.TOP);
+					ToastAndroid.showWithGravity('Registered Successfully', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_AUTH_SUCCESS:
 					break;
@@ -55,14 +58,17 @@ export function startWebSocketReceiving(store) {
 				case TYPE_SUB_REQ_APPROVED:
 					store.dispatch(updateSubscriberStateAccepted(from));
 					break;
-				case EVENT_ADD_TO_PUBLISH:
-					store.dispatch(updateSubscriberStateAccepted(from));
-					break;
 				case TYPE_SUB_REQ_DENIED:
 					store.dispatch(updateSubscriberStateRejected(from));
 					break;
+				case TYPE_PUB_REQ_REMOVED:
+					store.dispatch(removePublishContact(from));
+					break;
+				case TYPE_SUB_REQ_REMOVED:
+					store.dispatch(removeSubsContact(from));
+					break;
 				case TYPE_NA:
-					ToastAndroid.showWithGravity('User offline!', ToastAndroid.SHORT, ToastAndroid.TOP);
+					ToastAndroid.showWithGravity('A notification has been sent to the user', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_LOC:
 					let objloc = obj.data;

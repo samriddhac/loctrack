@@ -429,6 +429,8 @@ io.on(events.CONNECTION, function(socket){
 				else {
 					if(!util.isEmpty(data)) {
 						let fromItem = JSON.parse(data);
+						_.remove(fromItem.pub, {id:to});
+						pub.set(from, JSON.stringify(fromItem));
 						pub.get(to, (err, data)=>{
 							if(!util.isEmpty(err)) {
 								console.log('EVENT_REMOVE_PUBLISH ', err);
@@ -437,7 +439,6 @@ io.on(events.CONNECTION, function(socket){
 								if(!util.isEmpty(data)) {
 									let toItem = JSON.parse(data);
 									_.remove(toItem.sub, {id:from});
-									_.remove(fromItem.pub, {id:to});
 									let toWebsocket = socketpool.getConnectionByID(to);
 									if(toWebsocket!==undefined && toWebsocket!==null) {
 										let toSocketId = toWebsocket.websocket;
@@ -453,7 +454,6 @@ io.on(events.CONNECTION, function(socket){
 										});
 									}
 									pub.set(to, JSON.stringify(toItem));
-									pub.set(from, JSON.stringify(fromItem));
 									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 								}

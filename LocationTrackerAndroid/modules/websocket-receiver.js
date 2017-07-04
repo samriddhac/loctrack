@@ -10,6 +10,7 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 EVENT_STOP_SUBSCRIPTION,
 	 EVENT_REMOVE_PUBLISH,
 	 EVENT_ADD_TO_PUBLISH,
+	 EVENT_SET_FCM_TOKEN,
 	 TYPE_CONN_ACK, TYPE_ACK, TYPE_AUTH_REQ,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
@@ -261,7 +262,21 @@ export function stopPublishLocation(from, location){
 	}
 	return false;
 }
-
+export function setFcmToken(from, token) {
+	if(checkStatus()===true) {
+		getSocket().emit(EVENT_SET_FCM_TOKEN, from, JSON.stringify({token}));
+		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_SET_FCM_TOKEN,
+			from:from,
+			data:JSON.stringify({token})
+		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
+	}
+	return false;
+}
 export function getSocket() {
 	if(socket===null) {
 		socket = io.connect(LOCATION_SERVER, {reconnect: true});

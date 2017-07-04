@@ -1,9 +1,22 @@
 import PushNotification  from 'react-native-push-notification';
+import {setFcmToken} from './websocket-receiver';
 
-export function configureNotification() {
+export function configureNotification(store) {
 	PushNotification.configure({
 	    onRegister: function(token) {
 	        console.log( 'TOKEN:', token );
+	        let state = store.getState();
+	        if(state!==undefined && state!==null && 
+	        	state.contactState!==undefined &&
+	        	state.contactState!==null &&
+	        	state.contactState.myContact!==undefined &&
+	        	state.contactState.myContact!==null &&
+	        	state.contactState.myContact!=='') {
+	        	let from = state.contactState.myContact;
+	        	if(from!==undefined && from!==null && from!=='') {
+		        	setFcmToken(from, token);
+		        }
+	        }
 	    },
 	    // (required) Called when a remote or local notification is opened or received
 	    onNotification: function(notification) {

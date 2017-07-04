@@ -26,5 +26,5 @@ export default class LocationTrackerAndroid extends Component {
 }
 startWebSocketReceiving(store);
 configureGeolocation(store);
-configureNotification();
+configureNotification(store);
 AppRegistry.registerComponent('LocationTrackerAndroid', () => LocationTrackerAndroid);

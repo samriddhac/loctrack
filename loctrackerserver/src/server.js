@@ -606,7 +606,9 @@ function sendFcmNotification(token, data) {
 		    playSound: 'true',
 		    soundName: 'default'
 		},
-		sound: "default",
+		notification:{
+    		sound:"default"
+		},
 		to:token
 	};
 	let key = "key=AIzaSyBukdNUWqz7yju4w33N_qxx7VxBYrAxWyc";

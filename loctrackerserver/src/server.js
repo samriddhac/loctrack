@@ -603,7 +603,8 @@ function sendFcmNotification(token, data) {
 		    vibration: 300,
 		    title: data.title,
 		    message: data.message,
-		    playSound: false
+		    playSound: true,
+		    soundName: 'default'
 		},
 		to:token
 	};

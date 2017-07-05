@@ -600,10 +600,7 @@ function sendFcmNotification(token, data) {
 		    bigText: data.message,
 		    subText: "WhereApp notification",
 		    title: data.title,
-		    message: data.message,
-		    playSound: true,
-		    soundName: 'default'
-		},
+		    message: data.message		},
 		to:token
 	};
 	let key = "key=AIzaSyBukdNUWqz7yju4w33N_qxx7VxBYrAxWyc";

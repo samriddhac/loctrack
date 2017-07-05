@@ -6,8 +6,9 @@ var isBackgroundServiceRunning = false;
 
 export function configureGeolocation(store) {
   try{ 
+    console.log('configuring geo location');
     BackgroundGeolocation.configure({
-      desiredAccuracy: 1000,
+      desiredAccuracy: 100,
       stationaryRadius: 50,
       distanceFilter: 50,
       locationTimeout: 30,
@@ -71,4 +72,8 @@ export function isServiceRunning() {
 
 export function setServiceRunning(val) {
   isBackgroundServiceRunning = val;
+}
+
+export function isGeoServiceConfigured() {
+  return isGeolocationConfigured;
 }

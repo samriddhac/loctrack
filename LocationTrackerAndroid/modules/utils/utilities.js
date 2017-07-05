@@ -165,7 +165,6 @@ export function updatePublish(items, contacts, data) {
 	catch(err) {
 		console.log(err);
 	}
-	console.log('itemList ',itemList);
 	return itemList;
 }
 export function updateSubLocations(items, obj) {

@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import {addToPublishContact, removePublishContact} from '../actions/index';
 import {subscriptionApproveRequest, removePubs, stopPublishLocation} from '../websocket-receiver';
-import {isServiceRunning, start, stop} from '../geolocation-receiver';
+import {isServiceRunning, start, stop } from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import {sendGeoTrackingNotification, stopGeoTrackingNotification} from '../pushnotification';

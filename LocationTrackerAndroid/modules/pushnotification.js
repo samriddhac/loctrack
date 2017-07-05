@@ -1,6 +1,5 @@
 import PushNotification  from 'react-native-push-notification';
 import {setFCMToken} from './actions/index';
-
 export function configureNotification(store) {
 	PushNotification.configure({
 	    onRegister: function(token) {

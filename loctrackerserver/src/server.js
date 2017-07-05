@@ -618,7 +618,7 @@ function sendFcmNotification(token, data) {
 	    json: true,
 	    body: jsonData
 	}, function (error, response, body){
-	    console.log(response);
+	    console.log('fcm error ', error);
 	});
 
 }

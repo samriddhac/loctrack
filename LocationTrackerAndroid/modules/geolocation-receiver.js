@@ -1,10 +1,11 @@
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import {updateMyLocation} from './actions/index';
 import {publishLocation} from './websocket-receiver';
+import store from './store';
 
 var isBackgroundServiceRunning = false;
 
-export function configureGeolocation(store) {
+export function configureGeolocation() {
   try{ 
     console.log('configuring geo location');
     BackgroundGeolocation.configure({
@@ -43,6 +44,9 @@ export function configureGeolocation(store) {
 
 export function start() {
   try{
+    if(isGeolocationConfigured === false) {
+      configureGeolocation();
+    }
     BackgroundGeolocation.start(() => {
       isBackgroundServiceRunning = true;
       console.log('[DEBUG] BackgroundGeolocation started successfully');    
@@ -76,4 +80,8 @@ export function setServiceRunning(val) {
 
 export function isGeoServiceConfigured() {
   return isGeolocationConfigured;
+}
+
+export function setGeoServiceConfigured(val) {
+  isGeolocationConfigured = val;
 }

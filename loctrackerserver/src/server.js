@@ -594,18 +594,19 @@ function sendFcmNotification(token, data) {
 	let jsonData = {
 		data:{
 			ticker: "WhereApp notification",
-		    autoCancel: true,
+		    autoCancel: 'true',
 		    largeIcon: "ic_launcher",
 		    smallIcon: "ic_notification",
 		    bigText: data.message,
 		    subText: "WhereApp notification",
-		    vibrate: true,
+		    vibrate: 'true',
 		    vibration: 300,
 		    title: data.title,
 		    message: data.message,
-		    playSound: true,
+		    playSound: 'true',
 		    soundName: 'default'
 		},
+		sound: "default",
 		to:token
 	};
 	let key = "key=AIzaSyBukdNUWqz7yju4w33N_qxx7VxBYrAxWyc";

@@ -150,6 +150,9 @@ io.on(events.CONNECTION, function(socket){
 				else {
 					if(!util.isEmpty(data)) {
 						let fromItem = JSON.parse(data);
+						_.remove(fromItem.sub, {id:to});
+						fromItem.sub.push({id:to, s:events.STATUS_PENDING});
+						pub.set(from, JSON.stringify(fromItem));
 						pub.get(to, (err, data)=>{
 							if(!util.isEmpty(err)) {
 								console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
@@ -157,14 +160,18 @@ io.on(events.CONNECTION, function(socket){
 							else {
 								if(!util.isEmpty(data)) {
 									let toItem = JSON.parse(data);
-									_.remove(fromItem.sub, {id:to});
-									fromItem.sub.push({id:to, s:events.STATUS_PENDING});
 									let toWebsocket = socketpool.getConnectionByID(to);
 									if(toWebsocket!==undefined && toWebsocket!==null) {
 										let toSocketId = toWebsocket.websocket;
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, to, 
 											{from:from, t:events.TYPE_SUB_REQ});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {from:from, t:events.TYPE_SUB_REQ});
+										if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+											sendFcmNotification(toItem.fcm_token, {
+												title: events.NF_TITLE,
+												message: events.NF_SUBREQMSG
+											});
+										}
 										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 												{t:events.TYPE_ACK});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
@@ -182,7 +189,6 @@ io.on(events.CONNECTION, function(socket){
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_NA});
 									}
 									pub.set(to, JSON.stringify(toItem));
-									pub.set(from, JSON.stringify(fromItem));
 								}
 								else {
 									dataRetrieveFailure(to, socket);
@@ -229,6 +235,12 @@ io.on(events.CONNECTION, function(socket){
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_DENIED});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_DENIED});
+										if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+											sendFcmNotification(toItem.fcm_token, {
+												title: events.NF_TITLE,
+												message: events.NF_SUBREQREJMSG
+											});
+										}
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -289,6 +301,12 @@ io.on(events.CONNECTION, function(socket){
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_APPROVED});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+										if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+											sendFcmNotification(toItem.fcm_token, {
+												title: events.NF_TITLE,
+												message: events.NF_SUBREQAPRMSG
+											});
+										}
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -358,6 +376,12 @@ io.on(events.CONNECTION, function(socket){
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_SUB_REQ_APPROVED});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+										if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+											sendFcmNotification(toItem.fcm_token, {
+												title: events.NF_TITLE,
+												message: events.NF_SUBREQPUBAPRMSG
+											});
+										}
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -416,6 +440,7 @@ io.on(events.CONNECTION, function(socket){
 										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 											{t:events.TYPE_PUB_REQ_REMOVED});
 										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_PUB_REQ_REMOVED});
+				
 									}
 									else {
 										(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -567,20 +592,22 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 
 function sendFcmNotification(token, data) {
 	let jsonData = {
-	    id: '101',
-	    ticker: "WhereApp notification",
-	    autoCancel: true,
-	    largeIcon: "ic_launcher",
-	    smallIcon: "ic_notification",
-	    bigText: data.message,
-	    subText: "WhereApp notification",
-	    vibrate: true,
-	    vibration: 300,
-	    title: data.title,
-	    message: data.message,
-	    playSound: false,
+		data:{
+			ticker: "WhereApp notification",
+		    autoCancel: true,
+		    largeIcon: "ic_launcher",
+		    smallIcon: "ic_notification",
+		    bigText: data.message,
+		    subText: "WhereApp notification",
+		    vibrate: true,
+		    vibration: 300,
+		    title: data.title,
+		    message: data.message,
+		    playSound: false
+		},
+		to:token
 	};
-	let key = "key="+token;
+	let key = "key=AIzaSyBukdNUWqz7yju4w33N_qxx7VxBYrAxWyc";
 	request({
 	    url: "https://fcm.googleapis.com/fcm/send",
 	    method: "POST",

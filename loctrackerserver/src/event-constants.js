@@ -33,5 +33,12 @@ module.exports = {
 
 	STATUS_PENDING: 'p',
 	STATUS_APPROVED: 'a',
-	STATUS_REJECTED: 'r'
+	STATUS_REJECTED: 'r',
+
+	NF_TITLE: 'WhereApp Notification',
+	NF_SUBREQMSG: 'You have NEW location request.',
+	NF_SUBREQREJMSG: 'Your location request has been rejected.',
+	NF_SUBREQAPRMSG: 'Your location request has been approved.',
+	NF_SUBREQPUBAPRMSG: 'You have been added as an approved subscriber.'
+
 };

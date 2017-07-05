@@ -156,7 +156,8 @@ export function updatePublish(items, contacts, data) {
 					familyName: '',
 					thumbnailPath: '',
 					phno:data.from,
-					searchName: data.from
+					searchName: data.from,
+					status: data.status
 				};
 			}
 			itemList = mergedList(items, selectectedContact);

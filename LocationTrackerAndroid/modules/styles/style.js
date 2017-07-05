@@ -440,6 +440,22 @@ const styles = StyleSheet.create({
     fontFamily: 'notoserif',
     fontSize: 20,
     paddingLeft: 25
+  },
+  selectedPubBtnContainer: {
+    position: 'absolute',
+    bottom: 3,
+    left:30,
+    width:20,
+    height:20,
+    borderRadius:20,
+    backgroundColor: '#ffffff'
+  },
+  selectedPubBtn: {
+    color: '#215602',
+    backgroundColor:'#ffffff',
+    width:20,
+    height:20,
+    borderRadius:20
   }
 });
 export default styles;

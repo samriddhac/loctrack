@@ -3,6 +3,7 @@ import {TextInput, TouchableHighlight,
 	TouchableNativeFeedback, 
 	TouchableOpacity, 
 	ListView, 
+	FlatList,
 	Image,
 	ToastAndroid} from 'react-native';
 import {connect} from 'react-redux';
@@ -17,6 +18,7 @@ import {isServiceRunning, start, stop } from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import {sendGeoTrackingNotification, stopGeoTrackingNotification} from '../pushnotification';
+import PublishRow from './publish-row';
 
 class PublishList extends Component {
 
@@ -29,9 +31,7 @@ class PublishList extends Component {
 		this._stopLocationPublish = this._stopLocationPublish.bind(this);
 		this._shareLocation = this._shareLocation.bind(this);
 	}
-	componentWillMount() {
-		this.setDataSource(this.props);
-	}
+	componentWillMount() {}
 	componentWillReceiveProps(nextProps){
 		if(nextProps.publishingTo===undefined ||
 			nextProps.publishingTo===null ||
@@ -49,13 +49,6 @@ class PublishList extends Component {
 				this._stopService();
 			}
 		}
-		this.setDataSource(nextProps);
-	}
-	setDataSource(props) {
-		let pubdataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.setState({
-			pubdataSource:pubdataSource.cloneWithRows(props.publishingTo)
-		});
 	}
 	_startPublish(data) {
 		this.props.addToPublishContact(data.phno, STATUS_APPROVED);
@@ -87,67 +80,20 @@ class PublishList extends Component {
 			sendGeoTrackingNotification();
 		}
 	}
-	_renderApprove(data) {
-		if(data.status !== STATUS_APPROVED) {
-			return (
-				<View style={[styles.subRightBtnContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._startPublish(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<EvilIcons name="check" size={50} 
-							style={[styles.checkButton]} />
-					</TouchableNativeFeedback>
-					<TouchableNativeFeedback onPress={()=>{
-							this._stopPublish(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<EvilIcons name="close-o" size={50} 
-							style={[styles.stopButton]} />
-					</TouchableNativeFeedback>
-				</View>
-			);
-		}
-		else {
-			return (
-				<View style={[styles.subRightStopBtnContainer]}>
-					<TouchableNativeFeedback onPress={()=>{
-							this._stopPublish(data);
-						}}
-						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-						<EvilIcons name="close-o" size={50} 
-							style={[styles.stopButtonSingle]} />
-					</TouchableNativeFeedback>
-				</View>
-			);
-		}
+	renderSeparator() {
+		return (
+		  <View
+		    style={styles.separator}
+		  />
+		);
 	}
-	_renderRow(data, sectionId, rowId, highlight) {
-		let thumbnail = require('../../modules/images/icons/default.jpg');
-		if(data.thumbnailPath!==undefined && data.thumbnailPath!==null 
-			&& data.thumbnailPath!=='') {
-			thumbnail = {uri:data.thumbnailPath};
-		}
-		let name = '';
-		if(data.givenName!==undefined && data.givenName!==null 
-			&& data.givenName!=='') {
-			name = data.givenName;
-		}
-		if(data.familyName!==undefined && data.familyName!==null 
-			&& data.familyName!=='') {
-			name = name + ' ' + data.familyName;
-		}
+	_renderRow(record) {
+		let data = record.item;
 		return(
-			<View style={styles.row}>
-				<View style={[styles.contactContainer]}>
-					<Image style={styles.thumb} source={thumbnail}
-		            defaultSource={require('../../modules/images/icons/default.jpg')} />
-		            <Text style={[styles.rowText, , styles.defaultFont]}>
-		              {name}
-		            </Text>
-				</View>
-				{this._renderApprove(data)}
-          	</View>
+			<PublishRow data={data} 
+			_stopPublish={this._stopPublish}
+			_startPublish={this._startPublish}
+			/>
 		);
 	}
 
@@ -166,11 +112,11 @@ class PublishList extends Component {
 			return(
 				<View animation="fadeInRight" delay={100} style={styles.searchResultContainer}>
 					<View style={styles.listViewContainer}>
-						<ListView
-				          dataSource={this.state.pubdataSource}
-				          renderRow={this._renderRow}
-				          renderSeparator={(sectionId, rowId) => <View style=
-		{styles.separator} />}
+						<FlatList
+				          data={this.props.publishingTo}
+				          renderItem={this._renderRow}
+				          pagingEnabled={true}
+				          ItemSeparatorComponent={this.renderSeparator}
 				        />
 			        </View>
 			        <View style={styles.globalButtonContainer}>

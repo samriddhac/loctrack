@@ -604,10 +604,7 @@ function sendFcmNotification(token, data) {
 		    title: data.title,
 		    message: data.message,
 		    playSound: 'true',
-		    soundName: 'default'
-		},
-		notification:{
-    		sound:"default"
+		    sound: 'default'
 		},
 		to:token
 	};

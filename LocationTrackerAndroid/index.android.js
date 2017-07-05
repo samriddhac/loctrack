@@ -24,7 +24,6 @@ export default class LocationTrackerAndroid extends Component {
     );
   }
 }
-console.log('Configuring stores');
 startWebSocketReceiving(store);
 configureGeolocation();
 configureNotification(store);

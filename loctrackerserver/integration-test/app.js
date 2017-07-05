@@ -138,6 +138,9 @@ export default class App extends Component {
 					                label: 'EVENT_STOP_PUBLISH',
 					                value: 'EVENT_STOP_PUBLISH'
 					              }, {
+					                label: 'EVENT_REMOVE_PUBLISH',
+					                value: 'EVENT_REMOVE_PUBLISH'
+					              }, {
 					                label: 'EVENT_ON_LOCATION_RECEIVE',
 					                value: 'EVENT_ON_LOCATION_RECEIVE'
 					              }]}
@@ -171,6 +174,12 @@ export default class App extends Component {
 					              }, {
 					                label: 'sub_req_denied',
 					                value: 'sub_req_denied'
+					              }, {
+					                label: 'sub_req_rem',
+					                value: 'sub_req_rem'
+					              }, {
+					                label: 'pub_req_rem',
+					                value: 'pub_req_rem'
 					              }, {
 					                label: 'na',
 					                value: 'na'

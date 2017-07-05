@@ -7,17 +7,10 @@ export function configureNotification(store) {
 	        console.log( 'TOKEN:', token.token );
 	        store.dispatch(setFCMToken(token.token));
 	    },
-	    // (required) Called when a remote or local notification is opened or received
 	    onNotification: function(notification) {
 	        console.log( 'NOTIFICATION:', notification );
 	    },
-	    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
 	    senderID: "979468621687",
-	    permissions: {
-	        alert: true,
-	        badge: true,
-	        sound: true
-	    },
 	    popInitialNotification: true,
 	    requestPermissions: true
 	});

@@ -30,6 +30,7 @@ class App extends Component {
 		let _parent = this;
 		try{
 			AsyncStorage.getItem(STATE).then((result)=>{
+				 console.log('result ',result);
 				 let data = JSON.parse(result);
 				 if(data!==undefined && data!==null) {
 				 	_parent.props.loadPersistedState(data.contactState);

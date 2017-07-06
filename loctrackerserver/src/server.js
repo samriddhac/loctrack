@@ -145,7 +145,7 @@ io.on(events.CONNECTION, function(socket){
 			if(objList!==undefined && objList!==null
 				&& objList.length>0) {
 				objList.forEach((toObj)=>{
-					setTimeout(()={
+					setTimeout(()=>{
 						let to = toObj.to;
 						pub.get(from, (err, data)=>{
 							if(!util.isEmpty(err)) {

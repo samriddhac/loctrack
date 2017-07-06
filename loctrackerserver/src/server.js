@@ -176,8 +176,6 @@ io.on(events.CONNECTION, function(socket){
 														socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 																{t:events.TYPE_ACK});
 														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-														_.remove(toItem.pub, {id:from});
-														toItem.pub.push({id:from, s:events.STATUS_PENDING});
 													}
 													else {
 														(pendingmessages[to] = pendingmessages[to] || []).push({
@@ -195,6 +193,8 @@ io.on(events.CONNECTION, function(socket){
 															message: events.NF_SUBREQMSG
 														});
 													}
+													_.remove(toItem.pub, {id:from});
+													toItem.pub.push({id:from, s:events.STATUS_PENDING});
 													pub.set(to, JSON.stringify(toItem));
 												}
 												else {
@@ -360,73 +360,74 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			console.log(events.EVENT_ADD_TO_PUBLISH, ' received from ', from, 'data ', data);
 			let objList = JSON.parse(data);
-			if(objList!==undefined && objList!==null
-				&& objList.length>0) {
-				objList.forEach((toObj)=>{
-					setTimeout(()=>{
-						console.log(toObj, from);
-						let to = toObj.to;
-						pub.get(from, (err, data)=>{
-							if(!util.isEmpty(err)) {
-								console.log('EVENT_ADD_TO_PUBLISH ', err);
-							}
-							else {
-								if(!util.isEmpty(data)) {
-									let fromItem = JSON.parse(data);
+			lock.acquire(from, (cb)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
+					}
+					else {
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							if(objList!==undefined && objList!==null
+							&& objList.length>0) {
+								objList.forEach((toObj)=>{
+									let to = toObj.to;
 									_.remove(fromItem.pub, {id:to});
 									fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
-									pub.set(from, JSON.stringify(fromItem));
-									pub.get(to, (err, data)=>{
-										if(!util.isEmpty(err)) {
-											console.log('EVENT_ADD_TO_PUBLISH ', err);
-										}
-										else {
-											if(!util.isEmpty(data)) {
-												let toItem = JSON.parse(data);
-												_.remove(toItem.sub, {id:from});
-												toItem.sub.push({id:from, s:events.STATUS_APPROVED});
-												let toWebsocket = socketpool.getConnectionByID(to);
-												if(toWebsocket!==undefined && toWebsocket!==null) {
-													let toSocketId = toWebsocket.websocket;
-													socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-														{t:events.TYPE_SUB_REQ_APPROVED});
-													logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
-												}
-												else {
-													(pendingmessages[to] = pendingmessages[to] || []).push({
-														event:events.EVENT_ON_MESSAGE_RECEIVE,
-														from: from,
-														data: {t:events.TYPE_SUB_REQ_APPROVED}
-													});
-												}
-												pub.set(to, JSON.stringify(toItem));
-												socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-												if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
-													sendFcmNotification(toItem.fcm_token, {
-														title: events.NF_TITLE,
-														message: events.NF_SUBREQPUBAPRMSG
-													});
-												}
+									lock.acquire(to, (cb)=>{
+										pub.get(to, (err, data)=>{
+											if(!util.isEmpty(err)) {
+												console.log('EVENT_ADD_TO_PUBLISH ', err);
 											}
 											else {
-												dataRetrieveFailure(to, socket);
+												if(!util.isEmpty(data)) {
+													let toItem = JSON.parse(data);
+													_.remove(toItem.sub, {id:from});
+													toItem.sub.push({id:from, s:events.STATUS_APPROVED});
+													let toWebsocket = socketpool.getConnectionByID(to);
+													if(toWebsocket!==undefined && toWebsocket!==null) {
+														let toSocketId = toWebsocket.websocket;
+														socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+															{t:events.TYPE_SUB_REQ_APPROVED});
+														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+													}
+													else {
+														(pendingmessages[to] = pendingmessages[to] || []).push({
+															event:events.EVENT_ON_MESSAGE_RECEIVE,
+															from: from,
+															data: {t:events.TYPE_SUB_REQ_APPROVED}
+														});
+													}
+													pub.set(to, JSON.stringify(toItem));
+													socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+													logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+													if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+														sendFcmNotification(toItem.fcm_token, {
+															title: events.NF_TITLE,
+															message: events.NF_SUBREQPUBAPRMSG
+														});
+													}
+												}
+												else {
+													dataRetrieveFailure(to, socket);
+												}
 											}
-										}
-									});
-									sub.subscribe(from);
-								}
-								else {
-									dataRetrieveFailure(from, socket);
-								}
+										});
+									}, (err, ret)=>{});
+								});
 							}
-						});
-					}, 1000);
+							sub.subscribe(from);
+							pub.set(from, JSON.stringify(fromItem));
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
+					}
 				});
-			}
+			}, (err, ret)=>{});
 		}
 		catch(err) {
-			console.log(err);
+			console.log(err.stack);
 		}
 	});
 	

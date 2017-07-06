@@ -55,9 +55,10 @@ export default function(state=INITIAL_STATE, action) {
 		case ADD_SELECTED_TO_MAP:
 			return {...state, selectedRecord: action.payload};
 		case ADD_TO_SELECTED_RECEIVER:
-			return {...state, selectedRecord: [...state.selectedRecord, action.payload]};
+			let newSelection = [...state.selectedReceiver, action.payload];
+			return {...state, selectedReceiver: [...newSelection]};
 		case REMOVE_FROM_SELECTED_RECEIVER:
-			return {...state, selectedRecord: removeItem(state.selectedRecord, action.payload)};
+			return {...state, selectedReceiver: removeItem(state.selectedReceiver, action.payload)};
 		default:
 			return state;
 	}

@@ -31,7 +31,10 @@ class PublishList extends Component {
 		this._stopPublish = this._stopPublish.bind(this);
 		this._stopLocationPublish = this._stopLocationPublish.bind(this);
 		this._shareLocation = this._shareLocation.bind(this);
+		this._addToSelectedReceiver = this._addToSelectedReceiver.bind(this);		
+		this._removeSelectedReceiver = this._removeSelectedReceiver.bind(this);
 	}
+
 	componentWillMount() {}
 	componentWillReceiveProps(nextProps){
 		if(nextProps.publishingTo===undefined ||
@@ -81,6 +84,12 @@ class PublishList extends Component {
 			sendGeoTrackingNotification();
 		}
 	}
+	_addToSelectedReceiver(ph) {
+		this.props.addToSelectedReceiver(ph);
+	}
+	_removeSelectedReceiver(ph) {
+		this.props.removeSelectedReceiver(ph);
+	}
 	renderSeparator() {
 		return (
 		  <View
@@ -95,8 +104,8 @@ class PublishList extends Component {
 			selected = {this.props.selected} 
 			_stopPublish={this._stopPublish}
 			_startPublish={this._startPublish}
-			_addToSelectedReceiver={this.props.addToSelectedReceiver}
-			_removeSelectedReceiver={this.props.removeSelectedReceiver}
+			_addToSelectedReceiver={this._addToSelectedReceiver}
+			_removeSelectedReceiver={this._removeSelectedReceiver}
 			/>
 		);
 	}

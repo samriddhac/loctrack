@@ -202,7 +202,7 @@ io.on(events.CONNECTION, function(socket){
 												}
 											}
 										});
-									}, (err, ret)=>{});
+									}, (err, ret)=>{done();});
 								});
 							}
 							pub.set(from, JSON.stringify(fromItem));
@@ -215,6 +215,7 @@ io.on(events.CONNECTION, function(socket){
 			}, (err, ret)=>{
 				console.log('lock err ',err);
 				console.log('lock ret ',ret);
+				done();
 			});
 		}
 		catch(err) {
@@ -427,7 +428,7 @@ io.on(events.CONNECTION, function(socket){
 						}
 					}
 				});
-			}, (err, ret)=>{});
+			}, (err, ret)=>{done();});
 		}
 		catch(err) {
 			console.log(err.stack);

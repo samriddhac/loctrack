@@ -145,7 +145,7 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			console.log(events.EVENT_REQUEST_SUBSCRIPTION, ' received from ', from, 'data ', data);
 			let objList = JSON.parse(data);
-			lock.acquire(from, (cb)=>{
+			lock.acquire(from, (done)=>{
 				pub.get(from, (err, data)=>{
 					if(!util.isEmpty(err)) {
 						console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
@@ -202,6 +202,7 @@ io.on(events.CONNECTION, function(socket){
 												}
 											}
 										});
+										cb();
 									}, (err, ret)=>{done();});
 								});
 							}
@@ -212,10 +213,9 @@ io.on(events.CONNECTION, function(socket){
 						}
 					}
 				});
+				done();
 			}, (err, ret)=>{
 				console.log('lock err ',err);
-				console.log('lock ret ',ret);
-				done();
 			});
 		}
 		catch(err) {
@@ -364,7 +364,7 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			console.log(events.EVENT_ADD_TO_PUBLISH, ' received from ', from, 'data ', data);
 			let objList = JSON.parse(data);
-			lock.acquire(from, (cb)=>{
+			lock.acquire(from, (done)=>{
 				pub.get(from, (err, data)=>{
 					if(!util.isEmpty(err)) {
 						console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
@@ -416,6 +416,7 @@ io.on(events.CONNECTION, function(socket){
 													dataRetrieveFailure(to, socket);
 												}
 											}
+											cb();
 										});
 									}, (err, ret)=>{});
 								});
@@ -427,8 +428,9 @@ io.on(events.CONNECTION, function(socket){
 							dataRetrieveFailure(from, socket);
 						}
 					}
+					done();
 				});
-			}, (err, ret)=>{done();});
+			}, (err, ret)=>{});
 		}
 		catch(err) {
 			console.log(err.stack);

@@ -12,7 +12,7 @@ const request = require('request');
 var AsyncLock = require('async-lock');
 
 
-var lock = new AsyncLock();
+var lock = new AsyncLock({timeout : 5000});
 var counter = 0;
 
 app.get('/', function(req, res){

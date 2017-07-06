@@ -212,7 +212,10 @@ io.on(events.CONNECTION, function(socket){
 						}
 					}
 				});
-			}, (err, ret)=>{});
+			}, (err, ret)=>{
+				console.log('lock err ',err);
+				console.log('lock ret ',ret);
+			});
 		}
 		catch(err) {
 			console.log(err);

@@ -57,46 +57,42 @@ class SearchBoxView extends React.PureComponent {
 
 	_requestLocation() {
 		let serverObjs =[];
+		let from = this.props.myContact;
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			let from = this.props.myContact;
 			this.selectedData.forEach((data)=> {
 				let obj = {
 					to: data.phno
 				};
 				serverObjs.push(obj);
+				let dObj = JSON.parse(JSON.stringify(data));
+				dObj.status = STATUS_PENDING;
+				this.props.requestLocation(dObj);
 			});
 		}
 		if(serverObjs!==undefined && serverObjs!==null
 			&& serverObjs.length>0) {
 			status = subscriptionRequest(from, serverObjs);
-			this.serverObjs.forEach((data)=> {
-				let dObj = JSON.parse(JSON.stringify(data));
-				dObj.status = STATUS_PENDING;
-				this.props.requestLocation(dObj);
-			});
 			if(status === true)
 				ToastAndroid.showWithGravity('Location request sent', ToastAndroid.SHORT, ToastAndroid.TOP);
 		}
 	}
 	_publishLocation() {
 		let serverObjs =[];
+		let from = this.props.myContact;
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			let from = this.props.myContact;
 			this.selectedData.forEach((data)=> {
 				let obj = {
 					to: data.phno
 				};
 				serverObjs.push(obj);
+				let dObj = JSON.parse(JSON.stringify(data));
+				dObj.status = STATUS_APPROVED;
+				this.props.addToPublish(dObj);
 			});
 		}
 		if(serverObjs!==undefined && serverObjs!==null
 			&& serverObjs.length>0) {
 			status = addDataToPublish(from, serverObjs);
-			this.serverObjs.forEach((data)=> {
-				let dObj = JSON.parse(JSON.stringify(data));
-				dObj.status = STATUS_APPROVED;
-				this.props.addToPublish(dObj);
-			});
 			if(status === true)
 				ToastAndroid.showWithGravity('Added as your subscriber', ToastAndroid.SHORT, ToastAndroid.TOP);
 		}

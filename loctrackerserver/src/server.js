@@ -562,20 +562,42 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 					console.log('Approved list for channel ', channel, ' ',approvedSubList);
 					if(approvedSubList!==undefined && approvedSubList!==null
 						&& approvedSubList.length>0) {
-						approvedSubList.forEach((item)=>{
-							let websocket = socketpool.getConnectionByID(item.id);
-							if(websocket!==undefined && websocket!==null
-								&& websocket.socket!==undefined
-								&& websocket.socket!==null) {
-								let locObj = JSON.parse(message);
-								let obj = {
-									t:locObj.t,
-									data: locObj.data
-								};
-								websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
-								logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
-							}
-						});
+						let locObj = JSON.parse(message);
+						if(locObj.selected!==undefined && locObj.selected!==null
+							&& locObj.selected.length>0) {
+							locObj.selected.forEach((sel)=>{
+								approvedSubList.forEach((item)=>{
+									if(item.id === sel) {
+										let websocket = socketpool.getConnectionByID(item.id);
+										if(websocket!==undefined && websocket!==null
+											&& websocket.socket!==undefined
+											&& websocket.socket!==null) {
+											let obj = {
+												t:locObj.t,
+												data: locObj.data
+											};
+											websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+										}
+									}
+								});
+							});
+						}
+						else {
+							approvedSubList.forEach((item)=>{
+								let websocket = socketpool.getConnectionByID(item.id);
+								if(websocket!==undefined && websocket!==null
+									&& websocket.socket!==undefined
+									&& websocket.socket!==null) {
+									let obj = {
+										t:locObj.t,
+										data: locObj.data
+									};
+									websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+								}
+							});
+						}
 					}
 				}
 				else {

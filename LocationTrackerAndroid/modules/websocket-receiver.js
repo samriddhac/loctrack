@@ -247,10 +247,11 @@ export function addDataToPublish(from, obj) {
 	return false;
 }
 
-export function publishLocation(from, location){
+export function publishLocation(from, location, selectedReceiver){
 	let obj = {
 		t:TYPE_LOC,
-		data:location
+		data:location,
+		selected:selectedReceiver
 	};
 	if(checkStatus()===true) {
 		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(obj));

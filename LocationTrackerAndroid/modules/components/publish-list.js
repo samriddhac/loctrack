@@ -12,7 +12,8 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import {addToPublishContact, removePublishContact} from '../actions/index';
+import {addToPublishContact, removePublishContact,
+		addToSelectedReceiver, removeSelectedReceiver} from '../actions/index';
 import {subscriptionApproveRequest, removePubs, stopPublishLocation} from '../websocket-receiver';
 import {isServiceRunning, start, stop } from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
@@ -93,6 +94,8 @@ class PublishList extends Component {
 			<PublishRow data={data} 
 			_stopPublish={this._stopPublish}
 			_startPublish={this._startPublish}
+			_addToSelectedReceiver={this.props.addToSelectedReceiver}
+			_removeSelectedReceiver={this.props.removeSelectedReceiver}
 			/>
 		);
 	}
@@ -167,4 +170,6 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {addToPublishContact, removePublishContact})(PublishList);
+export default connect(mapStateToProps, {addToPublishContact, 
+	removePublishContact, addToSelectedReceiver, 
+	removeSelectedReceiver})(PublishList);

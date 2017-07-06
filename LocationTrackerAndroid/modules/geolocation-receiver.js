@@ -24,7 +24,8 @@ export function configureGeolocation() {
     BackgroundGeolocation.on('location', (location) => {
       console.log(location);
       let from = store.getState().contactState.myContact;
-      publishLocation(from, location);
+      let selectedReceiver = store.getState().contactState.selectedReceiver;
+      publishLocation(from, location, selectedReceiver);
     });
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {

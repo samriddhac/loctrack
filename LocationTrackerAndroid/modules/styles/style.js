@@ -443,6 +443,8 @@ const styles = StyleSheet.create({
   },
   selectedPubBtnContainer: {
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     bottom: 3,
     left:30,
     width:20,

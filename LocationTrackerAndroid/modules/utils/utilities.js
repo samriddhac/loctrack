@@ -213,3 +213,10 @@ export function removeContact(items, obj) {
 	returnList = [...items];
 	return returnList;
 }
+
+export function removeItem(items, val) {
+	let returnList = [];
+	_.pull(items, val);
+	returnList = [...items];
+	return returnList;
+}

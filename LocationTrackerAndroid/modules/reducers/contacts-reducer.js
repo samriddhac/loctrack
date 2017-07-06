@@ -5,20 +5,24 @@ import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER,
 		ACTION_TYPE_LOC_UPDATE,
 		REMOVE_PUBLISH_CONTACT, 
 		REMOVE_SUBS_CONTACT,
-		ADD_SELECTED_TO_MAP} from '../actions/action-types';
+		ADD_SELECTED_TO_MAP,
+		ADD_TO_SELECTED_RECEIVER,
+		REMOVE_FROM_SELECTED_RECEIVER} from '../actions/action-types';
 import {convertContacts, 
 	mergedList,
 	updateStatus, 
 	updatePublish,
 	updateSubLocations, 
-	removeContact} from '../utils/utilities';
+	removeContact,
+	removeItem} from '../utils/utilities';
 	
 INITIAL_STATE = {
 	myContact:'',
 	contacts: [],
 	subscribedTo:[],
 	publishingTo:[],
-	selectedRecord: -999
+	selectedRecord: -999,
+	selectedReceiver:[]
 }
 
 export default function(state=INITIAL_STATE, action) {
@@ -50,6 +54,10 @@ export default function(state=INITIAL_STATE, action) {
 			return {...state, subscribedTo: removeContact(state.subscribedTo, action.payload)};
 		case ADD_SELECTED_TO_MAP:
 			return {...state, selectedRecord: action.payload};
+		case ADD_TO_SELECTED_RECEIVER:
+			return {...state, selectedRecord: [...state.selectedRecord, action.payload]};
+		case REMOVE_FROM_SELECTED_RECEIVER:
+			return {...state, selectedRecord: removeItem(state.selectedRecord, action.payload)};
 		default:
 			return state;
 	}

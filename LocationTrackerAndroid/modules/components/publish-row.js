@@ -26,9 +26,11 @@ export default class PublishListItem extends React.PureComponent {
 		let data = this.props.data;
 		if(this.state.selected === true) {
 			data.selected = false;
+			this.props._removeSelectedReceiver(data.phno);
 		}
 		else {
 			data.selected = true;
+			this.props._addToSelectedReceiver(data.phno);
 		}
 		this.setState({ selected: data.selected });
 	}

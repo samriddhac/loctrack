@@ -4,7 +4,9 @@ import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS,
 	SET_MY_CONTACT, UPDATE_SUBS_STATUS,
 	ADD_TO_PUBLISH, ADD_TO_PUBLISH_CONTACT,
 	REMOVE_PUBLISH_CONTACT, REMOVE_SUBS_CONTACT,
-	ADD_SELECTED_TO_MAP, SET_FCM_TOKEN} from './action-types';
+	ADD_SELECTED_TO_MAP, SET_FCM_TOKEN,
+	ADD_TO_SELECTED_RECEIVER,
+	REMOVE_FROM_SELECTED_RECEIVER} from './action-types';
 import {publishLocation} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -18,6 +20,20 @@ export function setFCMToken(token) {
 	return {
 		type: SET_FCM_TOKEN,
 		payload: token
+	};
+}
+
+export function addToSelectedReceiver(data) {
+	return {
+		type: ADD_TO_SELECTED_RECEIVER,
+		payload: data
+	};
+}
+
+export function removeSelectedReceiver(data) {
+	return {
+		type: REMOVE_FROM_SELECTED_RECEIVER,
+		payload: data
 	};
 }
 

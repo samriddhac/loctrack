@@ -56,32 +56,43 @@ class SearchBoxView extends React.PureComponent {
 	}
 
 	_requestLocation() {
+		let serverObjs =[];
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			let status = false;
+			let from = this.props.myContact;
 			this.selectedData.forEach((data)=> {
-				let from = this.props.myContact;
 				let obj = {
 					to: data.phno
 				};
-				status = subscriptionRequest(from, obj);
+				serverObjs.push(obj);
+			});
+		}
+		if(serverObjs!==undefined && serverObjs!==null
+			&& serverObjs.length>0) {
+			status = subscriptionRequest(from, serverObjs);
+			this.serverObjs.forEach((data)=> {
 				let dObj = JSON.parse(JSON.stringify(data));
 				dObj.status = STATUS_PENDING;
 				this.props.requestLocation(dObj);
 			});
 			if(status === true)
-				ToastAndroid.showWithGravity('Location request sent', ToastAndroid.SHORT, ToastAndroid.TOP);	
+				ToastAndroid.showWithGravity('Location request sent', ToastAndroid.SHORT, ToastAndroid.TOP);
 		}
-		
 	}
 	_publishLocation() {
+		let serverObjs =[];
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			let status = false;
+			let from = this.props.myContact;
 			this.selectedData.forEach((data)=> {
-				let from = this.props.myContact;
 				let obj = {
 					to: data.phno
 				};
-				status = addDataToPublish(from, obj);
+				serverObjs.push(obj);
+			});
+		}
+		if(serverObjs!==undefined && serverObjs!==null
+			&& serverObjs.length>0) {
+			status = addDataToPublish(from, serverObjs);
+			this.serverObjs.forEach((data)=> {
 				let dObj = JSON.parse(JSON.stringify(data));
 				dObj.status = STATUS_APPROVED;
 				this.props.addToPublish(dObj);

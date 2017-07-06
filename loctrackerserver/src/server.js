@@ -577,7 +577,7 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 												data: locObj.data
 											};
 											websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
-											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, item.id);
 										}
 									}
 								});
@@ -593,7 +593,7 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 										t:locObj.t,
 										data: locObj.data
 									};
-									websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+									websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, item.id);
 									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
 								}
 							});

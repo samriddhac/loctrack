@@ -46,37 +46,41 @@ class GoogleMap extends Component {
 		this.onRegionChange = this.onRegionChange.bind(this);
 	}
 
-	onRegionChange(region) {
-	}
+	onRegionChange(region) {}
 
 	componentDidMount() {
 		this.mounted = true;
-		if (Platform.OS === 'android') {
-			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-			.then(granted => {
-			  if (granted && this.mounted) {
-			  	navigator.geolocation.getCurrentPosition((pos)=>{
-			  		let myPosition = {
-			  			id:-1,
-				      	position: pos.coords,
-	      				name: 'Me'
-				      };
-				    _.remove(this.state.markars, {id:-1});  
-			  		this.setState({ 
-			        	region: {
-			        		latitude: pos.coords.latitude,
-				            longitude: pos.coords.longitude,
-				            latitudeDelta: LATITUDE_DELTA,
-				            longitudeDelta: LONGITUDE_DELTA,
-			        	},
-			        	markars: [...this.state.markars, myPosition]
-			        });
-			        this.watchLocation();
-			  	});
-			  }
-			});
-		} else {
-			this.watchLocation();
+		if(this.props.selected === ALL_FRIEND) {
+			if (Platform.OS === 'android') {
+				PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+				.then(granted => {
+				  if (granted && this.mounted) {
+				  	navigator.geolocation.getCurrentPosition((pos)=>{
+				  		let myPosition = {
+				  			id:-1,
+					      	position: pos.coords,
+		      				name: 'Me'
+					      };
+					    _.remove(this.state.markars, {id:-1});  
+				  		this.setState({ 
+				        	region: {
+				        		latitude: pos.coords.latitude,
+					            longitude: pos.coords.longitude,
+					            latitudeDelta: LATITUDE_DELTA,
+					            longitudeDelta: LONGITUDE_DELTA,
+				        	},
+				        	markars: [...this.state.markars, myPosition]
+				        });
+				        this.watchLocation();
+				  	});
+				  }
+				});
+			} else {
+				this.watchLocation();
+			}
+		}
+		else {
+			this.addMarkers(this.props);
 		}
 	}
 

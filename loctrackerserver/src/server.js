@@ -567,6 +567,7 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 							&& locObj.selected.length>0) {
 							locObj.selected.forEach((sel)=>{
 								approvedSubList.forEach((item)=>{
+									console.log('item.id ',item.id,'sel ',sel);
 									if(item.id === sel) {
 										let websocket = socketpool.getConnectionByID(item.id);
 										if(websocket!==undefined && websocket!==null
@@ -593,8 +594,8 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 										t:locObj.t,
 										data: locObj.data
 									};
-									websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, item.id);
-									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+									websocket.socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, channel, obj);
+									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, channel, item.id);
 								}
 							});
 						}

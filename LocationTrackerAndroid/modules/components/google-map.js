@@ -55,12 +55,6 @@ class GoogleMap extends Component {
 			.then(granted => {
 			  if (granted && this.mounted) {
 			  	navigator.geolocation.getCurrentPosition((pos)=>{
-			  		let myPosition = {
-			  			id:-1,
-				      	position: pos.coords,
-	      				name: 'Me'
-				      };
-				    _.remove(this.state.markars, {id:-1});  
 			  		this.setState({ 
 			        	region: {
 			        		latitude: pos.coords.latitude,
@@ -68,9 +62,24 @@ class GoogleMap extends Component {
 				            latitudeDelta: LATITUDE_DELTA,
 				            longitudeDelta: LONGITUDE_DELTA,
 			        	},
-			        	markars: [...this.state.markars, myPosition]
+			        	markars: []
 			        });
-			        this.watchLocation();
+			       	if(this.props.selected === ALL_FRIEND) {
+			       		let myPosition = {
+				  			id:-1,
+					      	position: pos.coords,
+		      				name: 'Me'
+					      };
+					    _.remove(this.state.markars, {id:-1});  
+					    this.setState({ 
+				        	...this.state,
+				        	markars: [...this.state.markars, myPosition]
+				        });
+				        this.watchLocation();
+			       	}
+			       	else {
+			       		this.addMarkers(this.props);
+			       	}
 			  	});
 			  }
 			});

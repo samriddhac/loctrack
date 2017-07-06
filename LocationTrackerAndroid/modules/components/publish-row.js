@@ -17,9 +17,28 @@ export default class PublishListItem extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected: false,
+			selected: this._getSelectionStatus(props),
 			status: props.data.status
 		};
+	}
+
+	componentWillReceiveProps(nextProps){
+		this.setState({
+			selected: this._getSelectionStatus(nextProps),
+			status: nextProps.data.status
+		});
+	}
+	_getSelectionStatus(props) {
+		if(props.data!==undefined && props.data!==null
+		&& props.data.phno!==undefined && props.data.phno!==null
+		&& props.data.phno!=='' && props.selected!==undefined
+		&& props.data.selected!==null && props.data.selected.length>0) {
+			let index = _.indexOf(props.data.selected, props.data.phno);
+			if(index>=0) {
+				return true;
+			}
+		}
+		return false
 	}
 
 	_onPressRow() {

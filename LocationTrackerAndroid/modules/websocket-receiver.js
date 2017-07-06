@@ -268,10 +268,11 @@ export function publishLocation(from, location, selectedReceiver){
 	return false;
 }
 
-export function stopPublishLocation(from, location){
+export function stopPublishLocation(from, location, selectedReceiver){
 	let obj = {
 		t:TYPE_LOC_STOP,
-		data:location
+		data:location,
+		selected:selectedReceiver
 	};
 	if(checkStatus()===true) {
 		getSocket().emit(EVENT_PUBLISH_LOCATION, from, JSON.stringify(obj));

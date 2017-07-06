@@ -64,7 +64,7 @@ class PublishList extends Component {
 		if(isPublish === true) {
 			stop();
 			stopGeoTrackingNotification();
-			stopPublishLocation(this.props.myContact, {});
+			stopPublishLocation(this.props.myContact, {}, this.props.selected);
 		}
 	}
 	_stopLocationPublish() {
@@ -91,7 +91,8 @@ class PublishList extends Component {
 	_renderRow(record) {
 		let data = record.item;
 		return(
-			<PublishRow data={data} 
+			<PublishRow data={data}
+			selected = {this.props.selected} 
 			_stopPublish={this._stopPublish}
 			_startPublish={this._startPublish}
 			_addToSelectedReceiver={this.props.addToSelectedReceiver}
@@ -167,7 +168,8 @@ function mapStateToProps(state) {
 	}
 	return {
 		publishingTo: pub,
-		myContact: state.contactState.myContact
+		myContact: state.contactState.myContact,
+		selected: state.contactState.selectedReceiver
 	};
 }
 export default connect(mapStateToProps, {addToPublishContact, 

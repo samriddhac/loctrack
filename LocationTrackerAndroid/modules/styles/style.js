@@ -445,19 +445,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    bottom: 3,
-    left:30,
-    width:20,
-    height:20,
-    borderRadius:20,
-    backgroundColor: '#ffffff'
+    bottom: 0,
+    left:30
   },
   selectedPubBtn: {
     color: '#215602',
     backgroundColor:'#ffffff',
-    width:20,
-    height:20,
-    borderRadius:20
+    width:19,
+    height:19,
+    borderRadius:19
   }
 });
 export default styles;

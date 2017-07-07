@@ -10,7 +10,7 @@ const socketpool = require('./websocket-pool');
 const util = require('./util');
 const request = require('request');
 var AsyncLock = require('async-lock');
-
+const uuidv1 = require('uuid/v1');
 
 var lock = new AsyncLock({timeout : 5000});
 var counter = 0;
@@ -183,11 +183,12 @@ io.on(events.CONNECTION, function(socket){
 												if(!util.isEmpty(data)) {
 													let toItem = JSON.parse(data);
 													let toWebsocket = socketpool.getConnectionByID(to);
+													let id = uuidv1();
 													if(toWebsocket!==undefined && toWebsocket!==null) {
 														let toSocketId = toWebsocket.websocket;
 														socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, to, 
-															{from:from, t:events.TYPE_SUB_REQ});
-														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {from:from, t:events.TYPE_SUB_REQ});
+															{id, from:from, t:events.TYPE_SUB_REQ});
+														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, from:from, t:events.TYPE_SUB_REQ});
 														socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 																{t:events.TYPE_ACK});
 														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
@@ -196,7 +197,7 @@ io.on(events.CONNECTION, function(socket){
 														(pendingmessages[to] = pendingmessages[to] || []).push({
 															event:events.EVENT_ON_MESSAGE_RECEIVE,
 															from: to,
-															data: {from:from, t:events.TYPE_SUB_REQ}
+															data: {id, from:from, t:events.TYPE_SUB_REQ}
 														});
 														socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
 																{t:events.TYPE_NA});
@@ -264,20 +265,22 @@ io.on(events.CONNECTION, function(socket){
 											_.remove(toItem.sub, {id:from});
 											toItem.sub.push({id:from, s:events.STATUS_REJECTED});
 											let toWebsocket = socketpool.getConnectionByID(to);
+											let id = uuidv1();
 											if(toWebsocket!==undefined && toWebsocket!==null) {
 												let toSocketId = toWebsocket.websocket;
 												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-													{t:events.TYPE_SUB_REQ_DENIED});
-												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_DENIED});
+													{id, t:events.TYPE_SUB_REQ_DENIED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, t:events.TYPE_SUB_REQ_DENIED});
 											}
 											else {
 												(pendingmessages[to] = pendingmessages[to] || []).push({
 													event:events.EVENT_ON_MESSAGE_RECEIVE,
 													from: from,
-													data: {t:events.TYPE_SUB_REQ_DENIED}
+													data: {id, t:events.TYPE_SUB_REQ_DENIED}
 												});
 											}
-											pub.set(to, JSON.stringify(toItem));									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											pub.set(to, JSON.stringify(toItem));									
+											socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
 											if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
 												sendFcmNotification(toItem.fcm_token, {
@@ -338,17 +341,18 @@ io.on(events.CONNECTION, function(socket){
 											_.remove(toItem.sub, {id:from});
 											toItem.sub.push({id:from, s:events.STATUS_APPROVED});
 											let toWebsocket = socketpool.getConnectionByID(to);
+											let id = uuidv1();
 											if(toWebsocket!==undefined && toWebsocket!==null) {
 												let toSocketId = toWebsocket.websocket;
 												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-													{t:events.TYPE_SUB_REQ_APPROVED});
-												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+													{id, t:events.TYPE_SUB_REQ_APPROVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, t:events.TYPE_SUB_REQ_APPROVED});
 											}
 											else {
 												(pendingmessages[to] = pendingmessages[to] || []).push({
 													event:events.EVENT_ON_MESSAGE_RECEIVE,
 													from: from,
-													data: {t:events.TYPE_SUB_REQ_APPROVED}
+													data: {id, t:events.TYPE_SUB_REQ_APPROVED}
 												});
 											}
 											pub.set(to, JSON.stringify(toItem));
@@ -423,18 +427,19 @@ io.on(events.CONNECTION, function(socket){
 													let toItem = JSON.parse(data);
 													_.remove(toItem.sub, {id:from});
 													toItem.sub.push({id:from, s:events.STATUS_APPROVED});
+													let id = uuidv1();
 													let toWebsocket = socketpool.getConnectionByID(to);
 													if(toWebsocket!==undefined && toWebsocket!==null) {
 														let toSocketId = toWebsocket.websocket;
 														socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-															{t:events.TYPE_SUB_REQ_APPROVED});
-														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+															{id, t:events.TYPE_SUB_REQ_APPROVED});
+														logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, t:events.TYPE_SUB_REQ_APPROVED});
 													}
 													else {
 														(pendingmessages[to] = pendingmessages[to] || []).push({
 															event:events.EVENT_ON_MESSAGE_RECEIVE,
 															from: from,
-															data: {t:events.TYPE_SUB_REQ_APPROVED}
+															data: {id, t:events.TYPE_SUB_REQ_APPROVED}
 														});
 													}
 													pub.set(to, JSON.stringify(toItem));
@@ -497,19 +502,20 @@ io.on(events.CONNECTION, function(socket){
 										if(!util.isEmpty(data)) {
 											let toItem = JSON.parse(data);
 											_.remove(toItem.pub, {id:from});
+											let id = uuidv1();
 											let toWebsocket = socketpool.getConnectionByID(to);
 											if(toWebsocket!==undefined && toWebsocket!==null) {
 												let toSocketId = toWebsocket.websocket;
 												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-													{t:events.TYPE_PUB_REQ_REMOVED});
-												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_PUB_REQ_REMOVED});
+													{id, t:events.TYPE_PUB_REQ_REMOVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, t:events.TYPE_PUB_REQ_REMOVED});
 
 											}
 											else {
 												(pendingmessages[to] = pendingmessages[to] || []).push({
 													event:events.EVENT_ON_MESSAGE_RECEIVE,
 													from: from,
-													data: {t:events.TYPE_PUB_REQ_REMOVED}
+													data: {id, t:events.TYPE_PUB_REQ_REMOVED}
 												});
 											}
 											pub.set(to, JSON.stringify(toItem));
@@ -565,18 +571,19 @@ io.on(events.CONNECTION, function(socket){
 										if(!util.isEmpty(data)) {
 											let toItem = JSON.parse(data);
 											_.remove(toItem.sub, {id:from});
+											let id = uuidv1();
 											let toWebsocket = socketpool.getConnectionByID(to);
 											if(toWebsocket!==undefined && toWebsocket!==null) {
 												let toSocketId = toWebsocket.websocket;
 												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-													{t:events.TYPE_SUB_REQ_REMOVED});
-												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_REMOVED});
+													{id, t:events.TYPE_SUB_REQ_REMOVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, t:events.TYPE_SUB_REQ_REMOVED});
 											}
 											else {
 												(pendingmessages[to] = pendingmessages[to] || []).push({
 													event:events.EVENT_ON_MESSAGE_RECEIVE,
 													from: from,
-													data: {t:events.TYPE_SUB_REQ_REMOVED}
+													data: {id, t:events.TYPE_SUB_REQ_REMOVED}
 												});
 											}
 											pub.set(to, JSON.stringify(toItem));

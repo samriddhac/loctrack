@@ -58,23 +58,23 @@ export function startWebSocketReceiving(store) {
 					break;
 				case TYPE_SUB_REQ:
 					store.dispatch(addToPublishContact(obj.from));
-					clearPendingQueue(obj.id);
+					clearPendingQueue(obj.id, from);
 					break;
 				case TYPE_SUB_REQ_APPROVED:
 					store.dispatch(updateSubscriberStateAccepted(from));
-					clearPendingQueue(obj.id);
+					clearPendingQueue(obj.id, from);
 					break;
 				case TYPE_SUB_REQ_DENIED:
 					store.dispatch(updateSubscriberStateRejected(from));
-					clearPendingQueue(obj.id);
+					clearPendingQueue(obj.id, from);
 					break;
 				case TYPE_PUB_REQ_REMOVED:
 					store.dispatch(removePublishContact(from));
-					clearPendingQueue(obj.id);
+					clearPendingQueue(obj.id, from);
 					break;
 				case TYPE_SUB_REQ_REMOVED:
 					store.dispatch(removeSubsContact(from));
-					clearPendingQueue(obj.id);
+					clearPendingQueue(obj.id, from);
 					break;
 				case TYPE_NA:
 					ToastAndroid.showWithGravity('A notification has been sent to the user', ToastAndroid.SHORT, ToastAndroid.TOP);
@@ -159,7 +159,7 @@ export function initConnection(from) {
 	getSocket().emit(EVENT_CONNECTION_ESTABLISHED, from);
 }
 
-export clearPendingQueue(id) {
+export function clearPendingQueue(id, from) {
 	if(id!==undefined && id!==null) {
 		if(isOnline===true) {
 			getSocket().emit(EVENT_ACK_PENDING_QUEUE, from, {id});

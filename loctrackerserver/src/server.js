@@ -43,7 +43,7 @@ io.on(events.CONNECTION, function(socket){
 	});
 	socket.on(events.EVENT_ACK_PENDING_QUEUE, (from, data)=>{
 		try {
-			console.log(events.EVENT_ESTABLISH_AUTH, ' received from ', from, 'data ', data);
+			console.log(events.EVENT_ACK_PENDING_QUEUE, ' received from ', from, 'data ', data);
 			let pendingQueue = pendingmessages[from];
 			if(pendingQueue!==undefined && pendingQueue!==null
 				&& pendingQueue.length>0) {
@@ -59,7 +59,9 @@ io.on(events.CONNECTION, function(socket){
 					i++;
 				});
 				if(index>=0) {
+					console.log('pending queue ',pendingQueue.length);
 					pendingQueue.splice(index, 1);
+					console.log('pending queue ',pendingQueue.length);
 				}
 			}
 		}

@@ -15,6 +15,8 @@ getSocket().on('message', (from, data) => {
 	console.log('Message received');
 	console.log('From ', from);
 	console.log('data ', data);
+	if(data.id!==undefined)
+		getSocket().emit('EVENT_ACK_PENDING_QUEUE', from, data.id);
 });
 export default class App extends Component {
 

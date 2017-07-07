@@ -44,26 +44,28 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_ACK_PENDING_QUEUE, (from, data)=>{
 		try {
 			console.log(events.EVENT_ACK_PENDING_QUEUE, ' received from ', from, 'data ', data);
-			let pendingQueue = pendingmessages[from];
-			if(pendingQueue!==undefined && pendingQueue!==null
-				&& pendingQueue.length>0) {
-				let index = -1;
-				let i =0;
-				pendingQueue.forEach((item)=>{
-					if(item.data!==undefined && item.data!==null
-						&& item.data.id!==undefined && item.data.id!==null) {
-						if(data.id === item.data.id) {
-							index = i;
+			Object.keys(pendingmessages).forEach(function(key) {
+				let pendingQueue = pendingmessages[key];
+				if(pendingQueue!==undefined && pendingQueue!==null
+					&& pendingQueue.length>0) {
+					let index = -1;
+					let i =0;
+					pendingQueue.forEach((item)=>{
+						if(item.data!==undefined && item.data!==null
+							&& item.data.id!==undefined && item.data.id!==null) {
+							if(data.id === item.data.id) {
+								index = i;
+							}
 						}
+						i++;
+					});
+					if(index>=0) {
+						console.log('pending queue ',pendingQueue.length);
+						pendingQueue.splice(index, 1);
+						console.log('pending queue ',pendingQueue.length);
 					}
-					i++;
-				});
-				if(index>=0) {
-					console.log('pending queue ',pendingQueue.length);
-					pendingQueue.splice(index, 1);
-					console.log('pending queue ',pendingQueue.length);
 				}
-			}
+			});
 		}
 		catch(err) {
 			console.log(err);

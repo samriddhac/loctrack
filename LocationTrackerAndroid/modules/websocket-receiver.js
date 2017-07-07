@@ -317,7 +317,6 @@ function addToPendingQueue(obj) {
 function releasePendingQueue() {
 	if(pendingEvents!==undefined && pendingEvents!==null &&
 		pendingEvents.length>0) {
-		pendingEvents.reverse();
 		pendingEvents.forEach((obj)=>{
 			if(obj!==undefined && obj!==null) {
 				getSocket().emit(obj.event, obj.from, obj.data);

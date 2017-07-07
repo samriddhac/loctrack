@@ -730,7 +730,6 @@ function releasePendingQueue(to) {
 			if(pendingmessages[to]!==undefined && pendingmessages[to]!==null
 				&& pendingmessages[to].length>0) {
 				let websocket = socketpool.getConnectionByID(to);
-				pendingmessages[to].reverse();
 				pendingmessages[to].forEach((obj)=>{
 					if(websocket!==undefined && websocket!==null) {
 						websocket.socket.emit(obj.event, obj.from, obj.data);

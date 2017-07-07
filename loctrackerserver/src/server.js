@@ -87,8 +87,7 @@ io.on(events.CONNECTION, function(socket){
 				done();
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
-			
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -119,8 +118,7 @@ io.on(events.CONNECTION, function(socket){
 				done();
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
-			
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -152,7 +150,7 @@ io.on(events.CONNECTION, function(socket){
 				done();
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -296,8 +294,7 @@ io.on(events.CONNECTION, function(socket){
 								cb();
 							},(err, ret)=>{
 								console.log('lock err ',err);
-							}
-							
+							});			
 						}
 						else {
 							dataRetrieveFailure(from, socket);
@@ -307,8 +304,7 @@ io.on(events.CONNECTION, function(socket){
 				done();	
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
-			
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -374,7 +370,7 @@ io.on(events.CONNECTION, function(socket){
 								cb();
 							},(err, ret)=>{
 								console.log('lock err ',err);
-							}
+							});
 						}
 						else {
 							dataRetrieveFailure(from, socket);
@@ -384,8 +380,7 @@ io.on(events.CONNECTION, function(socket){
 				});
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
-			
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -529,8 +524,7 @@ io.on(events.CONNECTION, function(socket){
 								cb();
 							},(err, ret)=>{
 								console.log('lock err ',err);
-							}
-							
+							});
 						}
 						else {
 							dataRetrieveFailure(from, socket);
@@ -540,7 +534,7 @@ io.on(events.CONNECTION, function(socket){
 				done();
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
+			});
 		}
 		catch(err) {
 			console.log(err);
@@ -597,7 +591,7 @@ io.on(events.CONNECTION, function(socket){
 								cb();
 							},(err, ret)=>{
 								console.log('lock err ',err);
-							}							
+							});							
 						}
 						else {
 							dataRetrieveFailure(from, socket);
@@ -607,8 +601,7 @@ io.on(events.CONNECTION, function(socket){
 				done();
 			},(err, ret)=>{
 				console.log('lock err ',err);
-			}
-			
+			});
 		}
 		catch(err) {
 			console.log(err);

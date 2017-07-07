@@ -65,24 +65,30 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_ESTABLISH_AUTH_SUCCESS, (from, data)=>{
 		try {
 			console.log(events.EVENT_ESTABLISH_AUTH_SUCCESS, ' received from ', from, 'data ', data);
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_ESTABLISH_AUTH_SUCCESS ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let obj = JSON.parse(data);
-						obj.auth  = {isAuth: true};
-						pub.set(from, JSON.stringify(obj));
-						obj.t = events.TYPE_ACK;
-						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
-						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_ESTABLISH_AUTH_SUCCESS ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let obj = JSON.parse(data);
+							obj.auth  = {isAuth: true};
+							pub.set(from, JSON.stringify(obj));
+							obj.t = events.TYPE_ACK;
+							socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+							logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
+			
 		}
 		catch(err) {
 			console.log(err);
@@ -92,23 +98,29 @@ io.on(events.CONNECTION, function(socket){
 		try {
 			console.log(events.EVENT_SET_FCM_TOKEN, ' received from ', from, 'data ', tokenObj);
 			let tokenObject = JSON.parse(tokenObj);
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_SET_FCM_TOKEN ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let fromItem = JSON.parse(data);
-						fromItem.fcm_token  = tokenObject.token;
-						pub.set(from, JSON.stringify(fromItem));
-						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_SET_FCM_TOKEN ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							fromItem.fcm_token  = tokenObject.token;
+							pub.set(from, JSON.stringify(fromItem));
+							socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+							logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
+			
 		}
 		catch(err) {
 			console.log(err);
@@ -117,25 +129,30 @@ io.on(events.CONNECTION, function(socket){
 	socket.on(events.EVENT_ESTABLISH_AUTH_FAILURE, (from, data)=>{
 		try {
 			console.log(events.EVENT_ESTABLISH_AUTH_FAILURE, ' received from ', from, 'data ', data);
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_ESTABLISH_AUTH_FAILURE ', err);
-					dataRetrieveFailure(from);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let obj = JSON.parse(data);
-						obj.auth  = {isAuth: false};
-						pub.set(from, JSON.stringify(obj));
-						obj.t = events.TYPE_ACK;
-						socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
-						logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_ESTABLISH_AUTH_FAILURE ', err);
+						dataRetrieveFailure(from);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let obj = JSON.parse(data);
+							obj.auth  = {isAuth: false};
+							pub.set(from, JSON.stringify(obj));
+							obj.t = events.TYPE_ACK;
+							socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+							logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, obj);
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
 		}
 		catch(err) {
 			console.log(err);
@@ -227,59 +244,71 @@ io.on(events.CONNECTION, function(socket){
 			console.log(events.EVENT_REQUEST_SUBSCRIPTION_REJECTED, ' received from ', from, 'data ', data);
 			let toObj = JSON.parse(data);
 			let to = toObj.to;
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let fromItem = JSON.parse(data);
-						_.remove(fromItem.pub, {id:to});
-						fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
-						pub.set(from, JSON.stringify(fromItem));
-						pub.get(to, (err, data)=>{
-							if(!util.isEmpty(err)) {
-								console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
-							}
-							else {
-								if(!util.isEmpty(data)) {
-									let toItem = JSON.parse(data);
-									_.remove(toItem.sub, {id:from});
-									toItem.sub.push({id:from, s:events.STATUS_REJECTED});
-									let toWebsocket = socketpool.getConnectionByID(to);
-									if(toWebsocket!==undefined && toWebsocket!==null) {
-										let toSocketId = toWebsocket.websocket;
-										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-											{t:events.TYPE_SUB_REQ_DENIED});
-										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_DENIED});
-									}
-									else {
-										(pendingmessages[to] = pendingmessages[to] || []).push({
-											event:events.EVENT_ON_MESSAGE_RECEIVE,
-											from: from,
-											data: {t:events.TYPE_SUB_REQ_DENIED}
-										});
-									}
-									pub.set(to, JSON.stringify(toItem));									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-									if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
-										sendFcmNotification(toItem.fcm_token, {
-											title: events.NF_TITLE,
-											message: events.NF_SUBREQREJMSG
-										});
-									}
-								}
-								else {
-									dataRetrieveFailure(to, socket);
-								}
-							}
-						});
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							_.remove(fromItem.pub, {id:to});
+							fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
+							pub.set(from, JSON.stringify(fromItem));
+							lock.acquire(from, (cb)=>{
+								pub.get(to, (err, data)=>{
+									if(!util.isEmpty(err)) {
+										console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
+									}
+									else {
+										if(!util.isEmpty(data)) {
+											let toItem = JSON.parse(data);
+											_.remove(toItem.sub, {id:from});
+											toItem.sub.push({id:from, s:events.STATUS_REJECTED});
+											let toWebsocket = socketpool.getConnectionByID(to);
+											if(toWebsocket!==undefined && toWebsocket!==null) {
+												let toSocketId = toWebsocket.websocket;
+												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+													{t:events.TYPE_SUB_REQ_DENIED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_DENIED});
+											}
+											else {
+												(pendingmessages[to] = pendingmessages[to] || []).push({
+													event:events.EVENT_ON_MESSAGE_RECEIVE,
+													from: from,
+													data: {t:events.TYPE_SUB_REQ_DENIED}
+												});
+											}
+											pub.set(to, JSON.stringify(toItem));									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+												sendFcmNotification(toItem.fcm_token, {
+													title: events.NF_TITLE,
+													message: events.NF_SUBREQREJMSG
+												});
+											}
+										}
+										else {
+											dataRetrieveFailure(to, socket);
+										}
+									}
+								});
+								cb();
+							},(err, ret)=>{
+								console.log('lock err ',err);
+							}
+							
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();	
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
+			
 		}
 		catch(err) {
 			console.log(err);

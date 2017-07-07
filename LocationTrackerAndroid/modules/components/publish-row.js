@@ -29,7 +29,6 @@ export default class PublishListItem extends React.PureComponent {
 		});
 	}
 	_getSelectionStatus(props) {
-		console.log('props.selected ',props.selected);
 		if(props.data!==undefined && props.data!==null
 		&& props.data.phno!==undefined && props.data.phno!==null
 		&& props.data.phno!=='' && props.selected!==undefined

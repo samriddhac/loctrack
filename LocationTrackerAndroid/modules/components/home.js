@@ -8,6 +8,7 @@ import Header from './header';
 import SubscribeList from './subscribe-list';
 import PublishList from './publish-list';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import { getPendingCount } from '../utils/utilities';
 
 class Home extends Component {
 
@@ -18,16 +19,24 @@ class Home extends Component {
 		    routes: [
 		      { key: '1', title: 'My Subscriptions' },
 		      { key: '2', title: 'My Subcribers' },
-		    ]
+		    ],
+		    pCount: getPendingCount(props.publishTo)
 		  };
 	}
-
+	componentWillReceiveProps(nextProps){
+		this.setState({pCount:getPendingCount(nextProps.publishTo)});
+	}
 	_handleChangeTab = index => this.setState({ index });
 	_renderHeader = props => <TabBar {...props} style={styles.tabBarContent}
 		indicatorStyle={styles.indicatorStyle}
 		labelStyle={styles.labelStyle} 
 		getLabelText={(scene)=>{
 			let title = scene.route.title ? scene.route.title : null;
+			if(scene.route.key === '2') {
+				if(this.state.pCount>0) {
+					title = title +' ('+this.state.pCount+')';
+				}
+			}
 			return title;
 		}}/>;
 
@@ -56,6 +65,7 @@ class Home extends Component {
 function mapStateToProps(state) {
 	return { 
 		contacts: state.contactState.contacts,
+		publishTo: state.contactState.publishingTo,
 		myContact: state.contactState.myContact
 	};
 }

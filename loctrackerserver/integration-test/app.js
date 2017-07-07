@@ -36,9 +36,15 @@ export default class App extends Component {
 		if(values.data!==undefined && values.data!==null) {
 			o.data = values.data;
 		}
-		console.log('JSON.stringify(o) ',JSON.stringify(o));
+		let str = JSON.stringify(o);
+		if(values.events==='EVENT_REQUEST_SUBSCRIPTION' || values.events==='EVENT_ADD_TO_PUBLISH') {
+			let arr = [];
+			arr.push(o);
+			str = JSON.stringify(arr);
+		}
+		console.log('JSON.stringify(o) ',str);
 		if(values.from!==undefined && values.from!==null) {
-			getSocket().emit(values.events, values.from, JSON.stringify(o));
+			getSocket().emit(values.events, values.from, str);
 		}
 		else {
 			getSocket().emit(values.events, JSON.stringify(o));
@@ -141,8 +147,8 @@ export default class App extends Component {
 					                label: 'EVENT_REMOVE_PUBLISH',
 					                value: 'EVENT_REMOVE_PUBLISH'
 					              }, {
-					                label: 'EVENT_ON_LOCATION_RECEIVE',
-					                value: 'EVENT_ON_LOCATION_RECEIVE'
+					                label: 'EVENT_ADD_TO_PUBLISH',
+					                value: 'EVENT_ADD_TO_PUBLISH'
 					              }]}
 					            />
 					            <Select // This is the built-in Select formInput 

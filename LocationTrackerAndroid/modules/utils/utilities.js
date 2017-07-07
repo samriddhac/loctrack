@@ -3,6 +3,18 @@ import { AsyncStorage } from 'react-native';
 import { STATE, STATUS_PENDING, 
 	STATUS_APPROVED, STATUS_REJECTED, STATUS_LIVE } from '../common/constants';
 
+export function getPendingCount(items) {
+	let count = 0;
+	if(items!==undefined && items!==null && items.length>0) {
+		items.forEach((item)=>{
+			if(item.status === STATUS_PENDING) {
+				count =count +1;
+			}
+		});
+	}
+	return count;
+}
+
 export const saveState = async (state) => {
 	try {
 		const serializedState = JSON.stringify(state);

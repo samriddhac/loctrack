@@ -255,7 +255,7 @@ io.on(events.CONNECTION, function(socket){
 							_.remove(fromItem.pub, {id:to});
 							fromItem.pub.push({id:to, s:events.STATUS_REJECTED});
 							pub.set(from, JSON.stringify(fromItem));
-							lock.acquire(from, (cb)=>{
+							lock.acquire(to, (cb)=>{
 								pub.get(to, (err, data)=>{
 									if(!util.isEmpty(err)) {
 										console.log('EVENT_REQUEST_SUBSCRIPTION_REJECTED ', err);
@@ -320,61 +320,72 @@ io.on(events.CONNECTION, function(socket){
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_REQUEST_SUBSCRIPTION_ACCEPTED ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let fromItem = JSON.parse(data);
-						_.remove(fromItem.pub, {id:to});
-						fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
-						pub.set(from, JSON.stringify(fromItem));
-						pub.get(to, (err, data)=>{
-							if(!util.isEmpty(err)) {
-								console.log('EVENT_REQUEST_SUBSCRIPTION_ACCEPTED ', err);
-							}
-							else {
-								if(!util.isEmpty(data)) {
-									let toItem = JSON.parse(data);
-									_.remove(toItem.sub, {id:from});
-									toItem.sub.push({id:from, s:events.STATUS_APPROVED});
-									let toWebsocket = socketpool.getConnectionByID(to);
-									if(toWebsocket!==undefined && toWebsocket!==null) {
-										let toSocketId = toWebsocket.websocket;
-										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-											{t:events.TYPE_SUB_REQ_APPROVED});
-										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
-									}
-									else {
-										(pendingmessages[to] = pendingmessages[to] || []).push({
-											event:events.EVENT_ON_MESSAGE_RECEIVE,
-											from: from,
-											data: {t:events.TYPE_SUB_REQ_APPROVED}
-										});
-									}
-									pub.set(to, JSON.stringify(toItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-									if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
-										sendFcmNotification(toItem.fcm_token, {
-											title: events.NF_TITLE,
-											message: events.NF_SUBREQAPRMSG
-										});
-									}
-								}
-								else {
-									dataRetrieveFailure(to, socket);
-								}
-							}
-						});
-						sub.subscribe(from);
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_REQUEST_SUBSCRIPTION_ACCEPTED ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							_.remove(fromItem.pub, {id:to});
+							fromItem.pub.push({id:to, s:events.STATUS_APPROVED});
+							pub.set(from, JSON.stringify(fromItem));
+							lock.acquire(to, (cb)=>{
+								pub.get(to, (err, data)=>{
+									if(!util.isEmpty(err)) {
+										console.log('EVENT_REQUEST_SUBSCRIPTION_ACCEPTED ', err);
+									}
+									else {
+										if(!util.isEmpty(data)) {
+											let toItem = JSON.parse(data);
+											_.remove(toItem.sub, {id:from});
+											toItem.sub.push({id:from, s:events.STATUS_APPROVED});
+											let toWebsocket = socketpool.getConnectionByID(to);
+											if(toWebsocket!==undefined && toWebsocket!==null) {
+												let toSocketId = toWebsocket.websocket;
+												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+													{t:events.TYPE_SUB_REQ_APPROVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_APPROVED});
+											}
+											else {
+												(pendingmessages[to] = pendingmessages[to] || []).push({
+													event:events.EVENT_ON_MESSAGE_RECEIVE,
+													from: from,
+													data: {t:events.TYPE_SUB_REQ_APPROVED}
+												});
+											}
+											pub.set(to, JSON.stringify(toItem));
+											socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+												sendFcmNotification(toItem.fcm_token, {
+													title: events.NF_TITLE,
+													message: events.NF_SUBREQAPRMSG
+												});
+											}
+										}
+										else {
+											dataRetrieveFailure(to, socket);
+										}
+									}
+								});
+								sub.subscribe(from);
+								cb();
+							},(err, ret)=>{
+								console.log('lock err ',err);
+							}
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+					done();
+				});
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
+			
 		}
 		catch(err) {
 			console.log(err);
@@ -472,53 +483,64 @@ io.on(events.CONNECTION, function(socket){
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_STOP_SUBSCRIPTION ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let fromItem = JSON.parse(data);
-						pub.get(to, (err, data)=>{
-							if(!util.isEmpty(err)) {
-								console.log('EVENT_STOP_SUBSCRIPTION ', err);
-							}
-							else {
-								if(!util.isEmpty(data)) {
-									let toItem = JSON.parse(data);
-									_.remove(fromItem.sub, {id:to});
-									_.remove(toItem.pub, {id:from});
-									let toWebsocket = socketpool.getConnectionByID(to);
-									if(toWebsocket!==undefined && toWebsocket!==null) {
-										let toSocketId = toWebsocket.websocket;
-										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-											{t:events.TYPE_PUB_REQ_REMOVED});
-										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_PUB_REQ_REMOVED});
-
-									}
-									else {
-										(pendingmessages[to] = pendingmessages[to] || []).push({
-											event:events.EVENT_ON_MESSAGE_RECEIVE,
-											from: from,
-											data: {t:events.TYPE_PUB_REQ_REMOVED}
-										});
-									}
-									pub.set(to, JSON.stringify(toItem));
-									pub.set(from, JSON.stringify(fromItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-								}
-								else {
-									dataRetrieveFailure(to, socket);
-								}
-							}
-						});
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_STOP_SUBSCRIPTION ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							_.remove(fromItem.sub, {id:to});
+							pub.set(from, JSON.stringify(fromItem));
+							lock.acquire(to, (cb)=>{
+								pub.get(to, (err, data)=>{
+									if(!util.isEmpty(err)) {
+										console.log('EVENT_STOP_SUBSCRIPTION ', err);
+									}
+									else {
+										if(!util.isEmpty(data)) {
+											let toItem = JSON.parse(data);
+											_.remove(toItem.pub, {id:from});
+											let toWebsocket = socketpool.getConnectionByID(to);
+											if(toWebsocket!==undefined && toWebsocket!==null) {
+												let toSocketId = toWebsocket.websocket;
+												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+													{t:events.TYPE_PUB_REQ_REMOVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_PUB_REQ_REMOVED});
+
+											}
+											else {
+												(pendingmessages[to] = pendingmessages[to] || []).push({
+													event:events.EVENT_ON_MESSAGE_RECEIVE,
+													from: from,
+													data: {t:events.TYPE_PUB_REQ_REMOVED}
+												});
+											}
+											pub.set(to, JSON.stringify(toItem));
+											socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+										}
+										else {
+											dataRetrieveFailure(to, socket);
+										}
+									}
+								});
+								cb();
+							},(err, ret)=>{
+								console.log('lock err ',err);
+							}
+							
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
 		}
 		catch(err) {
 			console.log(err);
@@ -530,52 +552,63 @@ io.on(events.CONNECTION, function(socket){
 			let toObj = JSON.parse(data);
 			console.log(toObj, from);
 			let to = toObj.to;
-			pub.get(from, (err, data)=>{
-				if(!util.isEmpty(err)) {
-					console.log('EVENT_REMOVE_PUBLISH ', err);
-				}
-				else {
-					if(!util.isEmpty(data)) {
-						let fromItem = JSON.parse(data);
-						_.remove(fromItem.pub, {id:to});
-						pub.set(from, JSON.stringify(fromItem));
-						pub.get(to, (err, data)=>{
-							if(!util.isEmpty(err)) {
-								console.log('EVENT_REMOVE_PUBLISH ', err);
-							}
-							else {
-								if(!util.isEmpty(data)) {
-									let toItem = JSON.parse(data);
-									_.remove(toItem.sub, {id:from});
-									let toWebsocket = socketpool.getConnectionByID(to);
-									if(toWebsocket!==undefined && toWebsocket!==null) {
-										let toSocketId = toWebsocket.websocket;
-										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
-											{t:events.TYPE_SUB_REQ_REMOVED});
-										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_REMOVED});
-									}
-									else {
-										(pendingmessages[to] = pendingmessages[to] || []).push({
-											event:events.EVENT_ON_MESSAGE_RECEIVE,
-											from: from,
-											data: {t:events.TYPE_SUB_REQ_REMOVED}
-										});
-									}
-									pub.set(to, JSON.stringify(toItem));
-									socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
-									logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
-								}
-								else {
-									dataRetrieveFailure(to, socket);
-								}
-							}
-						});
+			lock.acquire(from, (done)=>{
+				pub.get(from, (err, data)=>{
+					if(!util.isEmpty(err)) {
+						console.log('EVENT_REMOVE_PUBLISH ', err);
 					}
 					else {
-						dataRetrieveFailure(from, socket);
+						if(!util.isEmpty(data)) {
+							let fromItem = JSON.parse(data);
+							_.remove(fromItem.pub, {id:to});
+							pub.set(from, JSON.stringify(fromItem));
+							lock.acquire(from, (cb)=>{
+								pub.get(to, (err, data)=>{
+									if(!util.isEmpty(err)) {
+										console.log('EVENT_REMOVE_PUBLISH ', err);
+									}
+									else {
+										if(!util.isEmpty(data)) {
+											let toItem = JSON.parse(data);
+											_.remove(toItem.sub, {id:from});
+											let toWebsocket = socketpool.getConnectionByID(to);
+											if(toWebsocket!==undefined && toWebsocket!==null) {
+												let toSocketId = toWebsocket.websocket;
+												socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+													{t:events.TYPE_SUB_REQ_REMOVED});
+												logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_SUB_REQ_REMOVED});
+											}
+											else {
+												(pendingmessages[to] = pendingmessages[to] || []).push({
+													event:events.EVENT_ON_MESSAGE_RECEIVE,
+													from: from,
+													data: {t:events.TYPE_SUB_REQ_REMOVED}
+												});
+											}
+											pub.set(to, JSON.stringify(toItem));
+											socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, {t:events.TYPE_ACK});
+											logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+										}
+										else {
+											dataRetrieveFailure(to, socket);
+										}
+									}
+								});
+								cb();
+							},(err, ret)=>{
+								console.log('lock err ',err);
+							}							
+						}
+						else {
+							dataRetrieveFailure(from, socket);
+						}
 					}
-				}
-			});
+				});
+				done();
+			},(err, ret)=>{
+				console.log('lock err ',err);
+			}
+			
 		}
 		catch(err) {
 			console.log(err);

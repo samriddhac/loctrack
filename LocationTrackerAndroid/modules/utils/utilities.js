@@ -22,7 +22,8 @@ export function convertContacts(cntList) {
 			{
 				let phno =0;
 				item.phoneNumbers.forEach((ph)=>{
-					if(ph.label==='mobile'){
+					if(ph.label==='mobile' || ph.label==='other'
+						|| ph.label==='home'){
 						phno = ph.number;
 					}
 				});
@@ -34,6 +35,7 @@ export function convertContacts(cntList) {
 						givenName: item.givenName,
 						familyName: item.familyName,
 						thumbnailPath: item.thumbnailPath,
+						origNo:phno,
 						phno:phStr,
 						searchName: item.givenName + ' ' + item.familyName,
 						selected: false

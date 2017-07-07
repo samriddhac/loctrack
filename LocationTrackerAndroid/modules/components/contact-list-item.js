@@ -50,9 +50,12 @@ export default class ContactListItem extends React.PureComponent {
 					<View style={[styles.contactContainer]}>
 						<Image style={styles.thumb} source={thumbnail}
 			            defaultSource={require('../../modules/images/icons/default.jpg')} />
-			            <Text style={[styles.rowText, , styles.defaultFont]}>
-			              {name}
-			            </Text>
+			            <View style={styles.rowText}>
+				            <Text style={[styles.defaultFont]}>
+				              {name}
+				            </Text>
+				            <Text>{data.origNo}</Text>
+			            </View>
 					</View>
 	          	</View>
           	</TouchableHighlight>

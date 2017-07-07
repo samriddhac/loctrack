@@ -41,6 +41,32 @@ io.on(events.CONNECTION, function(socket){
 			console.log(err);
 		}
 	});
+	socket.on(events.EVENT_ACK_PENDING_QUEUE, (from, data)=>{
+		try {
+			console.log(events.EVENT_ESTABLISH_AUTH, ' received from ', from, 'data ', data);
+			let pendingQueue = pendingmessages[from];
+			if(pendingQueue!==undefined && pendingQueue!==null
+				&& pendingQueue.length>0) {
+				let index = -1;
+				let i =0;
+				pendingQueue.forEach((item)=>{
+					if(item.data!==undefined && item.data!==null
+						&& item.data.id!==undefined && item.data.id!==null) {
+						if(data.id === item.data.id) {
+							index = i;
+						}
+					}
+					i++;
+				});
+				if(index>=0) {
+					pendingQueue.splice(index, 1);
+				}
+			}
+		}
+		catch(err) {
+			console.log(err);
+		}
+	});
 	socket.on(events.EVENT_ESTABLISH_AUTH, (from, data)=>{
 		try {
 			let obj = {
@@ -743,7 +769,6 @@ function releasePendingQueue(to) {
 						logEmits(obj.event, obj.from, obj.data);
 					}
 				});
-				pendingmessages[to] = [];
 			}
 		}
 	}

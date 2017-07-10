@@ -119,8 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   rowText: {
-    marginLeft: 10,
-    fontSize: 16
+    marginLeft: 10
   },
   separator: {
     height: StyleSheet.hairlineWidth,
@@ -146,7 +145,6 @@ const styles = StyleSheet.create({
   },
   subButton: {
     flex:2,
-    backgroundColor:'#ffffff',
     color: '#4A44F2',
     justifyContent: 'center',
     alignItems: 'center',
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
   stopButton: {
     flex:1,
     paddingRight:4,
-    backgroundColor:'#ffffff',
+    backgroundColor:'transparent',
     color: '#CC1D23',
     alignItems: 'center'
   },
@@ -182,7 +180,7 @@ const styles = StyleSheet.create({
   mapButton: {
     flex:1,
     paddingRight:6,
-    backgroundColor:'#ffffff',
+    backgroundColor:'transparent',
     color: '#CC1D23'
   },
   checkButton: {
@@ -280,12 +278,14 @@ const styles = StyleSheet.create({
     paddingRight:5
   },
   subRightContainer: {
-    flex: 3
+    flex: 3,
+    backgroundColor: 'transparent'
   },
   subRightBtnContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    flex: 4
+    flex: 4,
+    backgroundColor: 'transparent'
   },
   subRightStopBtnContainer: {
     flexDirection: 'row',
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     height:45,
     borderRadius:45,
     alignItems: 'center',
-    marginRight:20
+    marginRight:10
   },
   globalShareBackButton: {
     paddingTop:5,

@@ -21,6 +21,7 @@ class SubscribeList extends Component {
 		this._renderRow = this._renderRow.bind(this);
 		this._goToMap = this._goToMap.bind(this);
 		this._stopSubscription = this._stopSubscription.bind(this);
+		this._onRowPressed = this._onRowPressed.bind(this);
 	}
 
 	_goToMap(data) {
@@ -33,6 +34,10 @@ class SubscribeList extends Component {
 		removeSubs(this.props.myContact, {to:data.phno});
 	}
 	
+	_onRowPressed(data) {
+
+	}
+
 	_renderRow(record) {
 		let data = record.item;
 		return(

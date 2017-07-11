@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 import styles from '../styles/style';
 import { VIEW_MAP, STATUS_APPROVED, ALL_FRIEND } from '../common/constants';
 import {changeView, removeSubsContact, addToMap} from '../actions/index';
@@ -59,18 +60,19 @@ class SubscribeList extends Component {
 	_renderRequestShare() {
 		if(this.state.selectionCount>0) {
 			return (
-				<View style={[styles.globalmapButtonTxtContainer]}>
+				<View animation="zoomIn" style={[styles.globalRequestShareButtonTxtContainer]}>
 			    	<View>
 						<TouchableNativeFeedback onPress={()=>{
 								this._requestShare();
 							}}
 							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<View style={[styles.globalmapButtonContainer]}>
+							<View style={[styles.globalRequestShareButtonContainer]}>
 							<FontAwesome name="share" size={35} 
-							style={[styles.globalmapBackButton]} />
+							style={[styles.globalRequestShareBackButton]} />
 							</View>
 						</TouchableNativeFeedback>
 					</View>
+					<Text style={styles.btnBottomShareText}>Request Share</Text>
 				</View>
 			);
 		}
@@ -85,6 +87,7 @@ class SubscribeList extends Component {
 			<SubscribeRow data={data}
 			_stopSubscription={this._stopSubscription}
 			_goToMap={this._goToMap}
+			_onRowPressed={this._onRowPressed}
 			/>
 		);
 	}
@@ -120,6 +123,7 @@ class SubscribeList extends Component {
 				        />
 			        </View>
 			        <View style={styles.globalButtonContainer}>
+			        	{this._renderRequestShare()}
 			        	<View style={[styles.globalmapButtonTxtContainer]}>
 			        		<View>
 								<TouchableNativeFeedback onPress={()=>{
@@ -134,7 +138,6 @@ class SubscribeList extends Component {
 							</View>
 							<Text style={styles.btnBottomText}>Map</Text>
 						</View>
-						{this._renderRequestShare()}
 					</View>
 				</View>
 			);

@@ -454,6 +454,31 @@ const styles = StyleSheet.create({
     width:20,
     height:20,
     borderRadius:20
-  }
+  },
+  globalRequestShareButtonTxtContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    marginLeft:20
+  },
+  globalRequestShareButtonContainer: {
+    backgroundColor:'#4A44F2',
+    width:45,
+    height:45,
+    borderRadius:45,
+    alignItems: 'center',
+    marginLeft:10
+  },
+  globalRequestShareBackButton: {
+    paddingTop:5,
+    paddingRight:5,
+    color: '#ffffff'
+  },
+  btnBottomShareText: {
+    color: '#4A44F2',
+    fontFamily: 'notoserif',
+    fontSize: 12, 
+    alignItems: 'center',
+    marginRight:10
+  },
 });
 export default styles;

@@ -20,6 +20,7 @@ export default class SubscribeListItem extends React.PureComponent {
 		this.state = {
 			status: props.data.status
 		};
+		this._onPressRow = this._onPressRow.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -29,15 +30,21 @@ export default class SubscribeListItem extends React.PureComponent {
 	}
 
 	_onPressRow() {
-		let data = this.props.data;
-		if(this.state.status === STATUS_APPROVED) {
-			if(this.state.selected === true) {
-				data.selected = false;
+		try {
+			let data = this.props.data;
+			if(this.state.status === STATUS_APPROVED) {
+				if(this.state.selected === true) {
+					data.selected = false;
+				}
+				else {
+					data.selected = true;
+				}
+				this.setState({ selected: data.selected });
+				this.props._onRowPressed(data);
 			}
-			else {
-				data.selected = true;
-			}
-			this.setState({ selected: data.selected });
+		}
+		catch(e) {
+			console.log(e);
 		}
 	}
 
@@ -73,7 +80,7 @@ export default class SubscribeListItem extends React.PureComponent {
 			name = name + ' ' + data.familyName;
 		}
 		return(
-			<TouchableHighlight onLongPress={() => {this._onPressRow();}} 
+			<TouchableHighlight onLongPress={() => {this._onPressRow()}} 
 			underlayColor='#d6d5f2'>
 				<View style={[styles.rowSub, this.state.selected ? styles.selected :  styles.unselected]}>
 					<View style={[styles.contactContainer]}>

@@ -16,6 +16,7 @@ module.exports = {
 	EVENT_STOP_PUBLISH:'EVENT_STOP_PUBLISH',
 	EVENT_SET_FCM_TOKEN: 'EVENT_SET_FCM_TOKEN',
 	EVENT_ACK_PENDING_QUEUE: 'EVENT_ACK_PENDING_QUEUE',
+	EVENT_SHARE_REQUEST: 'EVENT_SHARE_REQUEST',
 
 	TYPE_CONN_ACK: 'conn_ack',
 	TYPE_ACK: 'ack',
@@ -31,6 +32,7 @@ module.exports = {
 	TYPE_SUB_REQ_REMOVED: 'sub_req_rem',
 	TYPE_PUB_REQ_REMOVED: 'pub_req_rem',
 	TYPE_NR: 'nr',
+	TYPE_SHARE_REQ: 'share_req',
 
 	STATUS_PENDING: 'p',
 	STATUS_APPROVED: 'a',
@@ -40,6 +42,6 @@ module.exports = {
 	NF_SUBREQMSG: 'You have NEW location request.',
 	NF_SUBREQREJMSG: 'Your location request has been rejected.',
 	NF_SUBREQAPRMSG: 'Your location request has been approved.',
-	NF_SUBREQPUBAPRMSG: 'You have been added as an approved subscriber.'
-
+	NF_SUBREQPUBAPRMSG: 'You have been added as an approved subscriber.',
+	NF_SHAREREQUEST: 'You have been requested to share your location by your approved subsribers.'
 };

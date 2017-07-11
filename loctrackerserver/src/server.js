@@ -186,6 +186,65 @@ io.on(events.CONNECTION, function(socket){
 			console.log(err);
 		}
 	});
+	socket.on(events.EVENT_SHARE_REQUEST, (from, data)=>{
+		try {
+			console.log(events.EVENT_SHARE_REQUEST, ' received from ', from, 'data ', data);
+			let objList = JSON.parse(data);
+			if(objList!==undefined && objList!==null
+			&& objList.length>0) {
+				objList.forEach((toObj)=>{
+					let to = toObj.to;
+					lock.acquire(to, (cb)=>{
+						pub.get(to, (err, data)=>{
+							if(!util.isEmpty(err)) {
+								console.log('EVENT_REQUEST_SUBSCRIPTION ', err);
+							}
+							else {
+								if(!util.isEmpty(data)) {
+									let toItem = JSON.parse(data);
+									let toWebsocket = socketpool.getConnectionByID(to);
+									let id = uuidv1();
+									if(toWebsocket!==undefined && toWebsocket!==null) {
+										let toSocketId = toWebsocket.websocket;
+										socket.broadcast.to(toSocketId).emit(events.EVENT_ON_MESSAGE_RECEIVE, to, 
+											{id, from:from, t:events.TYPE_SHARE_REQ});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {id, from:from, t:events.TYPE_SHARE_REQ});
+										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+												{t:events.TYPE_ACK});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_ACK});
+									}
+									else {
+										(pendingmessages[to] = pendingmessages[to] || []).push({
+											event:events.EVENT_ON_MESSAGE_RECEIVE,
+											from: to,
+											data: {id, from:from, t:events.TYPE_SHARE_REQ}
+										});
+										socket.emit(events.EVENT_ON_MESSAGE_RECEIVE, from, 
+												{t:events.TYPE_NA});
+										logEmits(events.EVENT_ON_MESSAGE_RECEIVE, from, {t:events.TYPE_NA});
+									}
+									if(toItem.fcm_token!==undefined && toItem.fcm_token!==null) {
+										sendFcmNotification(toItem.fcm_token, {
+											title: events.NF_TITLE,
+											message: events.NF_SHAREREQUEST
+										});
+									}
+								}
+								else {
+									dataRetrieveFailure(to, socket);
+								}
+							}
+							cb();
+						});
+					}, (err, ret)=>{});
+					
+				});
+			}
+		}
+		catch(err) {
+			console.log(err);
+		}
+	});
 	socket.on(events.EVENT_REQUEST_SUBSCRIPTION, (from, data)=>{
 		try {
 			console.log(events.EVENT_REQUEST_SUBSCRIPTION, ' received from ', from, 'data ', data);

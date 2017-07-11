@@ -43,15 +43,17 @@ export default class PublishListItem extends React.PureComponent {
 
 	_onPressRow() {
 		let data = this.props.data;
-		if(this.state.selected === true) {
-			data.selected = false;
-			this.props._removeSelectedReceiver(data.phno);
+		if(this.state.status === STATUS_APPROVED) {
+			if(this.state.selected === true) {
+				data.selected = false;
+				this.props._removeSelectedReceiver(data.phno);
+			}
+			else {
+				data.selected = true;
+				this.props._addToSelectedReceiver(data.phno);
+			}
+			this.setState({ selected: data.selected });
 		}
-		else {
-			data.selected = true;
-			this.props._addToSelectedReceiver(data.phno);
-		}
-		this.setState({ selected: data.selected });
 	}
 
 	_onCheckPress() {
@@ -132,16 +134,16 @@ export default class PublishListItem extends React.PureComponent {
 		return(
 			<TouchableHighlight onLongPress={() => {this._onPressRow();}} 
 			underlayColor='#d6d5f2'>
-				<View style={styles.row}>
+				<View style={[styles.row, this.state.selected ? styles.selected :  styles.unselected]}>
 					<View style={[styles.contactContainer]}>
 						<Image style={styles.thumb} source={thumbnail}
 			            defaultSource={require('../../modules/images/icons/default.jpg')} />
 			            <Text style={[styles.rowText, , styles.defaultFont]}>
 			              {name}
 			            </Text>
-			            {this._renderSelection()}
 					</View>
 					{this._renderApprove()}
+					{this._renderSelection()}
 	          	</View>          	
           	</TouchableHighlight>
 		);

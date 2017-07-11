@@ -30,13 +30,30 @@ export default class SubscribeListItem extends React.PureComponent {
 
 	_onPressRow() {
 		let data = this.props.data;
-		if(this.state.selected === true) {
-			data.selected = false;
+		if(this.state.status === STATUS_APPROVED) {
+			if(this.state.selected === true) {
+				data.selected = false;
+			}
+			else {
+				data.selected = true;
+			}
+			this.setState({ selected: data.selected });
+		}
+	}
+
+	_renderSelection() {
+		if(this.state.selected === true &&
+			this.state.status === STATUS_APPROVED) {
+			return (
+				<View animation="zoomIn" style={styles.selectedPubBtnContainer}>
+					<MaterialCommunityIcons name="check-circle" size={20} 
+					style={[styles.selectedPubBtn]} />
+				</View>
+			);
 		}
 		else {
-			data.selected = true;
+			return null;
 		}
-		this.setState({ selected: data.selected });
 	}
 
 	render() {
@@ -87,6 +104,7 @@ export default class SubscribeListItem extends React.PureComponent {
 							<Text style={[styles.statusText]}>{getStatus(data.status)}</Text>
 						</View>
 					</View>
+					{this._renderSelection()}
 	          	</View>
           	</TouchableHighlight>
 		);

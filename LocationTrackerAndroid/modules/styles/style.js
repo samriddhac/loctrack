@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'row',
     paddingRight:4,
-    backgroundColor:'#ffffff',
+    backgroundColor:'transparent',
     color: '#CC1D23',
     justifyContent:'flex-end',
     alignItems: 'center'
@@ -445,15 +445,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    bottom: 0,
-    left:30
+    bottom: 5,
+    left:40
   },
   selectedPubBtn: {
     color: '#215602',
     backgroundColor:'#ffffff',
-    width:19,
-    height:19,
-    borderRadius:19
+    width:20,
+    height:20,
+    borderRadius:20
   }
 });
 export default styles;

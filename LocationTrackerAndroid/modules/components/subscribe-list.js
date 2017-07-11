@@ -5,6 +5,7 @@ import {TextInput, TouchableHighlight,
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import styles from '../styles/style';
 import { VIEW_MAP, STATUS_APPROVED, ALL_FRIEND } from '../common/constants';
@@ -18,10 +19,15 @@ class SubscribeList extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = { 
+			selectionCount:0
+		};
+		this.selectedData = [];
 		this._renderRow = this._renderRow.bind(this);
 		this._goToMap = this._goToMap.bind(this);
 		this._stopSubscription = this._stopSubscription.bind(this);
 		this._onRowPressed = this._onRowPressed.bind(this);
+		this._requestShare = this._requestShare.bind(this);
 	}
 
 	_goToMap(data) {
@@ -33,9 +39,44 @@ class SubscribeList extends Component {
 		this.props.removeSubsContact(data.phno);
 		removeSubs(this.props.myContact, {to:data.phno});
 	}
+
+	_requestShare() {
+
+	}
 	
 	_onRowPressed(data) {
+		if(data!==undefined) {
+			_.remove(this.selectedData, {recordID:data.recordID});
+			if(data.selected !==undefined
+			&& data.selected === true) {
+				this.selectedData = [data, ...this.selectedData];
+			}
+		}
+		let newCount = this.selectedData.length;
+		this.setState({...this.state, selectionCount:newCount});
+	}
 
+	_renderRequestShare() {
+		if(this.state.selectionCount>0) {
+			return (
+				<View style={[styles.globalmapButtonTxtContainer]}>
+			    	<View>
+						<TouchableNativeFeedback onPress={()=>{
+								this._requestShare();
+							}}
+							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<View style={[styles.globalmapButtonContainer]}>
+							<FontAwesome name="share" size={35} 
+							style={[styles.globalmapBackButton]} />
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+				</View>
+			);
+		}
+		else {
+			return null;
+		}
 	}
 
 	_renderRow(record) {
@@ -93,6 +134,7 @@ class SubscribeList extends Component {
 							</View>
 							<Text style={styles.btnBottomText}>Map</Text>
 						</View>
+						{this._renderRequestShare()}
 					</View>
 				</View>
 			);

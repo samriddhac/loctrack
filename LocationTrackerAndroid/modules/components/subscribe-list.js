@@ -46,9 +46,9 @@ class SubscribeList extends Component {
 		if(this.selectedData!==undefined && this.selectedData!==null
 			&& this.selectedData.length>0) {
 			this.selectedData.forEach((item)=>{
-				reData.push(item.phno);
+				reData.push({to:item.phno});
 			});
-			shareRequest(reData);
+			shareRequest(this.props.myContact, reData);
 		}
 	}
 	

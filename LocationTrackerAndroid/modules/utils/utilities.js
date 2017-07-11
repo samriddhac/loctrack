@@ -234,3 +234,22 @@ export function removeItem(items, val) {
 	returnList = [...items];
 	return returnList;
 }
+
+export function updateShareRequest(items, from) {
+	let returnList = [];
+	try {
+		if(items!==undefined && items!==null && items.length>0) {
+			let selecteditem = null;
+			items.forEach((item)=>{
+				if(item.phno === from){
+					item.shareRequested = true;
+				}
+			});
+			returnList = [...items];
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+	return returnList;
+}

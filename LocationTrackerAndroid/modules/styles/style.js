@@ -480,5 +480,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight:10
   },
+  shareReqBtnContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: 5,
+    left:60
+  },
+  shareReqBtn: {
+    color: '#4A44F2',
+    backgroundColor:'transparent',
+    width:20,
+    height:20,
+    borderRadius:20
+  },
 });
 export default styles;

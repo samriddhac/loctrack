@@ -39,7 +39,8 @@ export default class App extends Component {
 			o.data = values.data;
 		}
 		let str = JSON.stringify(o);
-		if(values.events==='EVENT_REQUEST_SUBSCRIPTION' || values.events==='EVENT_ADD_TO_PUBLISH') {
+		if(values.events==='EVENT_REQUEST_SUBSCRIPTION' || values.events==='EVENT_ADD_TO_PUBLISH'
+			|| values.events==='EVENT_SHARE_REQUEST') {
 			let arr = [];
 			arr.push(o);
 			str = JSON.stringify(arr);
@@ -148,6 +149,9 @@ export default class App extends Component {
 					              }, {
 					                label: 'EVENT_REMOVE_PUBLISH',
 					                value: 'EVENT_REMOVE_PUBLISH'
+					              },{
+					                label: 'EVENT_SHARE_REQUEST',
+					                value: 'EVENT_SHARE_REQUEST'
 					              }, {
 					                label: 'EVENT_ADD_TO_PUBLISH',
 					                value: 'EVENT_ADD_TO_PUBLISH'

@@ -24,7 +24,8 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 TYPE_SHARE_REQ} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
-		addToPublishContact, removePublishContact, removeSubsContact } from './actions/index';
+		addToPublishContact, removePublishContact, 
+		removeSubsContact, updateShareReq } from './actions/index';
 import { ToastAndroid } from 'react-native';
 
 var socket = null;
@@ -94,7 +95,7 @@ export function startWebSocketReceiving(store) {
 					ToastAndroid.showWithGravity('User is not registered with WhereApp', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_SHARE_REQ:
-
+					store.dispatch(updateShareReq(from));
 					break;
 			}
 		}

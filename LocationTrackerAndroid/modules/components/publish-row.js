@@ -8,6 +8,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import styles from '../styles/style';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
@@ -115,6 +116,22 @@ export default class PublishListItem extends React.PureComponent {
 		}
 	}
 
+	_renderShareRequested() {
+		let data = this.props.data;
+		if(data.shareRequested!==undefined && data.shareRequested!==null
+		&& data.shareRequested===true) {
+			return (
+				<View animation="zoomIn" style={styles.shareReqBtnContainer}>
+					<FontAwesome name="question" size={20} 
+					style={[styles.shareReqBtn]} />
+				</View>
+			);
+		}
+		else {
+			return null;
+		}
+	}
+
 	render() {
 		let data = this.props.data;
 		let thumbnail = require('../../modules/images/icons/default.jpg');
@@ -144,6 +161,7 @@ export default class PublishListItem extends React.PureComponent {
 					</View>
 					{this._renderApprove()}
 					{this._renderSelection()}
+					{this._renderShareRequested()}
 	          	</View>          	
           	</TouchableHighlight>
 		);

@@ -237,6 +237,7 @@ export function removeItem(items, val) {
 
 export function updateShareRequest(items, from) {
 	let returnList = [];
+	console.log(from);
 	try {
 		if(items!==undefined && items!==null && items.length>0) {
 			let selecteditem = null;

@@ -95,7 +95,7 @@ export function startWebSocketReceiving(store) {
 					ToastAndroid.showWithGravity('User is not registered with WhereApp', ToastAndroid.SHORT, ToastAndroid.TOP);
 					break;
 				case TYPE_SHARE_REQ:
-					store.dispatch(updateShareReq(from));
+					store.dispatch(updateShareReq(obj.from));
 					break;
 			}
 		}

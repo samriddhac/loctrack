@@ -23,6 +23,7 @@ export const EVENT_STOP_SUBSCRIPTION = 'EVENT_STOP_SUBSCRIPTION';
 export const EVENT_REMOVE_PUBLISH ='EVENT_REMOVE_PUBLISH';
 export const EVENT_SET_FCM_TOKEN ='EVENT_SET_FCM_TOKEN';
 export const EVENT_ACK_PENDING_QUEUE = 'EVENT_ACK_PENDING_QUEUE';
+export const EVENT_SHARE_REQUEST = 'EVENT_SHARE_REQUEST';
 
 export const EVENT_ON_LOCATION_RECEIVE = 'message';
 
@@ -41,6 +42,7 @@ export const TYPE_SUB_REQ_REMOVED ='sub_req_rem';
 export const TYPE_PUB_REQ_REMOVED ='pub_req_rem';
 export const TYPE_LOC_STOP = 'loc_stop';
 export const TYPE_NR = 'nr';
+export const TYPE_SHARE_REQ = 'share_req';
 
 export const STATUS_PENDING = 'p';
 export const STATUS_APPROVED = 'a';

@@ -12,13 +12,16 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 	 EVENT_ADD_TO_PUBLISH,
 	 EVENT_SET_FCM_TOKEN,
 	 EVENT_ACK_PENDING_QUEUE,
+	 EVENT_SHARE_REQUEST,
 	 TYPE_CONN_ACK, TYPE_ACK, TYPE_AUTH_REQ,
 	 TYPE_AUTH_VALIDATE, TYPE_AUTH_SUCCESS,
 	 TYPE_AUTH_FAILURE, TYPE_SUB_REQ,
 	 TYPE_SUB_REQ_APPROVED, TYPE_SUB_REQ_DENIED,
 	 TYPE_NA, TYPE_LOC, 
 	 TYPE_LOC_STOP, TYPE_NR,
-	 TYPE_PUB_REQ_REMOVED, TYPE_SUB_REQ_REMOVED} from './common/constants';
+	 TYPE_PUB_REQ_REMOVED, 
+	 TYPE_SUB_REQ_REMOVED,
+	 TYPE_SHARE_REQ} from './common/constants';
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
 		addToPublishContact, removePublishContact, removeSubsContact } from './actions/index';
@@ -89,6 +92,9 @@ export function startWebSocketReceiving(store) {
 					break;
 				case TYPE_NR:
 					ToastAndroid.showWithGravity('User is not registered with WhereApp', ToastAndroid.SHORT, ToastAndroid.TOP);
+					break;
+				case TYPE_SHARE_REQ:
+
 					break;
 			}
 		}
@@ -198,6 +204,22 @@ export function subscriptionRequest(from, obj) {
 	else {
 		addToPendingQueue({
 			event:EVENT_REQUEST_SUBSCRIPTION,
+			from:from,
+			data:JSON.stringify(obj)
+		});
+		ToastAndroid.showWithGravity('No Internet access', ToastAndroid.SHORT, ToastAndroid.TOP);
+	}
+	return false;
+}
+
+export function shareRequest(from, obj) {
+	if(checkStatus()===true) {
+		getSocket().emit(EVENT_SHARE_REQUEST, from, JSON.stringify(obj));
+		return true;
+	}
+	else {
+		addToPendingQueue({
+			event:EVENT_SHARE_REQUEST,
 			from:from,
 			data:JSON.stringify(obj)
 		});

@@ -12,7 +12,7 @@ import styles from '../styles/style';
 import { VIEW_MAP, STATUS_APPROVED, ALL_FRIEND } from '../common/constants';
 import {changeView, removeSubsContact, addToMap} from '../actions/index';
 import { getStatus } from '../utils/utilities';
-import {removeSubs} from '../websocket-receiver';
+import {removeSubs, shareRequest} from '../websocket-receiver';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import SubscribeRow from './subscribe-row';
 
@@ -42,7 +42,14 @@ class SubscribeList extends Component {
 	}
 
 	_requestShare() {
-
+		let reData = [];
+		if(this.selectedData!==undefined && this.selectedData!==null
+			&& this.selectedData.length>0) {
+			this.selectedData.forEach((item)=>{
+				reData.push(item.phno);
+			});
+			shareRequest(reData);
+		}
 	}
 	
 	_onRowPressed(data) {

@@ -42,11 +42,16 @@ class GoogleMap extends Component {
 			region: null,
 			markars: []
 		};
+		this.latDelta = LATITUDE_DELTA;
+		this.longDelta = LONGITUDE_DELTA;
 		this._goToHome = this._goToHome.bind(this);
 		this.onRegionChange = this.onRegionChange.bind(this);
 	}
 
-	onRegionChange(region) {}
+	onRegionChange(region) {
+		this.latDelta = region.latitudeDelta;
+		this.longDelta = region.longitudeDelta;
+	}
 
 	componentDidMount() {
 		this.mounted = true;
@@ -59,8 +64,8 @@ class GoogleMap extends Component {
 			        	region: {
 			        		latitude: pos.coords.latitude,
 				            longitude: pos.coords.longitude,
-				            latitudeDelta: LATITUDE_DELTA,
-				            longitudeDelta: LONGITUDE_DELTA,
+				            latitudeDelta: this.latDelta,
+				            longitudeDelta: this.longDelta,
 			        	},
 			        	markars: []
 			        });
@@ -162,8 +167,8 @@ class GoogleMap extends Component {
 					let region = {
 		        		latitude: obj.loc.latitude,
 			            longitude: obj.loc.longitude,
-			            latitudeDelta: LATITUDE_DELTA,
-			            longitudeDelta: LONGITUDE_DELTA,
+			            latitudeDelta: this.latDelta,
+				        longitudeDelta: this.longDelta,
 		        	};
 					this.setState({ 
 			        	region:region,

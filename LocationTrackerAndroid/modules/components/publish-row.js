@@ -42,7 +42,7 @@ export default class PublishListItem extends React.PureComponent {
 				return true;
 			}
 		}
-		return false
+		return false;
 	}
 
 	_onPressRow() {

@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   globalShareButtonContainer: {
-    backgroundColor:'#215602',
+    backgroundColor:'#4A44F2',
     width:45,
     height:45,
     borderRadius:45,

@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
 import {changeView} from '../actions/index';
-import myLocIcon from '../images/icons/bluecircle.png';
+import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
@@ -235,6 +235,16 @@ class GoogleMap extends Component {
 				              </View>
 				            </MapView.Callout>
 						</MapView.Marker>
+						))}
+						{this.state.markars.map((marker, i) => (
+							<MapView.Circle
+					            center={marker.position}
+					            radius={100}
+					            fillColor="rgba(74,68,242, 0.2)"
+					            strokeColor="rgba(74,68,242,0.8)"
+					            zIndex={1}
+					            strokeWidth={1}
+					          />
 						))}
 					</MapView>
 				    <View style={[styles.mapButtonContainer]}>

@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     flex:1,
     paddingRight:0,
     backgroundColor:'#ffffff',
-    color: '#215602'
+    color: '#4A44F2'
   },
   mapContainer: {
     flex: 1
@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
     left:40
   },
   selectedPubBtn: {
-    color: '#215602',
+    color: '#4A44F2',
     backgroundColor:'#ffffff',
     width:20,
     height:20,

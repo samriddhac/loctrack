@@ -96,6 +96,7 @@ export function startWebSocketReceiving(store) {
 					break;
 				case TYPE_SHARE_REQ:
 					store.dispatch(updateShareReq(obj.from));
+					clearPendingQueue(obj.id, from);
 					break;
 			}
 		}

@@ -240,12 +240,39 @@ export function updateShareRequest(items, from) {
 	console.log(from);
 	try {
 		if(items!==undefined && items!==null && items.length>0) {
-			let selecteditem = null;
 			items.forEach((item)=>{
 				if(item.phno === from){
 					item.shareRequested = true;
 				}
 			});
+			returnList = [...items];
+		}
+	}
+	catch(err) {
+		console.log(err);
+	}
+	return returnList;
+}
+
+export function doneShareRequest(items, selectedLists) {
+	let returnList = [];
+	try {
+		if(items!==undefined && items!==null && items.length>0) {
+			if(selectedLists!==undefined && selectedLists!==null
+				&& selectedLists.length>0) {
+				selectedLists.forEach((sel)=>{
+					items.forEach((item)=>{
+						if(item.phno === sel){
+							item.shareRequested = false;
+						}
+					});
+				});
+			}
+			else {
+				items.forEach((item)=>{
+					item.shareRequested = false;
+				});
+			}
 			returnList = [...items];
 		}
 	}

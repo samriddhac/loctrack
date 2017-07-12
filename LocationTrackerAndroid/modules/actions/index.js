@@ -6,7 +6,8 @@ import {ACTION_TYPE_LOC_UPDATE, GET_ALL_CONTACTS,
 	REMOVE_PUBLISH_CONTACT, REMOVE_SUBS_CONTACT,
 	ADD_SELECTED_TO_MAP, SET_FCM_TOKEN,
 	ADD_TO_SELECTED_RECEIVER,
-	REMOVE_FROM_SELECTED_RECEIVER, SHARE_REQUEST} from './action-types';
+	REMOVE_FROM_SELECTED_RECEIVER, SHARE_REQUEST,
+	DONE_SHARE_REQUEST} from './action-types';
 import {publishLocation} from '../websocket-receiver';
 import Contacts from 'react-native-contacts';
 import {EVENT_REQUEST_SUBSCRIPTION, EVENT_STOP_SUBSCRIPTION,
@@ -20,6 +21,12 @@ export function updateShareReq(from) {
 	return {
 		type: SHARE_REQUEST,
 		payload: from
+	};
+}
+
+export function resetShareRequest() {
+	return {
+		type: DONE_SHARE_REQUEST
 	};
 }
 

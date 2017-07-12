@@ -482,6 +482,7 @@ const styles = StyleSheet.create({
   },
   shareReqBtnContainer: {
     position: 'absolute',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     bottom: 5,

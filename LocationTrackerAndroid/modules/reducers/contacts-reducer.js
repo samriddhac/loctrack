@@ -8,7 +8,8 @@ import {GET_ALL_CONTACTS, ADD_TO_SUBSCRIBER,
 		ADD_SELECTED_TO_MAP,
 		ADD_TO_SELECTED_RECEIVER,
 		REMOVE_FROM_SELECTED_RECEIVER,
-		SHARE_REQUEST} from '../actions/action-types';
+		SHARE_REQUEST,
+		DONE_SHARE_REQUEST} from '../actions/action-types';
 import {convertContacts, 
 	mergedList,
 	updateStatus, 
@@ -16,7 +17,8 @@ import {convertContacts,
 	updateSubLocations, 
 	removeContact,
 	removeItem,
-	updateShareRequest} from '../utils/utilities';
+	updateShareRequest,
+	doneShareRequest } from '../utils/utilities';
 	
 INITIAL_STATE = {
 	myContact:'',
@@ -63,6 +65,8 @@ export default function(state=INITIAL_STATE, action) {
 			return {...state, selectedReceiver: removeItem(state.selectedReceiver, action.payload)};
 		case SHARE_REQUEST:
 			return {...state, publishingTo:updateShareRequest(state.publishingTo, action.payload)};
+		case DONE_SHARE_REQUEST:
+			return {...state, publishingTo:doneShareRequest(state.publishingTo, state.selectedReceiver)};
 		default:
 			return state;
 	}

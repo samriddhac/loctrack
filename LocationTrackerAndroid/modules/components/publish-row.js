@@ -8,6 +8,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import styles from '../styles/style';
@@ -19,14 +20,16 @@ export default class PublishListItem extends React.PureComponent {
 		super(props);
 		this.state = {
 			selected: this._getSelectionStatus(props),
-			status: props.data.status
+			status: props.data.status,
+			shareRequested: props.data.shareRequested
 		};
 	}
 
 	componentWillReceiveProps(nextProps){
 		this.setState({
 			selected: this._getSelectionStatus(nextProps),
-			status: nextProps.data.status
+			status: nextProps.data.status,
+			shareRequested: nextProps.data.shareRequested
 		});
 	}
 	_getSelectionStatus(props) {
@@ -117,9 +120,8 @@ export default class PublishListItem extends React.PureComponent {
 	}
 
 	_renderShareRequested() {
-		let data = this.props.data;
-		if(data.shareRequested!==undefined && data.shareRequested!==null
-		&& data.shareRequested===true) {
+		if(this.state.shareRequested!==undefined && this.state.shareRequested!==null
+		&& this.state.shareRequested===true) {
 			return (
 				<View animation="zoomIn" style={styles.shareReqBtnContainer}>
 					<FontAwesome name="question" size={20} 

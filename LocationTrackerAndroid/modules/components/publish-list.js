@@ -13,7 +13,8 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import {addToPublishContact, removePublishContact,
-		addToSelectedReceiver, removeSelectedReceiver} from '../actions/index';
+		addToSelectedReceiver, removeSelectedReceiver,
+		resetShareRequest} from '../actions/index';
 import {subscriptionApproveRequest, removePubs, stopPublishLocation} from '../websocket-receiver';
 import {isServiceRunning, start, stop } from '../geolocation-receiver';
 import { STATUS_PENDING, STATUS_APPROVED} from '../common/constants';
@@ -82,6 +83,7 @@ class PublishList extends Component {
 			ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
 			ToastAndroid.SHORT, ToastAndroid.TOP);
 			sendGeoTrackingNotification();
+			this.props.resetShareRequest();
 		}
 	}
 	_addToSelectedReceiver(ph) {
@@ -183,4 +185,4 @@ function mapStateToProps(state) {
 }
 export default connect(mapStateToProps, {addToPublishContact, 
 	removePublishContact, addToSelectedReceiver, 
-	removeSelectedReceiver})(PublishList);
+	removeSelectedReceiver, resetShareRequest})(PublishList);

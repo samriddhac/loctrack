@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     height:45,
     borderRadius:45,
     alignItems: 'center',
-    marginRight:10
+    marginLeft: 10
   },
   globalShareBackButton: {
     paddingTop:5,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     height:45,
     borderRadius:45,
     alignItems: 'center',
-    marginRight:10
+    marginRight: 10
   },
   globalStopButton: {
     paddingTop:5,
@@ -418,13 +418,15 @@ const styles = StyleSheet.create({
   },
   globalShareButtonTxtContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginLeft:20
   },
   globalStopButtonTxtContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    marginRight:20
   },
   pubBtnTxtStyle: {
     color: '#4A44F2',

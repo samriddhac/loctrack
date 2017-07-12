@@ -36,8 +36,8 @@ export default class PublishListItem extends React.PureComponent {
 		if(props.data!==undefined && props.data!==null
 		&& props.data.phno!==undefined && props.data.phno!==null
 		&& props.data.phno!=='' && props.selected!==undefined
-		&& props.data.selected!==null && props.data.selected.length>0) {
-			let index = _.indexOf(props.data.selected, props.data.phno);
+		&& props.selected!==null && props.selected.length>0) {
+			let index = _.indexOf(props.selected, props.data.phno);
 			if(index>=0) {
 				return true;
 			}

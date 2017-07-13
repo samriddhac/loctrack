@@ -15,6 +15,7 @@ import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED, STATUS_LIVE } from '../common/c
 import {changeView} from '../actions/index';
 import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import PinMarker from './pin-marker';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
 const ANCHOR = { x: 0.5, y: 0.5 };
@@ -223,18 +224,12 @@ class GoogleMap extends Component {
 					loadingBackgroundColor="#eeeeee"
 					>
 						{this.state.markars.map((marker, i) => (
-						<MapView.Marker
+						<PinMarker
 						  key={marker.id}
 						  identifier={marker.id.toString()}
 						  coordinate={marker.position}
-						  pinColor={marker.color}
-						>
-							<MapView.Callout style={styles.plainView}>
-				              <View>
-				                <Text>{marker.name}</Text>
-				              </View>
-				            </MapView.Callout>
-						</MapView.Marker>
+						  marker={marker}
+						/>
 						))}
 						{this.state.markars.map((marker, i) => (
 							<MapView.Circle

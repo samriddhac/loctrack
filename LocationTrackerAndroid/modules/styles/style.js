@@ -500,6 +500,19 @@ const styles = StyleSheet.create({
   mapMarker: {
     width: 40,
     height: 40
+  },
+  circle:{
+    position:'absolute',
+    top: 30,
+    bottom:0,
+    left:10,
+    right:0,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#4A44F2',
+    opacity: 0.5,
+    borderWidth:1
   }
 });
 export default styles;

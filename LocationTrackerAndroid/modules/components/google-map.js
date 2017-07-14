@@ -41,7 +41,8 @@ class GoogleMap extends Component {
 		super(props);
 		this.state = {
 			region: null,
-			markars: []
+			markars: [],
+			radius:0
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
@@ -74,7 +75,8 @@ class GoogleMap extends Component {
 			       		let myPosition = {
 				  			id:-1,
 					      	position: pos.coords,
-		      				name: 'Me'
+		      				name: 'Me',
+		      				image: '../images/icons/map-marker-me.png'
 					      };
 					    _.remove(this.state.markars, {id:-1});  
 					    this.setState({ 
@@ -103,7 +105,8 @@ class GoogleMap extends Component {
 	      let myPosition = {
 	      	id:-1,
 	      	position: position.coords,
-	      	name: 'Me'
+	      	name: 'Me',
+		    image: '../images/icons/map-marker-me.png'
 	      };
 	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
 	      	_.remove(this.state.markars, {id:-1});
@@ -140,6 +143,7 @@ class GoogleMap extends Component {
 							id: item.recordID,
 							position: item.loc,
 							color: 'blue',
+		      				image: '../images/icons/map-marker.png',
 							name: item.givenName
 						};
 						markerArray = [m, ...markerArray];
@@ -162,6 +166,7 @@ class GoogleMap extends Component {
 						id: obj.recordID,
 						position: obj.loc,
 						color: 'blue',
+						image: '../images/icons/map-marker.png',
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];
@@ -203,6 +208,8 @@ class GoogleMap extends Component {
 	    this.map.fitToSuppliedMarkers(markers, animated);
 	}
 
+	onDrag(coord, pos) {}
+
 	render() {
 		if(this.state.region === undefined) {
 			return (
@@ -219,10 +226,21 @@ class GoogleMap extends Component {
 					style={styles.map}
 					region={this.state.region}
 					onRegionChangeComplete={(region)=>{this.onRegionChange(region);}}
+					onPanDrag={(coord, pos)=>{this.onDrag(coord, pos)}}
 					loadingEnabled
 			        loadingIndicatorColor="#666666"
 					loadingBackgroundColor="#eeeeee"
 					>
+						{this.state.markars.map((marker, i) => (
+							<MapView.Circle
+					            center={marker.position}
+					            radius={100}
+					            fillColor="rgba(74,68,242, 0.2)"
+					            strokeColor="rgba(74,68,242,0.2)"
+					            zIndex={1}
+					            strokeWidth={1}
+					          />
+						))}
 						{this.state.markars.map((marker, i) => (
 						<PinMarker
 						  key={marker.id}
@@ -230,16 +248,6 @@ class GoogleMap extends Component {
 						  coordinate={marker.position}
 						  marker={marker}
 						/>
-						))}
-						{this.state.markars.map((marker, i) => (
-							<MapView.Circle
-					            center={marker.position}
-					            radius={100}
-					            fillColor="rgba(74,68,242, 0.2)"
-					            strokeColor="rgba(74,68,242,0.8)"
-					            zIndex={1}
-					            strokeWidth={1}
-					          />
 						))}
 					</MapView>
 				    <View style={[styles.mapButtonContainer]}>

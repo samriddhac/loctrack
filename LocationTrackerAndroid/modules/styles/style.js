@@ -526,24 +526,22 @@ const styles = StyleSheet.create({
   },
   markerContainer:{
     width: 100,
-    height: 100,
+    height: 60,
     borderRadius: 50,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1
+    justifyContent: 'center'
   },
   mapMarker: {
     position:'absolute',
-    bottom: 20,
+    bottom: 5,
     width: 40,
     height: 40
   },
   mapMarkerArrow: {
     position:'absolute',
-    bottom: 5,
+    bottom: -5,
     width: 15,
-    height: 15,
-    margin:5
+    height: 15
   }
 });
 export default styles;

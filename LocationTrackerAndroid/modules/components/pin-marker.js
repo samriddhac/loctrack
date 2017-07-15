@@ -81,8 +81,6 @@ export default class PinMarker extends Component {
 	              <View>
 	              	<View style={[styles.markerCalloutContainer]}>
 						<Image style={styles.thumbCallout}
-						onLoadEnd={this.updateInitialThumbRender}
-						key={`${this.state.initialThumbRender}${this.props.marker.name}`}
 						source={thumbnail}/>
 			            <View style={styles.rowTextCallout}>
 				            <Text style={[styles.defaultFont]}>

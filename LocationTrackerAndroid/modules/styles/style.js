@@ -497,10 +497,6 @@ const styles = StyleSheet.create({
     height:20,
     borderRadius:20
   },
-  mapMarker: {
-    width: 40,
-    height: 40
-  },
   circle:{
     position:'absolute',
     top: 30,
@@ -528,5 +524,26 @@ const styles = StyleSheet.create({
   rowTextCallout: {
     marginLeft: 5
   },
+  markerContainer:{
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1
+  },
+  mapMarker: {
+    position:'absolute',
+    bottom: 20,
+    width: 40,
+    height: 40
+  },
+  mapMarkerArrow: {
+    position:'absolute',
+    bottom: 5,
+    width: 15,
+    height: 15,
+    margin:5
+  }
 });
 export default styles;

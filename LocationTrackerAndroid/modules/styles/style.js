@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   plainView: {
-    width: 60,
+    width: 120
   },
   listViewContainer: {
     flex: 9
@@ -513,6 +513,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A44F2',
     opacity: 0.5,
     borderWidth:1
-  }
+  },
+  markerCalloutContainer:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  thumbCallout:{
+    width:36,
+    height:36,
+    borderRadius: 18
+  },
+  rowTextCallout: {
+    marginLeft: 5
+  },
 });
 export default styles;

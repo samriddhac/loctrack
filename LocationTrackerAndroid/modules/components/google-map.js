@@ -76,7 +76,7 @@ class GoogleMap extends Component {
 				  			id:-1,
 					      	position: pos.coords,
 		      				name: 'Me',
-		      				image: '../images/icons/map-marker-me.png'
+		    				thumbnailPath: ''
 					      };
 					    _.remove(this.state.markars, {id:-1});  
 					    this.setState({ 
@@ -106,7 +106,7 @@ class GoogleMap extends Component {
 	      	id:-1,
 	      	position: position.coords,
 	      	name: 'Me',
-		    image: '../images/icons/map-marker-me.png'
+		    thumbnailPath: ''
 	      };
 	      if (!isEqual(myPosition.position, myLastPositionCoord)) {
 	      	_.remove(this.state.markars, {id:-1});
@@ -142,9 +142,8 @@ class GoogleMap extends Component {
 						let m = {
 							id: item.recordID,
 							position: item.loc,
-							color: 'blue',
-		      				image: '../images/icons/map-marker.png',
-							name: item.givenName
+							name: item.givenName,
+							thumbnailPath: item.thumbnailPath
 						};
 						markerArray = [m, ...markerArray];
 					}
@@ -165,8 +164,7 @@ class GoogleMap extends Component {
 					let m = {
 						id: obj.recordID,
 						position: obj.loc,
-						color: 'blue',
-						image: '../images/icons/map-marker.png',
+						thumbnailPath: obj.thumbnailPath,
 						name: obj.givenName
 					};
 					markerArray = [m, ...markerArray];

@@ -8,7 +8,8 @@ export default class PinMarker extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			initialRender: true
+			initialRender: true,
+			initialThumbRender: true
 		};
 	}
 
@@ -18,9 +19,7 @@ export default class PinMarker extends Component {
 
 	render() {
 		let imageSource = require('../images/icons/map-marker.png');
-		if(this.props.marker.id===-1) {
-			imageSource = require('../images/icons/map-marker-me.png');
-		}
+		
 		let thumbnail = require('../images/icons/default.jpg');
 		if(this.props.marker.thumbnailPath!==undefined && this.props.marker.thumbnailPath!==null 
 			&& this.props.marker.thumbnailPath!=='') {
@@ -36,12 +35,21 @@ export default class PinMarker extends Component {
 					<Image source={imageSource} 
 					style={styles.mapMarker}
 					onLayout={() => this.setState({ initialRender: false })}
-          			key={`${this.state.initialRender}`}
 					/>
 				</View>
 				<MapView.Callout style={styles.plainView}>
 	              <View>
-	                <Text>{this.props.marker.name}</Text>
+	              	<View style={[styles.markerCalloutContainer]}>
+						<Image style={styles.thumbCallout} 
+						onLayout={() => this.setState({...this.state, initialThumbRender: false })}
+						source={thumbnail}/>
+			            <View style={styles.rowTextCallout}>
+				            <Text style={[styles.defaultFont]}>
+				              {this.props.marker.name}
+				            </Text>
+				            <Text></Text>
+			            </View>
+					</View>
 	              </View>
 	            </MapView.Callout>
 			</MapView.Marker>

@@ -3,6 +3,7 @@ package com.locationtrackerandroid;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.bugsnag.BugsnagReactNative;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            BugsnagReactNative.getPackage(),
             new SplashScreenReactPackage(),
           new MapsPackage(),
           new VectorIconsPackage(),

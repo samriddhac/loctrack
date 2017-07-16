@@ -49,6 +49,8 @@
 		9ACAF91F57594256A099F9F5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E21ABA27D63F400A8E79D8A7 /* Zocial.ttf */; };
 		3CF520F5BB7042FD8E292AF7 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56728144567F4F1999084C74 /* libAirMaps.a */; };
 		735C70AF67C2443D80A40328 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6AA39D6B4EF4546AA2E0FCB /* libSplashScreen.a */; };
+		3BDA01613B8A478E976F00E2 /* libBugsnagReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7345EB82E03B4379ADD63CB2 /* libBugsnagReactNative.a */; };
+		FAC7F44E828745BFA6E00618 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CE7C65EA644FD58DC35D28 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -286,6 +288,9 @@
 		56728144567F4F1999084C74 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		65EF48BBC11D4512A4B898CF /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; name = "SplashScreen.xcodeproj"; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B6AA39D6B4EF4546AA2E0FCB /* libSplashScreen.a */ = {isa = PBXFileReference; name = "libSplashScreen.a"; path = "libSplashScreen.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		31F3587FA0EA46FD82E42F53 /* BugsnagReactNative.xcodeproj */ = {isa = PBXFileReference; name = "BugsnagReactNative.xcodeproj"; path = "../node_modules/bugsnag-react-native/cocoa/BugsnagReactNative.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		7345EB82E03B4379ADD63CB2 /* libBugsnagReactNative.a */ = {isa = PBXFileReference; name = "libBugsnagReactNative.a"; path = "libBugsnagReactNative.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		70CE7C65EA644FD58DC35D28 /* libz.tbd */ = {isa = PBXFileReference; name = "libz.tbd"; path = "usr/lib/libz.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +321,8 @@
 				9A8803BC7F6B4D45AC97B23A /* libRNVectorIcons.a in Frameworks */,
 				3CF520F5BB7042FD8E292AF7 /* libAirMaps.a in Frameworks */,
 				735C70AF67C2443D80A40328 /* libSplashScreen.a in Frameworks */,
+				3BDA01613B8A478E976F00E2 /* libBugsnagReactNative.a in Frameworks */,
+				FAC7F44E828745BFA6E00618 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +493,7 @@
 				4B61F8B895CF48249E5F0EAA /* RNVectorIcons.xcodeproj */,
 				EA9663398C864FD487BC5BBB /* AirMaps.xcodeproj */,
 				65EF48BBC11D4512A4B898CF /* SplashScreen.xcodeproj */,
+				31F3587FA0EA46FD82E42F53 /* BugsnagReactNative.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -507,6 +515,7 @@
 				00E356EF1AD99517003FC87E /* LocationTrackerAndroidTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				C323A9D192D249DF8E30A1B0 /* Resources */,
+				995A618B5C9D47819C5D2793 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -538,6 +547,15 @@
 				E21ABA27D63F400A8E79D8A7 /* Zocial.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+			path = "";
+		};
+		995A618B5C9D47819C5D2793 /* Frameworks */ = {
+			isa = "PBXGroup";
+			children = (
+				70CE7C65EA644FD58DC35D28 /* libz.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 			path = "";
 		};
@@ -1046,6 +1064,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1053,6 +1072,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Debug;
@@ -1077,6 +1097,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1084,6 +1105,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Release;
@@ -1109,6 +1131,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Debug;
@@ -1133,6 +1156,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Release;
@@ -1166,6 +1190,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1173,6 +1198,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Debug;
@@ -1206,6 +1232,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1213,6 +1240,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-splash-screen\ios",
+					"$(SRCROOT)\..\node_modules\bugsnag-react-native\cocoa/**",
 				);
 			};
 			name = Release;
@@ -1241,6 +1269,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1265,6 +1294,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

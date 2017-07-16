@@ -3,6 +3,7 @@ package com.locationtrackerandroid;
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import com.cboy.rn.splashscreen.SplashScreen;
+import com.bugsnag.BugsnagReactNative;
 
 public class MainActivity extends ReactActivity {
 
@@ -18,6 +19,7 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BugsnagReactNative.start(this);
         SplashScreen.show(this);
     }
 }

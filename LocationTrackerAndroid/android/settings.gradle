@@ -1,4 +1,6 @@
 rootProject.name = 'LocationTrackerAndroid'
+include ':bugsnag-react-native'
+project(':bugsnag-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/bugsnag-react-native/android')
 include ':react-native-splash-screen'
 project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
 include ':react-native-maps'
@@ -13,3 +15,5 @@ include ':react-native-mauron85-background-geolocation', ':app'
 project(':react-native-mauron85-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mauron85-background-geolocation/android/lib')
 include ':react-native-push-notification'
 project(':react-native-push-notification').projectDir = file('../node_modules/react-native-push-notification/android')
+include ':bugsnag-react-native'
+project(':bugsnag-react-native').projectDir = file('../node_modules/bugsnag-react-native/android')

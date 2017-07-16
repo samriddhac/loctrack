@@ -497,19 +497,6 @@ const styles = StyleSheet.create({
     height:20,
     borderRadius:20
   },
-  circle:{
-    position:'absolute',
-    top: 30,
-    bottom:0,
-    left:10,
-    right:0,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#4A44F2',
-    opacity: 0.5,
-    borderWidth:1
-  },
   markerCalloutContainer:{
     flex: 1,
     flexDirection: 'row',
@@ -526,22 +513,22 @@ const styles = StyleSheet.create({
   },
   markerContainer:{
     width: 100,
-    height: 60,
-    borderRadius: 50,
+    height: 70,
     alignItems: 'center',
     justifyContent: 'center'
   },
   mapMarker: {
     position:'absolute',
-    bottom: 5,
+    bottom: 20,
     width: 40,
     height: 40
   },
   mapMarkerArrow: {
     position:'absolute',
-    bottom: -5,
-    width: 15,
-    height: 15
+    bottom: 0
+  },
+  markArrow: {
+    color: '#4A44F2'
   }
 });
 export default styles;

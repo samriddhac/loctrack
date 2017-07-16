@@ -1,25 +1,38 @@
 import React, {Component} from 'react';
-import {Image, Animated} from 'react-native';
+import {Image, Animated, Easing} from 'react-native';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import MapView from 'react-native-maps';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 
 export default class PinMarker extends Component {
 	constructor(props) {
 		super(props);
+		this.spinValue = new Animated.Value(0);
 		this.state = {
 			initialRender: true,
-			initialThumbRender: true,
-			initialArrowRender: true
+			spinValue: new Animated.Value(0),
+			rotation: 0
 		};
-
 		this.updateInitialRender = this.updateInitialRender.bind(this);
-		this.updateInitialThumbRender = this.updateInitialThumbRender.bind(this);
-		this.updateInitialRenderArrow = this.updateInitialRenderArrow.bind(this);
 	}
 
 	componentDidMount() {
-		
+		this.spin();
+	}
+
+	spin() {
+		this.spinValue.setValue(0);
+		Animated.timing(
+		  this.spinValue,
+		  {
+		    toValue: 1,
+		    duration: 1500,
+		    easing: Easing.linear
+		  }
+		).start(() => {
+		    console.log('spinned');
+		});
 	}
 
 	updateInitialRender() {
@@ -30,27 +43,11 @@ export default class PinMarker extends Component {
 		this.setState(newState);
 	}
 
-	updateInitialThumbRender() {
-		let newState = {
-			...this.state,
-			initialThumbRender: false
-		};
-		this.setState(newState);
-		this.forceUpdate();
-	}
-
-	updateInitialRenderArrow() {
-		let newState = {
-			...this.state,
-			initialArrowRender: false
-		};
-		this.setState(newState);
-	}
-	onMarkerSelect() {
-		this.updateInitialThumbRender();
-	}
-
 	render() {
+		const spin = this.state.spinValue.interpolate({
+		  inputRange: [0, 1],
+		  outputRange: ['90deg', '180deg']
+		});
 		let imageSource = require('../images/icons/map-marker.png');
 		let downArrowSource = require('../images/icons/blue-arrow.png');
 
@@ -71,11 +68,9 @@ export default class PinMarker extends Component {
 					onLayout={this.updateInitialRender}
 					key={`${this.state.initialRender}${this.props.marker.id}`}
 					/>
-					<Image source={downArrowSource} 
-					style={styles.mapMarkerArrow}
-					onLayout={this.updateInitialRenderArrow}
-					key={`${this.state.initialArrowRender}${this.props.marker.id}arrow`}
-					/>
+					<Animated.View style={[styles.mapMarkerArrow, {transform: [{rotate: spin}]}]}>
+						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
+					</Animated.View>
 				</View>
 				<MapView.Callout style={styles.plainView}>
 	              <View>

@@ -513,19 +513,19 @@ const styles = StyleSheet.create({
   },
   markerContainer:{
     width: 100,
-    height: 70,
+    height: 75,
     alignItems: 'center',
     justifyContent: 'center'
   },
   mapMarker: {
     position:'absolute',
-    bottom: 20,
+    bottom: 10,
     width: 40,
     height: 40
   },
   mapMarkerArrow: {
     position:'absolute',
-    bottom: 0
+    bottom: -10
   },
   markArrow: {
     color: '#4A44F2'

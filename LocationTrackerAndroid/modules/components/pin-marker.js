@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {Image, Animated, Easing} from 'react-native';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
+import * as Animatable from 'react-native-animatable';
 import MapView from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 
+var markerAnimation = null;
 export default class PinMarker extends Component {
 	constructor(props) {
 		super(props);
@@ -18,21 +20,21 @@ export default class PinMarker extends Component {
 	}
 
 	componentDidMount() {
-		this.spin();
+		markerAnimation = setInterval(()=>{
+			this.spin();
+		}, 5000);
+	}
+
+	componentWillUnmount() {
+		if (markerAnimation) {
+			clearInterval(markerAnimation);
+		}
 	}
 
 	spin() {
-		this.spinValue.setValue(0);
-		Animated.timing(
-		  this.spinValue,
-		  {
-		    toValue: 1,
-		    duration: 1500,
-		    easing: Easing.linear
-		  }
-		).start(() => {
-		    console.log('spinned');
-		});
+		this.refs.arrow.transitionTo({rotate: '90deg'});
+		let newVal = this.state.rotation + 90
+		this.setState({...this.state, rotation:newVal});
 	}
 
 	updateInitialRender() {
@@ -44,10 +46,6 @@ export default class PinMarker extends Component {
 	}
 
 	render() {
-		const spin = this.state.spinValue.interpolate({
-		  inputRange: [0, 1],
-		  outputRange: ['90deg', '180deg']
-		});
 		let imageSource = require('../images/icons/map-marker.png');
 		let downArrowSource = require('../images/icons/blue-arrow.png');
 
@@ -68,9 +66,9 @@ export default class PinMarker extends Component {
 					onLayout={this.updateInitialRender}
 					key={`${this.state.initialRender}${this.props.marker.id}`}
 					/>
-					<Animated.View style={[styles.mapMarkerArrow, {transform: [{rotate: spin}]}]}>
+					<View ref="arrow" animate="swing" iterationCount="infinite" style={[styles.mapMarkerArrow ]}>
 						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
-					</Animated.View>
+					</View>
 				</View>
 				<MapView.Callout style={styles.plainView}>
 	              <View>

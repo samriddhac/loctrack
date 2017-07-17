@@ -66,7 +66,7 @@ export default class PinMarker extends Component {
 					onLayout={this.updateInitialRender}
 					key={`${this.state.initialRender}${this.props.marker.id}`}
 					/>
-					<View ref="arrow" animate="swing" iterationCount="infinite" style={[styles.mapMarkerArrow ]}>
+					<View style={[styles.mapMarkerArrow ]}>
 						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
 					</View>
 				</View>

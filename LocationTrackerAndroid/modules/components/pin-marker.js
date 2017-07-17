@@ -10,19 +10,18 @@ var markerAnimation = null;
 export default class PinMarker extends Component {
 	constructor(props) {
 		super(props);
-		this.spinValue = new Animated.Value(0);
 		this.state = {
 			initialRender: true,
-			spinValue: new Animated.Value(0),
-			rotation: 0
+			rotation: 0,
+			rotateDeg: '0deg'
 		};
 		this.updateInitialRender = this.updateInitialRender.bind(this);
 	}
 
 	componentDidMount() {
-		markerAnimation = setInterval(()=>{
-			this.spin();
-		}, 5000);
+		markerAnimation = setInterval(()=>{			
+			let animation = requestAnimationFrame(this.spin.bind(this));
+		}, 10000);
 	}
 
 	componentWillUnmount() {
@@ -32,9 +31,27 @@ export default class PinMarker extends Component {
 	}
 
 	spin() {
-		this.refs.arrow.transitionTo({rotate: '90deg'});
-		let newVal = this.state.rotation + 90
-		this.setState({...this.state, rotation:newVal});
+		let currentRotation = this.state.rotation;
+		if(currentRotation<40) {
+			currentRotation = currentRotation + 10;
+		}
+		else if(currentRotation>=40) {
+			currentRotation = 0;
+		}
+		this.setState({...this.state, 
+			rotation:currentRotation,
+			rotateDeg:currentRotation+'deg'
+		});
+	}
+
+	getRotateStyle() {
+		return {
+			transform: [
+				{
+					rotate: this.state.rotateDeg
+				}
+			]
+		};
 	}
 
 	updateInitialRender() {
@@ -66,7 +83,7 @@ export default class PinMarker extends Component {
 					onLayout={this.updateInitialRender}
 					key={`${this.state.initialRender}${this.props.marker.id}`}
 					/>
-					<View style={[styles.mapMarkerArrow ]}>
+					<View style={[styles.mapMarkerArrow, this.getRotateStyle() ]}>
 						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
 					</View>
 				</View>

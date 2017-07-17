@@ -203,7 +203,7 @@ class GoogleMap extends Component {
 
 	focusMap(markers, animated) {
 	    console.log('Markers received to populate map: ', markers);
-	    if(this.map!==undefined && this.map!==null
+	    if(this.map!==undefined && this.map!==null &&
 	    	markers!==undefined && markers!==null && markers.length>0) {
 	    	this.map.fitToSuppliedMarkers(markers, animated);
 	    }

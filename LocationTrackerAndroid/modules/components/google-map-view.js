@@ -89,7 +89,7 @@ class GoogleMapView extends Component {
 			  	}, (err)=>{
 	    			console.log('[ERROR]: Geolocation error ',err);
 	    			this.fallbackLocation();
-	    		}, {enableHighAccuracy:true});
+	    		});
 			  }
 			});
 		}
@@ -123,7 +123,7 @@ class GoogleMapView extends Component {
 	    }, (err)=>{
 	    	console.log('[ERROR]: Geolocation error ',err);
 	    	this.fallbackLocation();
-	    }, {enableHighAccuracy: true});
+	    });
 	}
 
 	fallbackLocation() {
@@ -156,7 +156,7 @@ class GoogleMapView extends Component {
 	       	}
 		}, (err)=>{
 			console.log('[ERROR]: Geolocation error ',err);
-		}, {enableHighAccuracy:false});
+		});
 	}
 
 	componentWillReceiveProps(nextprops) {

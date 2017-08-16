@@ -10,7 +10,7 @@ export function configureGeolocation() {
   try{ 
     console.log('configuring geo location');
     BackgroundGeolocation.configure({
-      desiredAccuracy: 100,
+      desiredAccuracy: 10,
       stationaryRadius: 50,
       distanceFilter: 50,
       locationTimeout: 30,

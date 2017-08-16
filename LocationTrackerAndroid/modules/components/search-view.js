@@ -68,6 +68,7 @@ class SearchView extends React.PureComponent {
 		this._stopShare = this._stopShare.bind(this);
 		this._stopReceiving = this._stopReceiving.bind(this);
 		this._declineRequest = this._declineRequest.bind(this);
+		this._stopAltShare = this._stopAltShare.bind(this);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -304,7 +305,7 @@ class SearchView extends React.PureComponent {
 	_getShareUnshareButton() {
 		console.log('this.state.isGeolocationOn ',this.state.isGeolocationOn);
 		if(this.state.isGeolocationOn === true) {
-			return this._getSingleRightCornerButton(this._stopShare, '#CC1D23',
+			return this._getSingleRightCornerButton(this._stopAltShare, '#CC1D23',
 			'close-circle', 35, 'Stop Sharing', styles.bottomBarCustomPadding);
 		}
 		else {
@@ -438,6 +439,14 @@ class SearchView extends React.PureComponent {
 			});
 			this.selectedData = [];
 			this.setState({selectionCount:this.selectedData.length});
+		}
+	}
+
+	_stopAltShare() {
+		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			this.selectedData.forEach((data)=> {
+				this.props.removeSelectedReceiver(data.phno);
+			});
 		}
 	}
 

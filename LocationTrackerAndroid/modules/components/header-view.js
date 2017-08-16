@@ -13,36 +13,34 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import {changeView} from '../actions/index';
-import { VIEW_SEARCH_BOX, VIEW_PRIVACY_POLICY } from '../common/constants';
+import { VIEW_PRIVACY_POLICY } from '../common/constants';
 
 class Header extends Component  {
 
 	constructor(props) {
 		super(props);
-		this._performSearch = this._performSearch.bind(this);
 		this._showPrivacyPolicy = this._showPrivacyPolicy.bind(this);
 	}
 
-	_performSearch() {
-		this.props.changeView(VIEW_SEARCH_BOX);
-	}
 	_showPrivacyPolicy() {
-		this.props.changeView(VIEW_PRIVACY_POLICY);
+		this.props.changeView({id:VIEW_PRIVACY_POLICY, options:{}});
 	}
 	render() {
 		return (
 			<View style={styles.headerContent}>
-				<Text style={[styles.headerText, styles.defaultFont]}>WhereApp</Text>
-				<View style={ styles.headerIconBtn }>
+				<View style={ styles.headerMenuBtn }>
 					<View>
-						<TouchableNativeFeedback onPress={this._performSearch}
+						<TouchableNativeFeedback onPress={()=> { this.props.openNav(); }}
 						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
 							<View style={[styles.searchIconContainer]}>
-								<OIcon name="search" size={24} 
+								<Icon name="menu" size={30} 
 								style={[styles.headerIcon, styles.headerIconSearch]}/>
 							</View>
 						</TouchableNativeFeedback>
 					</View>
+				</View>
+				<Text style={[styles.headerText, styles.defaultFont]}>WhereApp</Text>
+				<View style={ styles.headerIconBtn }>
 					<View>
 						<Menu>
 					      <MenuTrigger>

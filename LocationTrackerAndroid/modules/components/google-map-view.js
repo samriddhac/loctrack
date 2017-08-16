@@ -12,7 +12,6 @@ import _ from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
 import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
-import {changeView} from '../actions/index';
 import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import PinMarker from './pin-marker';
@@ -35,7 +34,7 @@ const SPACE = 0.01;
 const timeout = 4000;
 let animationTimeout;
 
-class GoogleMap extends Component {
+class GoogleMapView extends Component {
 
 	constructor(props) {
 		super(props);
@@ -46,7 +45,6 @@ class GoogleMap extends Component {
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
-		this._goToHome = this._goToHome.bind(this);
 		this.onRegionChange = this.onRegionChange.bind(this);
 	}
 
@@ -66,8 +64,8 @@ class GoogleMap extends Component {
 			        	region: {
 			        		latitude: pos.coords.latitude,
 				            longitude: pos.coords.longitude,
-				            latitudeDelta: this.latDelta,
-				            longitudeDelta: this.longDelta,
+				            latitudeDelta: LATITUDE_DELTA,
+				            longitudeDelta: LONGITUDE_DELTA,
 			        	},
 			        	markars: []
 			        });
@@ -88,13 +86,13 @@ class GoogleMap extends Component {
 			       	else {
 			       		this.addMarkers(this.props);
 			       	}
-			  	});
+			  	}, (err)=>{
+	    			console.log('[ERROR]: Geolocation error ',err);
+	    		}, {enableHighAccuracy:true});
 			  }
 			});
 		}
 	}
-
-	componentDidUpdate(){}
 
 	watchLocation() {
 	    this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -112,12 +110,18 @@ class GoogleMap extends Component {
 	      	_.remove(this.state.markars, {id:-1});
 	        this.setState({ 
 	        	...this.state,
+	        	region: {
+	        		latitude: position.coords.latitude,
+		            longitude: position.coords.longitude,
+		            latitudeDelta: this.latDelta,
+		            longitudeDelta: this.longDelta,
+	        	},
 	        	markars: [...this.state.markars, myPosition]
 	        });
 	      }
 	    }, (err)=>{
 	    	console.log('[ERROR]: Geolocation error ',err);
-	    }, null);
+	    }, {enableHighAccuracy: true});
 	}
 
 	componentWillReceiveProps(nextprops) {
@@ -197,10 +201,6 @@ class GoogleMap extends Component {
 		}
 	}
 
-	_goToHome() {
-		this.props.changeView(VIEW_HOME);
-	}
-
 	focusMap(markers, animated) {
 	    console.log('Markers received to populate map: ', markers);
 	    if(this.map!==undefined && this.map!==null &&
@@ -208,8 +208,6 @@ class GoogleMap extends Component {
 	    	this.map.fitToSuppliedMarkers(markers, animated);
 	    }
 	}
-
-	onDrag(coord, pos) {}
 
 	render() {
 		if(this.state.region === undefined) {
@@ -227,7 +225,6 @@ class GoogleMap extends Component {
 					style={styles.map}
 					region={this.state.region}
 					onRegionChangeComplete={(region)=>{this.onRegionChange(region);}}
-					onPanDrag={(coord, pos)=>{this.onDrag(coord, pos)}}
 					loadingEnabled
 			        loadingIndicatorColor="#666666"
 					loadingBackgroundColor="#eeeeee"
@@ -251,18 +248,7 @@ class GoogleMap extends Component {
 						/>
 						))}
 					</MapView>
-				    <View style={[styles.mapButtonContainer]}>
-						<TouchableNativeFeedback onPress={()=>{
-								this._goToHome();
-							}}
-							background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<View>
-							<Ionicons name="ios-arrow-back" size={45} 
-									style={[styles.mapBackButton]} />
-							</View>
-						</TouchableNativeFeedback>
-					</View>
-			    </View>
+				</View>
 			);
 		}
 	}
@@ -273,4 +259,4 @@ function mapStateToProps(state){
 		selected: state.contactState.selectedRecord
 	};
 }
-export default connect(mapStateToProps, {changeView})(GoogleMap);
+export default connect(mapStateToProps)(GoogleMapView);

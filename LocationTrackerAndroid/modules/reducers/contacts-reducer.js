@@ -25,7 +25,7 @@ INITIAL_STATE = {
 	contacts: [],
 	subscribedTo:[],
 	publishingTo:[],
-	selectedRecord: -999,
+	selectedRecord: -1,
 	selectedReceiver:[]
 }
 

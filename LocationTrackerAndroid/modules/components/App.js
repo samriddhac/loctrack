@@ -38,23 +38,23 @@ class App extends Component {
 					 	data.contactState.myContact!==undefined && 
 					 	data.contactState.myContact!==null && 
 					 	data.contactState.myContact!=='') {
-					 	_parent.props.changeView(VIEW_HOME);
+					 	_parent.props.changeView({id:VIEW_HOME, options:{}});
 					 	let from = data.contactState.myContact;
 					 	_parent.myContact = from;
 						initConnection(from);
 					}
 					else {
-						_parent.props.changeView(VIEW_REGISTER);
+						_parent.props.changeView({id:VIEW_REGISTER, options:{}});
 					}
 				 }
 				 else {
-				 	_parent.props.changeView(VIEW_REGISTER);
+				 	_parent.props.changeView({id:VIEW_REGISTER, options:{}});
 				 }
 			});
 		}
 		catch(err){
 			console.log(err);
-			_parent.props.changeView(VIEW_REGISTER);
+			_parent.props.changeView({id:VIEW_REGISTER, options:{}});
 		}
 	}
 

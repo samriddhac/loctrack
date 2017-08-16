@@ -4,12 +4,10 @@ import {connect} from 'react-redux';
 import {VIEW_HOME, VIEW_MAP, VIEW_MEDIA, VIEW_ABOUT, 
 	VIEW_SEARCH_BOX, VIEW_REGISTER, VIEW_PRIVACY_POLICY
 	} from '../common/constants';
-import Home from './home';
-import SearchBoxView from './search-box-view';
-import GoogleMap from './google-map';
+import HomeView from './home-view';
+import SearchView from './search-view';
 import Register from './register';
 import PrivacyPolicy from './privacy-policy';
-import Display from 'react-native-display';
 
 class ViewStateManager extends Component {
 	constructor(props) {
@@ -17,25 +15,23 @@ class ViewStateManager extends Component {
 	}
 	render() {
 		if(this.props.viewId === VIEW_HOME) {
-			return(<Home />);
+			return(<HomeView options={this.props.options}/>);
 		}
 		if(this.props.viewId === VIEW_REGISTER) {
-			return(<Register />);
+			return(<Register options={this.props.options}/>);
 		}
 		else if(this.props.viewId === VIEW_SEARCH_BOX) {
-			return(<SearchBoxView />);
-		}
-		else if(this.props.viewId === VIEW_MAP) {
-			return(<GoogleMap />);
+			return(<SearchView options={this.props.options}/>);
 		}
 		else if(this.props.viewId === VIEW_PRIVACY_POLICY) {
-			return(<PrivacyPolicy />);
+			return(<PrivacyPolicy options={this.props.options}/>);
 		}
-		return (<Home />);
+		return (<HomeView options={this.props.options}/>);
 	}
 }
 function mapStateToProps(state) {
 	let viewId = state.viewState.id;
-	return { viewId }; 
+	let options = state.viewState.options;
+	return { viewId, options }; 
 }
 export default connect(mapStateToProps)(ViewStateManager);

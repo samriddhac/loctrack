@@ -29,8 +29,15 @@ const styles = StyleSheet.create({
   headerIconBtn: {
     flex:1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'stretch'
+  },
+  headerMenuBtn: {
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    marginLeft: 10
   },
   headerIcon: {
     width:40,
@@ -46,7 +53,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex:3,
-    paddingLeft: 10,
+    paddingLeft: 5,
     fontSize: 20,
     color: '#ffffff'
   },
@@ -190,7 +197,7 @@ const styles = StyleSheet.create({
     color: '#4A44F2'
   },
   mapContainer: {
-    flex: 1
+    flex: 9
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -278,13 +285,11 @@ const styles = StyleSheet.create({
     paddingRight:5
   },
   subRightContainer: {
-    flex: 3,
+    flex: 1,
     backgroundColor: 'transparent'
   },
   subRightBtnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flex: 4,
+    justifyContent: 'flex-end',
     backgroundColor: 'transparent'
   },
   subRightStopBtnContainer: {
@@ -302,11 +307,6 @@ const styles = StyleSheet.create({
   },
   statusText: {
     color: 'blue'
-  },
-  statusTextContainer: {
-    flex:1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end'
   },
   globalShareButtonContainer: {
     backgroundColor:'#4A44F2',
@@ -459,8 +459,8 @@ const styles = StyleSheet.create({
   },
   globalRequestShareButtonTxtContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    marginLeft:20
+    alignItems: 'flex-end',
+    marginRight:20
   },
   globalRequestShareButtonContainer: {
     backgroundColor:'#4A44F2',
@@ -468,7 +468,7 @@ const styles = StyleSheet.create({
     height:45,
     borderRadius:45,
     alignItems: 'center',
-    marginLeft:10
+    marginRight:10
   },
   globalRequestShareBackButton: {
     paddingTop:5,
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     fontFamily: 'notoserif',
     fontSize: 12, 
     alignItems: 'center',
-    marginRight:10
+    marginLeft:10
   },
   shareReqBtnContainer: {
     position: 'absolute',
@@ -514,6 +514,7 @@ const styles = StyleSheet.create({
   markerContainer:{
     width: 100,
     height: 75,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -529,6 +530,91 @@ const styles = StyleSheet.create({
   },
   markArrow: {
     color: '#4A44F2'
+  },
+  navContainer: {
+    flex: 1
+  },
+  navHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#4A44F2',
+    padding: 10
+  },
+  navThumb: {
+    width:60,
+    height:60,
+    borderRadius: 30
+  },
+  navTextContainer: {
+    margin: 10
+  },
+  navNameText:{
+    fontWeight: 'bold',
+    fontFamily: 'notoserif',
+    fontSize: 18,
+    color: '#ffffff'
+  },
+  navNoText:{
+    fontWeight: 'bold',
+    fontFamily: 'notoserif',
+    fontSize: 15,
+    color: '#ffffff'
+  },
+  navListContainer: {
+    flex: 8
+  },
+  navRowIcon: {
+    color:'#4A44F2'
+  },
+  sectionHeader: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  bottomBarRightSingleContainer : {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginRight:20
+  },
+  bottomBarIconTextGroup: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  bottomBarTouchIconContainerStyle: {
+    width:44,
+    height:44,
+    borderRadius:22
+  },
+  bottomBarTouchIconStyle: {
+    color: '#ffffff'
+  },
+  bottomBarText: {
+    color: '#4A44F2',
+    fontFamily: 'notoserif',
+    fontSize: 12, 
+    alignItems: 'center'
+  },
+  bottomBarCustomPadding : {
+    paddingTop: 4,
+    paddingLeft: 4
+  },
+  bottomBarContainer : {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginRight:20,
+    marginLeft:20
+  },
+  subRightContainer: {
+    flex: 1,
+    backgroundColor: 'transparent'
+  },
+  subRightBtnContainer: {
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent'
+  },
+  statusTextContainer: {
+    justifyContent: 'flex-end'
   }
 });
 export default styles;

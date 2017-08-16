@@ -207,13 +207,13 @@ export function getStatus(s) {
 	if(s !==undefined && s !== null && s !== '') {
 		switch(s) {
 			case STATUS_PENDING:
-				return "Pending";
+				return "Not Sharing";
 			case STATUS_APPROVED: 
-				return "Approved";
+				return "Not Sharing";
 			case STATUS_LIVE: 
 				return "Sharing";
 			case STATUS_REJECTED:
-				return "Not there";
+				return "Not Sharing";
 		}
 	}
 	else {

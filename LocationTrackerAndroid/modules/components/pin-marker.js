@@ -81,8 +81,11 @@ export default class PinMarker extends Component {
 					<Image source={imageSource} 
 					style={styles.mapMarker}
 					onLayout={this.updateInitialRender}
+					onLoad={()=>{this.forceUpdate()}}
 					key={`${this.state.initialRender}${this.props.marker.id}`}
-					/>
+					>
+						<Text style={{width:0, height:0}}>{Math.random()}</Text>
+					</Image>
 					<View style={[styles.mapMarkerArrow, this.getRotateStyle() ]}>
 						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
 					</View>

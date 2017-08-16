@@ -60,6 +60,7 @@ class GoogleMapView extends Component {
 			.then(granted => {
 			  if (granted && this.mounted) {
 			  	navigator.geolocation.getCurrentPosition((pos)=>{
+			  		console.log('pos ',pos);
 			  		this.setState({ 
 			        	region: {
 			        		latitude: pos.coords.latitude,

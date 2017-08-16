@@ -20,7 +20,8 @@ import ContactListItem from './contact-list-item';
 import _ from 'lodash';
 import styles from '../styles/style';
 import { VIEW_HOME, 
-	STATUS_PENDING, 
+	STATUS_PENDING,
+	STATUS_LIVE, 
 	STATUS_APPROVED} from '../common/constants';
 import {subscriptionRequest, 
 	subscriptionApproveRequest, 
@@ -193,23 +194,56 @@ class SearchView extends React.PureComponent {
 					this.props.contacts, 'Recent Recipients', 'All Contacts');
 					return this._renderSections(sectionData);
 				case 3:
-					sectionData = this._setDataOption(this.props.publishingTo,
+					sectionData = this._setDataOption(this._getSharedList(),
 					null, 'My Recipients', null);
 					return this._renderSections(sectionData);
 				case 4:
-					sectionData = this._setDataOption(this.props.subscribedTo,
+					sectionData = this._setDataOption(this._filterByStatus(this.props.subscribedTo, STATUS_LIVE),
 					null, 'Location Sharers', null);
 					return this._renderSections(sectionData);
 				case 5:
-					sectionData = this._setDataOption(this.props.subscribedTo,
+					sectionData = this._setDataOption(this._filterByStatus(this.props.subscribedTo, STATUS_PENDING),
 					null, 'My Pending Requests', null);
 					return this._renderSections(sectionData);
 				case 6:
-					sectionData = this._setDataOption(this.props.publishingTo,
+					sectionData = this._setDataOption(this._filterByStatus(this.props.publishingTo, STATUS_PENDING),
 					null, 'My Pending Approvals', null);
 					return this._renderSections(sectionData);
 			}
 		}
+	}
+
+	_filterByStatus(itemList, statusVal) {
+		let results =[];
+		if(itemList!==undefined && itemList!==null
+			&& itemList.length>0) {
+			itemList.forEach((item)=>{
+				if(item.status === statusVal) {
+					results.push(item);
+				}
+			});
+		}
+		return results;
+	}
+
+	_getSharedList() {
+		let results = [];
+		let selections = this.props.selectedReceiver;
+		let pubList = this.props.publishingTo;
+		if(selections!==undefined && selections!==null
+			&& selections.length>0) {
+			selections.forEach((ph)=>{
+				if(pubList!==undefined && pubList!==null
+				&& pubList.length>0) {
+					pubList.forEach((data)=>{
+						if(data.phno === ph) {
+							results.push(data);
+						}
+					});
+				}
+			});
+		}
+		return results;
 	}
 
 	_filterData(query, options) {

@@ -30,7 +30,7 @@ export function configureGeolocation() {
     });
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {
-      console.log(stationaryLocation);
+      console.log('stationaryLocation ',stationaryLocation);
     });
 
     BackgroundGeolocation.on('error', (error) => {

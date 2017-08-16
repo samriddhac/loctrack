@@ -88,6 +88,7 @@ class GoogleMapView extends Component {
 			       	}
 			  	}, (err)=>{
 	    			console.log('[ERROR]: Geolocation error ',err);
+	    			this.fallbackLocation();
 	    		}, {enableHighAccuracy:true});
 			  }
 			});
@@ -121,7 +122,41 @@ class GoogleMapView extends Component {
 	      }
 	    }, (err)=>{
 	    	console.log('[ERROR]: Geolocation error ',err);
+	    	this.fallbackLocation();
 	    }, {enableHighAccuracy: true});
+	}
+
+	fallbackLocation() {
+		navigator.geolocation.getCurrentPosition((pos)=>{
+	  		this.setState({ 
+	        	region: {
+	        		latitude: pos.coords.latitude,
+		            longitude: pos.coords.longitude,
+		            latitudeDelta: LATITUDE_DELTA,
+		            longitudeDelta: LONGITUDE_DELTA,
+	        	},
+	        	markars: []
+	        });
+	       	if(this.props.selected === ALL_FRIEND) {
+	       		let myPosition = {
+		  			id:-1,
+			      	position: pos.coords,
+      				name: 'Me',
+    				thumbnailPath: ''
+			      };
+			    _.remove(this.state.markars, {id:-1});  
+			    this.setState({ 
+		        	...this.state,
+		        	markars: [...this.state.markars, myPosition]
+		        });
+		        this.watchLocation();
+	       	}
+	       	else {
+	       		this.addMarkers(this.props);
+	       	}
+		}, (err)=>{
+			console.log('[ERROR]: Geolocation error ',err);
+		}, {enableHighAccuracy:false});
 	}
 
 	componentWillReceiveProps(nextprops) {

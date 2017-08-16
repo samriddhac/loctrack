@@ -78,7 +78,7 @@ class SearchView extends React.PureComponent {
 			if(isGeolocationOn === true) {
 				stop();
 				stopGeoTrackingNotification();
-				this.setState({isGeolocationOn: isServiceRunning()});
+				this.setState({isGeolocationOn: false});
 			}
 		}
 	}
@@ -419,15 +419,13 @@ class SearchView extends React.PureComponent {
 				&& this.props.selectedReceiver.length>0)) {
 					let isGeolocationOn = isServiceRunning();
 					if(isGeolocationOn===false) {
-						isGeolocationOn = start(); 
-						if(isGeolocationOn === true) {
-							sendGeoTrackingNotification();
-							console.log('isServiceRunning ',isGeolocationOn);
-							this.setState({isGeolocationOn: isGeolocationOn});
-						}
-					}
-					ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
+						start(); 
+						sendGeoTrackingNotification();
+						console.log('isServiceRunning ',isServiceRunning());
+						this.setState({isGeolocationOn: true});
+						ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
 						ToastAndroid.SHORT, ToastAndroid.TOP);
+					}
 				}
 			}
 		}
@@ -438,6 +436,8 @@ class SearchView extends React.PureComponent {
 			this.selectedData.forEach((data)=> {
 				this.props.removeSelectedReceiver(data.phno);
 			});
+			this.selectedData = [];
+			this.setState({selectionCount:this.selectedData.length});
 		}
 	}
 
@@ -447,6 +447,8 @@ class SearchView extends React.PureComponent {
 				this.props.removeSubsContact(data.phno);
 				removeSubs(this.props.myContact, {to:data.phno});
 			});
+			this.selectedData = [];
+			this.setState({selectionCount:this.selectedData.length});
 		}
 	}
 
@@ -456,6 +458,8 @@ class SearchView extends React.PureComponent {
 				this.props.removePublishContact(data.phno);
 				removePubs(this.props.myContact, {to:data.phno});
 			});
+			this.selectedData = [];
+			this.setState({selectionCount:this.selectedData.length});
 		}
 	}
 }

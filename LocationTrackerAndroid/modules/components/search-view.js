@@ -175,6 +175,10 @@ class SearchView extends React.PureComponent {
 		return optionData;
 	}
 
+	_emptyView(){
+		return (<View style={{ flex: 1, justifyContent:'flex-start', alignItems:'center'}}><Text>(Empty)</Text></View>);
+	}
+
 	_renderList(options) {
 		let sectionData =[];
 		if(this.state.text!==undefined && this.state.text!==null
@@ -188,26 +192,44 @@ class SearchView extends React.PureComponent {
 				case 1:
 					sectionData = this._setDataOption(this.props.subscribedTo,
 					this.props.contacts, 'Recent Sharers', 'All Contacts');
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 				case 2:
 					sectionData = this._setDataOption(this.props.publishingTo,
 					this.props.contacts, 'Recent Recipients', 'All Contacts');
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 				case 3:
 					sectionData = this._setDataOption(this._getSharedList(),
 					null, 'My Recipients', null);
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 				case 4:
 					sectionData = this._setDataOption(this._filterByStatus(this.props.subscribedTo, STATUS_LIVE),
 					null, 'Location Sharers', null);
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 				case 5:
 					sectionData = this._setDataOption(this._filterByStatus(this.props.subscribedTo, STATUS_PENDING),
 					null, 'My Pending Requests', null);
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 				case 6:
 					sectionData = this._setDataOption(this._filterByStatus(this.props.publishingTo, STATUS_PENDING),
 					null, 'My Pending Approvals', null);
+					if(sectionData===undefined || sectionData ===null || sectionData.length===0) {
+						return this._emptyView();
+					}
 					return this._renderSections(sectionData);
 			}
 		}

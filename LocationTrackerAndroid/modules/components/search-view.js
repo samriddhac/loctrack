@@ -19,7 +19,8 @@ import {changeView,
 import ContactListItem from './contact-list-item';
 import _ from 'lodash';
 import styles from '../styles/style';
-import { VIEW_HOME, 
+import { ME, 
+	VIEW_HOME, 
 	STATUS_PENDING,
 	STATUS_LIVE, 
 	STATUS_APPROVED} from '../common/constants';
@@ -98,6 +99,7 @@ class SearchView extends React.PureComponent {
 	}
 
 	_backHome() {
+		this.props.addToMap(ME);
 		this.props.changeView({id:VIEW_HOME, options:{}});
 	}
 

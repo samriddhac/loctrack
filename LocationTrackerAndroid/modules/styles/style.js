@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     color: '#4A44F2'
   },
   mapContainer: {
-    flex: 9
+    flex: 8
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -615,6 +615,20 @@ const styles = StyleSheet.create({
   },
   statusTextContainer: {
     justifyContent: 'flex-end'
+  },
+  mapBottomBar: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  mapBottomImage: {
+    margin: 10,
+    width:36,
+    height:36,
+    borderRadius: 18
+  },
+  mapBottomTextBar: {
+    marginLeft: 10,
+    marginTop: 10
   }
 });
 export default styles;

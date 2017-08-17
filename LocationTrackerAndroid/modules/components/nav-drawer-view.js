@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../styles/style';
-import {changeView} from '../actions/index';
-import { VIEW_HOME, VIEW_SEARCH_BOX } from '../common/constants';
+import {changeView, addToMap} from '../actions/index';
+import { VIEW_HOME, VIEW_SEARCH_BOX, ME } from '../common/constants';
 
 class NavDrawerView extends Component {
 
@@ -25,6 +25,7 @@ class NavDrawerView extends Component {
 			switch(id) {
 				case 0:
 					this.props.closeNav();
+					this.props.addToMap(ME);
 					this.props.changeView({id:VIEW_HOME, options:{optionId: id}});
 					break;
 				case 1:
@@ -164,4 +165,4 @@ function mapStateToProps(state) {
 		myContact: state.contactState.myContact
 	};
 }
-export default connect(mapStateToProps, {changeView})(NavDrawerView);
+export default connect(mapStateToProps, {changeView, addToMap})(NavDrawerView);

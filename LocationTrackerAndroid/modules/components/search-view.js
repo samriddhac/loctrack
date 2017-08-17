@@ -27,7 +27,8 @@ import {subscriptionRequest,
 	subscriptionApproveRequest, 
 	addDataToPublish,
 	removeSubs,
-	removePubs} from '../websocket-receiver';
+	removePubs,
+	stopPublishLocation} from '../websocket-receiver';
 import {sendGeoTrackingNotification, stopGeoTrackingNotification} from '../pushnotification';
 import {isServiceRunning, start, stop } from '../geolocation-receiver';
 
@@ -385,8 +386,9 @@ class SearchView extends React.PureComponent {
 				return this._getSingleRightCornerButton(this._stopReceiving, '#CC1D23',
 				'close-circle', 35, 'Stop Receiving', styles.bottomBarCustomPadding);
 			case 5:
-				return this._getSingleRightCornerButton(this._requestLocation, '#4A44F2',
-					'share', 35, 'Request Share', {});
+				return this._getDoubleBottombarButton(this._requestLocation, '#4A44F2',
+				'share', 35, 'Request Share', {}, this._stopReceiving, '#CC1D23',
+				'close-circle', 35, 'Delete Request', styles.bottomBarCustomPadding);
 			case 6:
 				return this._getDoubleBottombarButton(this._shareLocation, '#4A44F2',
 			'share-variant', 35, 'Share Location', styles.bottomBarCustomPadding, this._declineRequest, '#CC1D23',
@@ -474,15 +476,12 @@ class SearchView extends React.PureComponent {
 				&& this.selectedData.length>0)
 				|| (this.props.selectedReceiver!==undefined 
 				&& this.props.selectedReceiver.length>0)) {
-					let isGeolocationOn = isServiceRunning();
-					if(isGeolocationOn===false) {
-						start(); 
-						sendGeoTrackingNotification();
-						console.log('isServiceRunning ',isServiceRunning());
-						this.setState({isGeolocationOn: true});
-						ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
-						ToastAndroid.SHORT, ToastAndroid.TOP);
-					}
+					start(); 
+					sendGeoTrackingNotification();
+					console.log('isServiceRunning ',isServiceRunning());
+					this.setState({isGeolocationOn: true});
+					ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
+					ToastAndroid.SHORT, ToastAndroid.TOP);
 				}
 			}
 		}
@@ -490,19 +489,25 @@ class SearchView extends React.PureComponent {
 
 	_stopShare() {
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			let stopList = [];
 			this.selectedData.forEach((data)=> {
 				this.props.removeSelectedReceiver(data.phno);
+				stopList.push(data.phno);
 			});
+			stopPublishLocation(this.props.myContact, {}, stopList);
 			this.selectedData = [];
 			this.setState({selectionCount:this.selectedData.length});
 		}
 	}
 
 	_stopAltShare() {
+		let stopList = [];
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
 			this.selectedData.forEach((data)=> {
 				this.props.removeSelectedReceiver(data.phno);
+				stopList.push(data.phno);
 			});
+			stopPublishLocation(this.props.myContact, {}, stopList);
 		}
 	}
 

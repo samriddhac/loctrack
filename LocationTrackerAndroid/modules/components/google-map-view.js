@@ -11,7 +11,7 @@ import isEqual from 'lodash/isEqual';
 import _ from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/style';
-import { VIEW_HOME, ALL_FRIEND, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
+import { VIEW_HOME, ALL_FRIEND, ME, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
 import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import PinMarker from './pin-marker';
@@ -46,6 +46,7 @@ class GoogleMapView extends Component {
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
 		this.onRegionChange = this.onRegionChange.bind(this);
+		this._renderBottomBar = this._renderBottomBar.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -55,47 +56,65 @@ class GoogleMapView extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
-		if (Platform.OS === 'android') {
-			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-			.then(granted => {
-			  if (granted && this.mounted) {
-			  	navigator.geolocation.getCurrentPosition((pos)=>{
-			  		console.log('pos ',pos);
-			  		this.setState({ 
-			        	region: {
-			        		latitude: pos.coords.latitude,
-				            longitude: pos.coords.longitude,
-				            latitudeDelta: LATITUDE_DELTA,
-				            longitudeDelta: LONGITUDE_DELTA,
-			        	},
-			        	markars: []
-			        });
-			       	if(this.props.selected === ALL_FRIEND) {
-			       		let myPosition = {
-				  			id:-1,
-					      	position: pos.coords,
-		      				name: 'Me',
-		    				thumbnailPath: ''
-					      };
-					    _.remove(this.state.markars, {id:-1});  
-					    this.setState({ 
-				        	...this.state,
-				        	markars: [...this.state.markars, myPosition]
-				        });
-				        this.watchLocation();
-			       	}
-			       	else {
-			       		this.addMarkers(this.props);
-			       	}
-			  	}, (err)=>{
-	    			console.log('[ERROR]: Geolocation error ',err);
-	    			this.fallbackLocation();
-	    		});
-			  }
-			});
-		}
+		this.setLocation(this.props);
 	}
 
+	setLocation(props) {
+		if(props.selected === ME || props.selected === ALL_FRIEND) {
+			if (Platform.OS === 'android') {
+				PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+				.then(granted => {
+				  if (granted && this.mounted) {
+				  	navigator.geolocation.getCurrentPosition((pos)=>{
+				  		this.setState({ 
+				        	region: {
+				        		latitude: pos.coords.latitude,
+					            longitude: pos.coords.longitude,
+					            latitudeDelta: LATITUDE_DELTA,
+					            longitudeDelta: LONGITUDE_DELTA,
+				        	},
+				        	markars: []
+				        });
+				       	if(props.selected === ALL_FRIEND) {
+				       		let myPosition = {
+					  			id:-1,
+						      	position: pos.coords,
+			      				name: 'Me',
+			    				thumbnailPath: ''
+						      };
+						    _.remove(this.state.markars, {id:-1});  
+						    this.setState({ 
+					        	...this.state,
+					        	markars: [...this.state.markars, myPosition]
+					        });
+					        this.watchLocation();
+				       	}
+				       	else if(props.selected === ME) {
+				       		let myPosition = {
+					  			id:-1,
+						      	position: pos.coords,
+			      				name: 'Me',
+			    				thumbnailPath: ''
+						      };
+						    _.remove(this.state.markars, {id:-1});  
+						    this.setState({ 
+					        	...this.state,
+					        	markars: [myPosition]
+					        });
+					        this.watchLocation();
+				       	}
+				  	}, (err)=>{
+		    			console.log('[ERROR]: Geolocation error ',err);
+		    			this.fallbackLocation();
+		    		});
+				  }
+				});
+			}
+		}
+		else {
+			this.addMarkers(props);
+		}
+	}
 	watchLocation() {
 	    this.watchID = navigator.geolocation.watchPosition((position) => {
 	      let myLastPositionCoord = null;
@@ -127,7 +146,7 @@ class GoogleMapView extends Component {
 	    });
 	}
 
-	fallbackLocation() {
+	fallbackLocation(props) {
 		navigator.geolocation.getCurrentPosition((pos)=>{
 	  		this.setState({ 
 	        	region: {
@@ -138,7 +157,7 @@ class GoogleMapView extends Component {
 	        	},
 	        	markars: []
 	        });
-	       	if(this.props.selected === ALL_FRIEND) {
+	       	if(props.selected === ALL_FRIEND) {
 	       		let myPosition = {
 		  			id:-1,
 			      	position: pos.coords,
@@ -150,10 +169,25 @@ class GoogleMapView extends Component {
 		        	...this.state,
 		        	markars: [...this.state.markars, myPosition]
 		        });
+		        this.addMarkers(props);
+		        this.watchLocation();
+	       	}
+	       	else if(props.selected === ME) {
+	       		let myPosition = {
+		  			id:-1,
+			      	position: pos.coords,
+      				name: 'Me',
+    				thumbnailPath: ''
+			      };
+			    _.remove(this.state.markars, {id:-1});  
+			    this.setState({ 
+		        	...this.state,
+		        	markars: [myPosition]
+		        });
 		        this.watchLocation();
 	       	}
 	       	else {
-	       		this.addMarkers(this.props);
+	       		this.addMarkers(props);
 	       	}
 		}, (err)=>{
 			console.log('[ERROR]: Geolocation error ',err);
@@ -161,7 +195,7 @@ class GoogleMapView extends Component {
 	}
 
 	componentWillReceiveProps(nextprops) {
-		this.addMarkers(nextprops);
+		this.setLocation(nextprops);
 	}
 	componentWillUnmount() {
 		this.mounted = false;
@@ -245,6 +279,44 @@ class GoogleMapView extends Component {
 	    }
 	}
 
+	_renderBottomBar() {
+		if(this.props.selected>0) {
+			let obj = _.find(this.props.subscribedTo, {recordID: this.props.selected});
+			let thumbnail = require('../images/icons/default.jpg');
+			if(obj.thumbnailPath!==undefined && obj.thumbnailPath!==null 
+				&& obj.thumbnailPath!=='') {
+				thumbnail = {uri:obj.thumbnailPath};
+			}
+			let name = '';
+			if(obj.givenName!==undefined && obj.givenName!==null 
+				&& obj.givenName!=='') {
+				name = obj.givenName;
+			}
+			if(obj.familyName!==undefined && obj.familyName!==null 
+				&& data.familyName!=='') {
+				name = name + ' ' + obj.familyName;
+			}
+			let speed = '(Speed unknown)';
+			if(obj.loc.speed!==undefined && obj.loc.speed!==null
+				&& obj.loc.speed!=='') {
+				speed = obj.loc.speed + ' meters/second'
+			}
+			return (
+				<View style={styles.mapBottomBar}>
+					<Image style={styles.mapBottomImage}
+						source={thumbnail}/>
+					<View style={styles.mapBottomTextBar}>
+						<Text style={[styles.defaultFont]}>
+				        	{name}
+				    	</Text>
+				    	<Text>{speed}</Text>
+					</View>
+				</View>
+			);
+		}
+		return null;
+	}
+
 	render() {
 		if(this.state.region === undefined) {
 			return (
@@ -284,6 +356,7 @@ class GoogleMapView extends Component {
 						/>
 						))}
 					</MapView>
+					{this._renderBottomBar()}
 				</View>
 			);
 		}

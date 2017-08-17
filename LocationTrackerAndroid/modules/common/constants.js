@@ -52,6 +52,7 @@ export const STATUS_LIVE = 'l';
 export const MY_CONTACT = 'contantno';
 export const STATE = 'state';
 
-export const ALL_FRIEND = -1;
+export const ALL_FRIEND = -2;
+export const ME = -1;
 
 export const PRIVACY_LINK = 'https://samriddhac.github.io/loctrack-privacy-policy/index.html';

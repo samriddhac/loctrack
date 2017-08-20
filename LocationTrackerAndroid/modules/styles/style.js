@@ -607,14 +607,33 @@ const styles = StyleSheet.create({
   },
   subRightContainer: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  contactContainerWBtn:{
+    flex:6,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   subRightBtnContainer: {
-    justifyContent: 'flex-end',
+    flex:4,
+    justifyContent: 'center',
     backgroundColor: 'transparent'
   },
   statusTextContainer: {
-    justifyContent: 'flex-end'
+    color:'#CC1D23',
+    fontFamily: 'notoserif',
+    fontSize: 8,
+  },
+  statusContainer: {
+    borderWidth:1,
+    borderRadius:5,
+    padding:2,
+    alignItems:'center',
+    justifyContent:'center',
+    borderColor:'#CC1D23'
   },
   mapBottomBar: {
     flex: 1,

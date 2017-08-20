@@ -57,6 +57,20 @@ export default class ContactListItem extends React.PureComponent {
 									style={[styles.mapButton]} />
 							</TouchableNativeFeedback>
 						</View>
+						<View style={styles.statusContainer}>
+							<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+						</View>
+					</View>
+				);
+			}
+			else {
+				return(
+					<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+						<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+							<View style={styles.statusContainer}>
+								<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+							</View>
+						</View>
 					</View>
 				);
 			}

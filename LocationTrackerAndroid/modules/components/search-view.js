@@ -283,16 +283,16 @@ class SearchView extends React.PureComponent {
 					this.listData = this._filterList(contacts, query);
 					break;
 				case 3:
-					this.listData = this._filterList(publishingTo, query);
+					this.listData = this._filterList(this._getSharedList(), query);
 					break;
 				case 4:
-					this.listData = this._filterList(subscribedTo, query);
+					this.listData = this._filterList(this._filterByStatus(subscribedTo, STATUS_LIVE), query);
 					break;
 				case 5:
-					this.listData = this._filterList(publishingTo, query);
+					this.listData = this._filterList(this._filterByStatus(this.props.subscribedTo, STATUS_PENDING), query);
 					break;
 				case 6:
-					this.listData = this._filterList(subscribedTo, query);
+					this.listData = this._filterList(this._filterByStatus(this.props.publishingTo, STATUS_PENDING), query);
 					break;
 			}
 	    }

@@ -9,15 +9,57 @@ import _ from 'lodash';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../styles/style';
 import {changeView, addToMap} from '../actions/index';
-import { VIEW_HOME, VIEW_SEARCH_BOX, ME } from '../common/constants';
+import { VIEW_HOME, VIEW_SEARCH_BOX, ME,
+	STATUS_PENDING, STATUS_LIVE  } from '../common/constants';
 
 class NavDrawerView extends Component {
 
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			option_3_count: 0,
+			option_4_count: 0,
+			option_5_count: 0,
+			option_6_count: 0
+		};
+
 		this._renderRow = this._renderRow.bind(this);
 		this._onPressRow = this._onPressRow.bind(this);
+	}
+
+	componentWillMount(){
+		this.setCountState(this.props);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setCountState(nextProps);
+	}
+
+	setCountState(props) {
+		let option_3_count = props.selectedReceiver.length;
+		let option_4_count = this._filterByStatus(props.subscribedTo, STATUS_LIVE).length;
+		let option_5_count = this._filterByStatus(props.subscribedTo, STATUS_PENDING).length;
+		let option_6_count = this._filterByStatus(props.publishingTo, STATUS_PENDING).length;
+		this.setState({
+			option_3_count,
+			option_4_count,
+			option_5_count,
+			option_6_count
+		});
+	}
+
+	_filterByStatus(itemList, statusVal) {
+		let results =[];
+		if(itemList!==undefined && itemList!==null
+			&& itemList.length>0) {
+			itemList.forEach((item)=>{
+				if(item.status === statusVal) {
+					results.push(item);
+				}
+			});
+		}
+		return results;
 	}
 
 	_onPressRow(id) {
@@ -64,7 +106,7 @@ class NavDrawerView extends Component {
 			<TouchableHighlight onPress={() => {this._onPressRow(data.id);}} 
 			underlayColor='#4b45f2'>
 				<View style={[styles.row]}>
-					<View style={[styles.contactContainer]}>
+					<View style={[styles.navItemContainer]}>
 						<MaterialCommunityIcons name={data.icon} size={25} 
 							style={[styles.navRowIcon]} />
 			            <View style={styles.rowText}>
@@ -162,7 +204,8 @@ function mapStateToProps(state) {
 	return {
 		subscribedTo: sub,
 		publishedTo: pub,
-		myContact: state.contactState.myContact
+		myContact: state.contactState.myContact,
+		selectedReceiver: state.contactState.selectedReceiver
 	};
 }
 export default connect(mapStateToProps, {changeView, addToMap})(NavDrawerView);

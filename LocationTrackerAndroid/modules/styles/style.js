@@ -611,12 +611,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center'
   },
-  contactContainerWBtn:{
-    flex:6,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
   subRightBtnContainer: {
     flex:4,
     justifyContent: 'center',
@@ -648,6 +642,12 @@ const styles = StyleSheet.create({
   mapBottomTextBar: {
     marginLeft: 10,
     marginTop: 10
+  },
+  navItemContainer:{
+    flex:7,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   }
 });
 export default styles;

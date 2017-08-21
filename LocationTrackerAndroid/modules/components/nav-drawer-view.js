@@ -26,6 +26,8 @@ class NavDrawerView extends Component {
 
 		this._renderRow = this._renderRow.bind(this);
 		this._onPressRow = this._onPressRow.bind(this);
+		this._renderCountView = this._renderCountView.bind(this);
+		this._renderCount = this._renderCount.bind(this);
 	}
 
 	componentWillMount(){
@@ -100,6 +102,39 @@ class NavDrawerView extends Component {
 			console.log(e);
 		}
 	}
+	_renderCountView(count) {
+		return (
+			<View style={styles.countContainer}>
+				<Text style={styles.countTextContainer}>{count}</Text>
+			</View>
+		);
+	}
+	_renderCount(data) {
+		let id = data.id;
+		switch(id) {
+			case 3:
+				if(this.state.option_3_count>0) {
+					return this._renderCountView(this.state.option_3_count);
+				}
+				return null;
+			case 4:
+				if(this.state.option_4_count>0) {
+					return this._renderCountView(this.state.option_4_count);
+				}
+				return null;
+			case 5:
+				if(this.state.option_5_count>0) {
+					return this._renderCountView(this.state.option_5_count);
+				}
+				return null;
+			case 6:
+				if(this.state.option_6_count>0) {
+					return this._renderCountView(this.state.option_6_count);
+				}
+				return null;
+		}
+		return null;
+	}
 	_renderRow(record) {
 		let data = record.item;
 		return(
@@ -115,6 +150,7 @@ class NavDrawerView extends Component {
 				            </Text>
 			            </View>
 					</View>
+					{this._renderCount(data)}
 	          	</View>
           	</TouchableHighlight>
 		);
@@ -197,13 +233,13 @@ function mapStateToProps(state) {
 		sub = state.contactState.subscribedTo;
 	}
 	if(state.contactState!==undefined && state.contactState!==null
-		&& state.contactState.publishedTo!==undefined 
-		&& state.contactState.publishedTo!==null) {
-		pub = state.contactState.publishedTo;
+		&& state.contactState.publishingTo!==undefined 
+		&& state.contactState.publishingTo!==null) {
+		pub = state.contactState.publishingTo;
 	}
 	return {
 		subscribedTo: sub,
-		publishedTo: pub,
+		publishingTo: pub,
 		myContact: state.contactState.myContact,
 		selectedReceiver: state.contactState.selectedReceiver
 	};

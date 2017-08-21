@@ -648,6 +648,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
+  },
+  countContainer: {
+    width: 18,
+    height: 18,
+    alignItems:'center',
+    justifyContent:'center',
+    borderRadius: 9,
+    backgroundColor: '#4A44F2'
+  },
+  countTextContainer: {
+    color:'#ffffff',
+    fontWeight: 'bold',
+    fontFamily: 'notoserif',
+    fontSize: 10,
+    fontWeight: 'bold'
   }
 });
 export default styles;

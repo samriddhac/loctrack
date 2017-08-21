@@ -72,6 +72,7 @@ class SearchView extends React.PureComponent {
 		this._stopReceiving = this._stopReceiving.bind(this);
 		this._declineRequest = this._declineRequest.bind(this);
 		this._stopAltShare = this._stopAltShare.bind(this);
+		this._shareLocationAlt = this._shareLocationAlt.bind(this);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -392,7 +393,7 @@ class SearchView extends React.PureComponent {
 				'share', 35, 'Request Share', {}, this._stopReceiving, '#CC1D23',
 				'close-circle', 35, 'Delete Request', styles.bottomBarCustomPadding);
 			case 6:
-				return this._getDoubleBottombarButton(this._shareLocation, '#4A44F2',
+				return this._getDoubleBottombarButton(this._shareLocationAlt, '#4A44F2',
 			'share-variant', 35, 'Share Location', styles.bottomBarCustomPadding, this._declineRequest, '#CC1D23',
 				'close-circle', 35, 'Decline Request', styles.bottomBarCustomPadding);
 				
@@ -482,6 +483,41 @@ class SearchView extends React.PureComponent {
 					sendGeoTrackingNotification();
 					console.log('isServiceRunning ',isServiceRunning());
 					this.setState({isGeolocationOn: true});
+					ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
+					ToastAndroid.SHORT, ToastAndroid.TOP);
+				}
+			}
+		}
+	}
+
+	_shareLocationAlt() {
+		let serverObjs =[];
+		let from = this.props.myContact;
+		if(this.selectedData!==undefined && this.selectedData.length>0) {
+			this.selectedData.forEach((data)=> {
+				let obj = {
+					to: data.phno
+				};
+				serverObjs.push(obj);
+				let dObj = JSON.parse(JSON.stringify(data));
+				dObj.status = STATUS_APPROVED;
+				this.props.addToPublish(dObj);
+			});
+		}
+		if(serverObjs!==undefined && serverObjs!==null
+			&& serverObjs.length>0) {
+			status = addDataToPublish(from, serverObjs);
+			if(status === true) {
+				if((this.selectedData!==undefined 
+				&& this.selectedData.length>0)
+				|| (this.props.selectedReceiver!==undefined 
+				&& this.props.selectedReceiver.length>0)) {
+					start(); 
+					sendGeoTrackingNotification();
+					console.log('isServiceRunning ',isServiceRunning());
+					this.setState({isGeolocationOn: true});
+					this.selectedData = [];
+					this.setState({selectionCount:this.selectedData.length});
 					ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
 					ToastAndroid.SHORT, ToastAndroid.TOP);
 				}

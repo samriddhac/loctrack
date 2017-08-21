@@ -44,7 +44,8 @@ export default class ContactListItem extends React.PureComponent {
 	_renderMap() {
 		let data = this.props.data.item;
 		if(this.props.options.optionId==1 ||
-				this.props.options.optionId==4) {
+				this.props.options.optionId==4 ||
+				this.props.options.optionId==5) {
 			if (data.status == STATUS_LIVE) {
 				return (
 					<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>

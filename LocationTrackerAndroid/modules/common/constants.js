@@ -1,4 +1,4 @@
-export const LOCATION_SERVER = 'http://54.186.102.87:7000';
+export const LOCATION_SERVER = 'http://52.25.44.165:7000';
 
 export const VIEW_REGISTER = 0;
 export const VIEW_HOME = 1;

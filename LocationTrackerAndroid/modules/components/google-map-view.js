@@ -56,10 +56,22 @@ class GoogleMapView extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
-		this.setLocation(this.props);
+		this.setLocation(this.props, false);
 	}
 
-	setLocation(props) {
+	componentWillReceiveProps(nextprops) {
+		this.setLocation(nextprops, true);
+	}
+
+	componentWillUnmount() {
+		this.mounted = false;
+		if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
+		if (animationTimeout) {
+			clearTimeout(animationTimeout);
+		}
+	}
+
+	setLocation(props, mapLoaded) {
 		if(props.selected === ME || props.selected === ALL_FRIEND) {
 			if (Platform.OS === 'android') {
 				PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
@@ -112,7 +124,25 @@ class GoogleMapView extends Component {
 			}
 		}
 		else {
-			this.addMarkers(props);
+			if(mapLoaded == true) {
+				this.addMarkers(props);
+			}
+			else {
+				navigator.geolocation.getCurrentPosition((pos)=>{
+					this.setState({ 
+			        	region: {
+			        		latitude: pos.coords.latitude,
+				            longitude: pos.coords.longitude,
+				            latitudeDelta: LATITUDE_DELTA,
+				            longitudeDelta: LONGITUDE_DELTA,
+			        	},
+			        	markars: []
+			        });
+			        this.addMarkers(props);
+				}, (err)=>{
+					console.log('[ERROR]: Geolocation error ',err);
+				});
+			}
 		}
 	}
 	watchLocation() {
@@ -194,80 +224,82 @@ class GoogleMapView extends Component {
 		});
 	}
 
-	componentWillReceiveProps(nextprops) {
-		this.setLocation(nextprops);
-	}
-	componentWillUnmount() {
-		this.mounted = false;
-		if (this.watchID) navigator.geolocation.clearWatch(this.watchID);
-		if (animationTimeout) {
-			clearTimeout(animationTimeout);
-		}
-	}
-
 	addMarkers(props) {
 		let markerArray = [];
-		if(props.subscribedTo!==undefined && props.subscribedTo!==null
+		try {
+			if(props.subscribedTo!==undefined && props.subscribedTo!==null
 			&& props.subscribedTo.length>0){
-			if(props.selected === ALL_FRIEND) {
-				props.subscribedTo.forEach((item)=>{
-					if(item!==undefined && item!==null
-						&& item.loc!==undefined && item.loc!==null) {
-						let m = {
-							id: item.recordID,
-							position: item.loc,
-							name: item.givenName,
-							thumbnailPath: item.thumbnailPath
-						};
-						markerArray = [m, ...markerArray];
+				if(props.selected === ALL_FRIEND) {
+					props.subscribedTo.forEach((item)=>{
+						if(item!==undefined && item!==null
+							&& item.loc!==undefined && item.loc!==null) {
+							let m = {
+								id: item.recordID,
+								position: item.loc,
+								name: item.givenName,
+								thumbnailPath: item.thumbnailPath
+							};
+							markerArray = [m, ...markerArray];
+						}
+					});
+					let me = _.find(this.state.markars, {id: -1});
+					if(me!==undefined && me!==null) {
+						markerArray = [me, ...markerArray];
 					}
-				});
-				let me = _.find(this.state.markars, {id: -1});
-				if(me!==undefined && me!==null) {
-					markerArray = [me, ...markerArray];
-				}
-				this.setState({ 
-		        	...this.state,
-		        	markars: [...markerArray]
-		        });
-			}
-			else if(props.selected>=0) {
-				let obj = _.find(props.subscribedTo, {recordID: props.selected});
-				if(obj!==undefined && obj!==null && obj.status===STATUS_LIVE
-					&& obj.loc!==undefined && obj.loc!==null) {
-					let m = {
-						id: obj.recordID,
-						position: obj.loc,
-						thumbnailPath: obj.thumbnailPath,
-						name: obj.givenName
-					};
-					markerArray = [m, ...markerArray];
-					let region = {
-		        		latitude: obj.loc.latitude,
-			            longitude: obj.loc.longitude,
-			            latitudeDelta: this.latDelta,
-				        longitudeDelta: this.longDelta,
-		        	};
 					this.setState({ 
-			        	region:region,
+			        	...this.state,
 			        	markars: [...markerArray]
 			        });
-			        this.map.animateToRegion(region, timeout);
+				}
+				else if(props.selected>=0) {
+					let obj = _.find(props.subscribedTo, {recordID: props.selected});
+					if(obj!==undefined && obj!==null && obj.status===STATUS_LIVE
+						&& obj.loc!==undefined && obj.loc!==null) {
+						let m = {
+							id: obj.recordID,
+							position: obj.loc,
+							thumbnailPath: obj.thumbnailPath,
+							name: obj.givenName
+						};
+						markerArray = [m, ...markerArray];
+						let region = {
+			        		latitude: obj.loc.latitude,
+				            longitude: obj.loc.longitude,
+				            latitudeDelta: this.latDelta,
+					        longitudeDelta: this.longDelta,
+			        	};
+						this.setState({ 
+				        	region:region,
+				        	markars: [...markerArray]
+				        });
+					}
+				}
+			}
+			if(markerArray!==undefined
+				&& markerArray!==null
+				&& markerArray.length>0) {
+				if(props.selected === ALL_FRIEND) {
+					let markerIDs = [];
+					markerArray.forEach((item)=>{
+						markerIDs.push(item.id.toString());
+					});
+					animationTimeout = setTimeout(() => {
+				      this.focusMap(markerIDs, true);
+					}, timeout);
 				}
 			}
 		}
-		if(markerArray!==undefined
-			&& markerArray!==null
-			&& markerArray.length>0) {
-			if(props.selected === ALL_FRIEND) {
-				let markerIDs = [];
-				markerArray.forEach((item)=>{
-					markerIDs.push(item.id.toString());
-				});
-				animationTimeout = setTimeout(() => {
-			      this.focusMap(markerIDs, true);
-				}, timeout);
-			}
+		catch(e) {
+			console.log(e);
+			this.setState({ 
+	        	region: {
+	        		latitude: LATITUDE,
+		            longitude: LONGITUDE,
+		            latitudeDelta: LATITUDE_DELTA,
+		            longitudeDelta: LONGITUDE_DELTA,
+	        	},
+	        	markars: []
+	        });
 		}
 	}
 
@@ -293,7 +325,7 @@ class GoogleMapView extends Component {
 				name = obj.givenName;
 			}
 			if(obj.familyName!==undefined && obj.familyName!==null 
-				&& data.familyName!=='') {
+				&& obj.familyName!=='') {
 				name = name + ' ' + obj.familyName;
 			}
 			let speed = '(Speed unknown)';

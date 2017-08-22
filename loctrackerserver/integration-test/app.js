@@ -4,7 +4,7 @@ import { Form, Text, Select, Textarea } from 'react-form';
 import io from 'socket.io-client';
 
 var socket = null;
-const LOCATION_SERVER = 'http://54.186.102.87:7000';
+const LOCATION_SERVER = 'http://52.25.44.165:7000';
 function getSocket() {
 	if(socket===null) {
 		socket = io.connect(LOCATION_SERVER, {reconnect: true});

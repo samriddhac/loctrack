@@ -38,63 +38,46 @@ export default class App extends Component {
 		if(values.data!==undefined && values.data!==null) {
 			o.data = values.data;
 		}
-		let str = JSON.stringify(o);
-		if(values.events==='EVENT_REQUEST_SUBSCRIPTION' || values.events==='EVENT_ADD_TO_PUBLISH'
-			|| values.events==='EVENT_SHARE_REQUEST') {
-			let arr = [];
-			arr.push(o);
-			str = JSON.stringify(arr);
-		}
-		console.log('JSON.stringify(o) ',str);
-		if(values.from!==undefined && values.from!==null) {
-			getSocket().emit(values.events, values.from, str);
+		if(values.events==='location') {
+			this.sendLocation(values.to, values.lat, values.lng);
 		}
 		else {
-			getSocket().emit(values.events, JSON.stringify(o));
+			let str = JSON.stringify(o);
+			if(values.events==='EVENT_REQUEST_SUBSCRIPTION' || values.events==='EVENT_ADD_TO_PUBLISH'
+				|| values.events==='EVENT_SHARE_REQUEST') {
+				let arr = [];
+				arr.push(o);
+				str = JSON.stringify(arr);
+			}
+			console.log('JSON.stringify(o) ',str);
+			if(values.from!==undefined && values.from!==null) {
+				getSocket().emit(values.events, values.from, str);
+			}
+			else {
+				getSocket().emit(values.events, JSON.stringify(o));
+			}
 		}
-		
 	}
-	sendLocation() {
+	sendLocation(n, lat, lng) {
 		let l = 0.001;
-		let lat = 22.5691;
 		let shareId = setInterval(()=>{
 			console.log('Sending data');
-			if(navigator && navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition((position) => {
-					let currentCoord = {};
-					currentCoord.lt = position.coords.latitude;
-					currentCoord.lg = position.coords.longitude;
-
-					let data = {
-						latitude:lat,
-						longitude:88.4090
-					};
-					let obj = {
-						t:'loc',
-						data:data
-					};
-					console.log(JSON.stringify(obj));
-					getSocket().emit('EVENT_PUBLISH_LOCATION', '1111111111', JSON.stringify(obj));
-					lat = lat + l;
-				});
+			let data = {
+					latitude:lat,
+					longitude:lng
+				};
+				let obj = {
+					t:'loc',
+					data:data
+				};
+				console.log(JSON.stringify(obj));
+				getSocket().emit('EVENT_PUBLISH_LOCATION', n, JSON.stringify(obj));
+				lat = lat + l;
 			}
 		}, 10000);
 	}
 	secondUser(values) {
-		console.log('Success!', values);
-		let o = {}
-		if(values.type!==undefined && values.type!==null) {
-			o.t = values.type;
-		}
-		if(values.to!==undefined && values.to!==null) {
-			o.to = values.to;
-		}
-		if(values.from!==undefined && values.from!==null) {
-			getSocket().emit(values.events, values.from, JSON.stringify(o));
-		}
-		else {
-			getSocket().emit(values.events, JSON.stringify(o));
-		}
+		
 	}
 	render() {
 		return (
@@ -111,6 +94,8 @@ export default class App extends Component {
 					        <form onSubmit={submitForm}>
 					          <span><label>From</label><Text field='from' /></span>
 					          <span><label>To</label><Text field='to' /></span>
+					          <span><label>lat</label><Text field='lat' /></span>
+					          <span><label>lng</label><Text field='lng' /></span>
 					          <Select // This is the built-in Select formInput 
 					              field='events'
 					              options={[{ // You can ship it some options like usual 
@@ -120,8 +105,8 @@ export default class App extends Component {
 					                label: 'EVENT_ESTABLISH_AUTH',
 					                value: 'EVENT_ESTABLISH_AUTH'
 					              }, {
-					                label: 'message',
-					                value: 'message'
+					                label: 'location',
+					                value: 'location'
 					              }, {
 					                label: 'EVENT_ESTABLISH_AUTH_SUCCESS',
 					                value: 'EVENT_ESTABLISH_AUTH_SUCCESS'

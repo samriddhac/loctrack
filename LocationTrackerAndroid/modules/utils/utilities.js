@@ -207,9 +207,9 @@ export function getStatus(s) {
 	if(s !==undefined && s !== null && s !== '') {
 		switch(s) {
 			case STATUS_PENDING:
-				return "Pending";
+				return "Received";
 			case STATUS_APPROVED: 
-				return "Offline";
+				return "Pending";
 			case STATUS_LIVE: 
 				return "Sharing";
 			case STATUS_REJECTED:
@@ -217,7 +217,7 @@ export function getStatus(s) {
 		}
 	}
 	else {
-		return 'Offline';
+		return '';
 	}
 }
 

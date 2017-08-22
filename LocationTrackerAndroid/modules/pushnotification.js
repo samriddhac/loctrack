@@ -1,6 +1,7 @@
 import PushNotification  from 'react-native-push-notification';
 import {setFCMToken} from './actions/index';
 import {setGeoServiceConfigured} from './geolocation-receiver';
+import {Alert} from 'react-native';
 
 export function configureNotification(store) {
 	PushNotification.configure({
@@ -11,6 +12,10 @@ export function configureNotification(store) {
 	    onNotification: function(notification) {
 	        console.log( 'NOTIFICATION:', notification );
 	        setGeoServiceConfigured(false);
+	        if(notification.foreground===true) {
+	        	Alert.alert(notification.title, notification.message,
+	        		[{text: 'OK', onPress: () => console.log('OK Pressed')}]);
+	        }
 	    },
 	    senderID: "979468621687",
 	    popInitialNotification: true,

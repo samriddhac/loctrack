@@ -65,15 +65,21 @@ export default class ContactListItem extends React.PureComponent {
 				);
 			}
 			else {
-				return(
-					<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
-						<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
-							<View style={styles.statusContainer}>
-								<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+				let status = getStatus(data.status);
+				if(status!==undefined && status!==null & status!=='') {
+					return(
+						<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+							<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+								<View style={styles.statusContainer}>
+									<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+								</View>
 							</View>
 						</View>
-					</View>
-				);
+					);
+				}
+				else {
+					return null;
+				}
 			}
 		}
 		return null;

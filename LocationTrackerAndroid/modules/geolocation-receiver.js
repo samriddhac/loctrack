@@ -10,7 +10,7 @@ export function configureGeolocation() {
   try{ 
     console.log('configuring geo location');
     BackgroundGeolocation.configure({
-      desiredAccuracy: 10,
+      desiredAccuracy: 100,
       stationaryRadius: 50,
       distanceFilter: 50,
       locationTimeout: 30,
@@ -18,7 +18,7 @@ export function configureGeolocation() {
       stopOnTerminate: true,
       locationProvider: BackgroundGeolocation.provider.ANDROID_DISTANCE_FILTER_PROVIDER,
       interval: 10000,
-      fastestInterval: 10000,
+      fastestInterval: 5000,
       activitiesInterval: 10000,
       stopOnStillActivity: false
     });

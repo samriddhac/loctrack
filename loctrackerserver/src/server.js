@@ -746,7 +746,6 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 								approvedSubList.forEach((item)=>{
 									if(item.id === sel) {
 										let websocket = socketpool.getConnectionByID(item.id);
-										console.log('websocket ',websocket);
 										if(websocket!==undefined && websocket!==null
 											&& websocket.socket!==undefined
 											&& websocket.socket!==null) {

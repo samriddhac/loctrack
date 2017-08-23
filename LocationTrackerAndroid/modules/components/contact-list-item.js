@@ -5,8 +5,10 @@ import {Image,
 	TouchableHighlight,
 	TouchableNativeFeedback} from 'react-native';
 import _ from 'lodash';
+import Spinner from 'react-native-spinkit';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { STATUS_PENDING, 
+import { STATUS_PENDING,
+	STATUS_APPROVED, 
 	STATUS_LIVE} from '../common/constants';
 import styles from '../styles/style';
 import { getStatus } from '../utils/utilities';
@@ -67,15 +69,37 @@ export default class ContactListItem extends React.PureComponent {
 			else {
 				let status = getStatus(data.status);
 				if(status!==undefined && status!==null & status!=='') {
-					return(
-						<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
-							<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
-								<View style={styles.statusContainer}>
-									<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+					if(data.status === STATUS_APPROVED) {
+						return (
+							<View style={styles.spinnerContainer}>
+								<View>
+									<Spinner style={styles.spinner} 
+									isVisible={true} 
+									size={20} 
+									type='FadingCircleAlt' 
+									color='#4b45f2'/>
+								</View>
+								<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+									<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+										<View style={styles.statusContainer}>
+											<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+										</View>
+									</View>
 								</View>
 							</View>
-						</View>
-					);
+						);
+					}
+					else {
+						return(
+							<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+								<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+									<View style={styles.statusContainer}>
+										<Text style={styles.statusTextContainer}>{getStatus(data.status)}</Text>
+									</View>
+								</View>
+							</View>
+						);
+					}
 				}
 				else {
 					return null;

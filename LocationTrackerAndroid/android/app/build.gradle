@@ -150,6 +150,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile project(':react-native-mauron85-background-geolocation')
     compile project(':react-native-splash-screen')
+    compile project(':react-native-spinkit')
     compile project(':react-native-push-notification')
     compile project(':bugsnag-react-native')
     compile ('com.google.android.gms:play-services-gcm:10.0.1') {

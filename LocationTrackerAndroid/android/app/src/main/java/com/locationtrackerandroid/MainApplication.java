@@ -3,6 +3,7 @@ package com.locationtrackerandroid;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.react.rnspinkit.RNSpinkitPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.bugsnag.BugsnagReactNative;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSpinkitPackage(),
             BugsnagReactNative.getPackage(),
             new SplashScreenReactPackage(),
           new MapsPackage(),

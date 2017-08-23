@@ -542,7 +542,6 @@ class SearchView extends React.PureComponent {
 		let stopList = [];
 		if(this.selectedData!==undefined && this.selectedData.length>0) {
 			this.selectedData.forEach((data)=> {
-				this.props.removeSelectedReceiver(data.phno);
 				stopList.push(data.phno);
 			});
 			stopPublishLocation(this.props.myContact, {}, stopList);

@@ -662,6 +662,16 @@ const styles = StyleSheet.create({
     fontFamily: 'notoserif',
     fontSize: 10,
     fontWeight: 'bold'
+  },
+  spinnerContainer:{
+    flexDirection:'row',
+    flex: 1.8,
+    backgroundColor: 'transparent',
+    justifyContent:'flex-end',
+    alignItems: 'center'
+  },
+  spinner: {
+    marginLeft: 5
   }
 });
 export default styles;

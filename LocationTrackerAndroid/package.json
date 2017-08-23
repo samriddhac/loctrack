@@ -17,6 +17,7 @@
     "react-native-mauron85-background-geolocation": "^0.3.0-alpha.1",
     "react-native-popup-menu": "^0.8.0",
     "react-native-push-notification": "^3.0.0",
+    "react-native-spinkit": "^1.1.1",
     "react-native-splash-screen": "^2.1.0",
     "react-native-vector-icons": "^4.3.0",
     "react-redux": "^5.0.4",

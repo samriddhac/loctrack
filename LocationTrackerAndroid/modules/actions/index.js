@@ -92,6 +92,9 @@ export function removeSubsContact(from) {
 export function updateSubscriberStateAccepted(from) {
 	return updateSubscriberState(STATUS_APPROVED, from);
 }
+export function updateSubscriberStatePending(from) {
+	return updateSubscriberState(STATUS_PENDING, from);
+}
 export function updateSubscriberStateRejected(from) {
 	return updateSubscriberState(STATUS_REJECTED, from);
 }

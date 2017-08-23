@@ -25,7 +25,8 @@ import { EVENT_ON_MESSAGE_RECEIVE,
 import { updateLocation, updateSubscriberStateAccepted,
 		updateSubscriberStateRejected,
 		addToPublishContact, removePublishContact, 
-		removeSubsContact, updateShareReq } from './actions/index';
+		removeSubsContact, updateShareReq,
+		updateSubscriberStatePending } from './actions/index';
 import { ToastAndroid } from 'react-native';
 
 var socket = null;
@@ -89,7 +90,7 @@ export function startWebSocketReceiving(store) {
 					store.dispatch(updateLocation(from, objloc));
 					break;
 				case TYPE_LOC_STOP:
-					store.dispatch(updateSubscriberStateAccepted(from));
+					store.dispatch(updateSubscriberStatePending(from));
 					break;
 				case TYPE_NR:
 					ToastAndroid.showWithGravity('User is not registered with WhereApp', ToastAndroid.SHORT, ToastAndroid.TOP);

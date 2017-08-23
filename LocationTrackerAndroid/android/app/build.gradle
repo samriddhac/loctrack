@@ -90,8 +90,8 @@ android {
         applicationId "com.locationtrackerandroid"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 12
-        versionName "0.1.2"
+        versionCode 14
+        versionName "0.1.4"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

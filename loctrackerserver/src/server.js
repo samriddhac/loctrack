@@ -736,17 +736,17 @@ sub.on(events.EVENT_ON_MESSAGE_RECEIVE, (channel, message)=>{
 							}
 						});
 					}
-					console.log('Approved list for channel ', channel, ' ',approvedSubList);
 					if(approvedSubList!==undefined && approvedSubList!==null
 						&& approvedSubList.length>0) {
 						let locObj = JSON.parse(message);
 						if(locObj.selected!==undefined && locObj.selected!==null
 							&& locObj.selected.length>0) {
 							locObj.selected.forEach((sel)=>{
+								console.log('selected channels ',sel);
 								approvedSubList.forEach((item)=>{
-									console.log('item.id ',item.id,'sel ',sel);
 									if(item.id === sel) {
 										let websocket = socketpool.getConnectionByID(item.id);
+										console.log('websocket ',websocket);
 										if(websocket!==undefined && websocket!==null
 											&& websocket.socket!==undefined
 											&& websocket.socket!==null) {

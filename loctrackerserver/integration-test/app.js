@@ -39,7 +39,7 @@ export default class App extends Component {
 			o.data = values.data;
 		}
 		if(values.events==='location') {
-			this.sendLocation(values.to, values.lat, values.lng);
+			this.sendLocation(values.to, parseFloat(values.lat), parseFloat(values.lng));
 		}
 		else {
 			let str = JSON.stringify(o);
@@ -58,22 +58,47 @@ export default class App extends Component {
 			}
 		}
 	}
+	sendLocation2() {
+		let l = 0.001;
+		let lat = 22.5691;
+		let shareId = setInterval(()=>{
+			console.log('Sending data');
+			if(navigator && navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition((position) => {
+					let currentCoord = {};
+					currentCoord.lt = position.coords.latitude;
+					currentCoord.lg = position.coords.longitude;
+
+					let data = {
+						latitude:lat,
+						longitude:88.4090
+					};
+					let obj = {
+						t:'loc',
+						data:data
+					};
+					console.log(JSON.stringify(obj));
+					getSocket().emit('EVENT_PUBLISH_LOCATION', '2', JSON.stringify(obj));
+					lat = lat + l;
+				});
+			}
+		}, 10000);
+	}
 	sendLocation(n, lat, lng) {
 		let l = 0.001;
 		let shareId = setInterval(()=>{
 			console.log('Sending data');
 			let data = {
-					latitude:lat,
-					longitude:lng
-				};
-				let obj = {
-					t:'loc',
-					data:data
-				};
-				console.log(JSON.stringify(obj));
-				getSocket().emit('EVENT_PUBLISH_LOCATION', n, JSON.stringify(obj));
-				lat = lat + l;
-			}
+				latitude:lat,
+				longitude:lng
+			};
+			let obj = {
+				t:'loc',
+				data:data
+			};
+			console.log(JSON.stringify(obj));
+			getSocket().emit('EVENT_PUBLISH_LOCATION', n, JSON.stringify(obj));
+			lat = lat + l;
 		}, 10000);
 	}
 	secondUser(values) {
@@ -188,7 +213,7 @@ export default class App extends Component {
 								/>
 					          <button type='submit'>Submit</button>
 					          <button type='button' onClick={ (e)=> {
-					          	this.sendLocation();
+					          	this.sendLocation2();
 					          }}>publish location</button>
 					        </form>
 					      )

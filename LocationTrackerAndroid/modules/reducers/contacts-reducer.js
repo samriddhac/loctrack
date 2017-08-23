@@ -16,6 +16,7 @@ import {convertContacts,
 	updatePublish,
 	updateSubLocations, 
 	removeContact,
+	addItem,
 	removeItem,
 	updateShareRequest,
 	doneShareRequest } from '../utils/utilities';
@@ -59,7 +60,7 @@ export default function(state=INITIAL_STATE, action) {
 		case ADD_SELECTED_TO_MAP:
 			return {...state, selectedRecord: action.payload};
 		case ADD_TO_SELECTED_RECEIVER:
-			let newSelection = [...state.selectedReceiver, action.payload];
+			let newSelection = addItem(state.selectedReceiver, action.payload);
 			return {...state, selectedReceiver: [...newSelection]};
 		case REMOVE_FROM_SELECTED_RECEIVER:
 			return {...state, selectedReceiver: removeItem(state.selectedReceiver, action.payload)};

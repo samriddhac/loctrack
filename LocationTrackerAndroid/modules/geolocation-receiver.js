@@ -16,9 +16,9 @@ export function configureGeolocation() {
       locationTimeout: 30,
       startOnBoot: false,
       stopOnTerminate: true,
-      locationProvider: BackgroundGeolocation.provider.ANDROID_DISTANCE_FILTER_PROVIDER,
+      locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
       interval: 10000,
-      fastestInterval: 5000,
+      fastestInterval: 10000,
       activitiesInterval: 10000,
       stopOnStillActivity: false
     });
@@ -52,14 +52,12 @@ export function start() {
     console.log();
     BackgroundGeolocation.start(() => {
       isBackgroundServiceRunning = true;
-      console.log('isBackgroundServiceRunning ',isBackgroundServiceRunning);
       console.log('[DEBUG] BackgroundGeolocation started successfully');    
     });
   }
 	catch(e) {
     console.log(e);
   }
-  console.log('return isBackgroundServiceRunning ',isBackgroundServiceRunning);
   return isBackgroundServiceRunning;
 }
 export function stop() {

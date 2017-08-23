@@ -235,6 +235,13 @@ export function removeItem(items, val) {
 	return returnList;
 }
 
+export function addItem(items, val) {
+	let returnList = [];
+	_.pull(items, val);
+	returnList = [...items, val];
+	return returnList;
+}
+
 export function updateShareRequest(items, from) {
 	let returnList = [];
 	console.log(from);

@@ -209,7 +209,7 @@ export function getStatus(s) {
 			case STATUS_PENDING:
 				return "Received";
 			case STATUS_APPROVED: 
-				return "Pending";
+				return "Waiting";
 			case STATUS_LIVE: 
 				return "Sharing";
 			case STATUS_REJECTED:

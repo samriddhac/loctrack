@@ -23,9 +23,9 @@ export function configureGeolocation() {
       stopOnStillActivity: false
     });
     BackgroundGeolocation.on('location', (location) => {
-      console.log(location);
       let from = store.getState().contactState.myContact;
       let selectedReceiver = store.getState().contactState.selectedReceiver;
+      console.log('loc ',location, 'selectedReceiver ', selectedReceiver);
       publishLocation(from, location, selectedReceiver);
     });
 

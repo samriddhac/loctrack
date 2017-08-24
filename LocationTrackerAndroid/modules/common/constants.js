@@ -54,5 +54,6 @@ export const STATE = 'state';
 
 export const ALL_FRIEND = -2;
 export const ME = -1;
+export const SHARED = 'Shared';
 
 export const PRIVACY_LINK = 'https://samriddhac.github.io/loctrack-privacy-policy/index.html';

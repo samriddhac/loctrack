@@ -141,6 +141,7 @@ class SearchView extends React.PureComponent {
 			_removeSelectedReceiver={this._removeSelectedReceiver}
 			_goToMap={this._goToMap}
 			options={this.props.options}
+			_selectedReceiver={this.props.selectedReceiver}
 			/>
 		);
 	}
@@ -545,6 +546,12 @@ class SearchView extends React.PureComponent {
 				stopList.push(data.phno);
 			});
 			stopPublishLocation(this.props.myContact, {}, stopList);
+			let isGeolocationOn = isServiceRunning();
+			if(isGeolocationOn === true) {
+				stop();
+				stopGeoTrackingNotification();
+				this.setState({isGeolocationOn: false});
+			}
 		}
 	}
 

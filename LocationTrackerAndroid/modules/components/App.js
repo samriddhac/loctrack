@@ -9,8 +9,9 @@ import {VIEW_REGISTER, VIEW_HOME, STATE} from '../common/constants';
 import {initConnection, setFcmToken} from '../websocket-receiver';
 import SplashScreen from 'react-native-splash-screen';
 import { MenuContext } from 'react-native-popup-menu';
-import {sendAppCloseNotification, sendGeoTrackingNotification} from '../pushnotification';
-import {configureGeolocation, start, 
+import {sendAppCloseNotification, sendGeoTrackingNotification, 
+	stopGeoTrackingNotification} from '../pushnotification';
+import {configureGeolocation, start, stop, 
 	isServiceRunning, setServiceRunning} from '../geolocation-receiver';
 
 class App extends Component {
@@ -68,6 +69,18 @@ class App extends Component {
 		}
 	}
 
+	componentWillReceiveProps(newProps) {
+		if(newProps.selectedReceiver===undefined
+			|| newProps.selectedReceiver===null
+			|| newProps.selectedReceiver.length===0) {
+			let isGeolocationOn = isServiceRunning();
+			if(isGeolocationOn === true) {
+				stop();
+				stopGeoTrackingNotification();
+			}
+		}
+	}
+
 	componentWillUnmount() {
 		if(isServiceRunning()===true) {
 			sendAppCloseNotification();
@@ -101,7 +114,8 @@ class App extends Component {
 function mapStateToProps(state) {
 	return { 
 		myContact: state.contactState.myContact,
-		fcmToken: state.deviceState.fcmToken
+		fcmToken: state.deviceState.fcmToken,
+		selectedReceiver: state.contactState.selectedReceiver
 	}
 }
 export default connect(mapStateToProps, {getAllContacts, loadPersistedState, changeView})(App);

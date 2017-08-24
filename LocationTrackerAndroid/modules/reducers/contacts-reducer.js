@@ -54,7 +54,9 @@ export default function(state=INITIAL_STATE, action) {
 		case ACTION_TYPE_LOC_UPDATE:
 			return {...state, subscribedTo: updateSubLocations(state.subscribedTo, action.payload)};
 		case REMOVE_PUBLISH_CONTACT:
-			return {...state, publishingTo: removeContact(state.publishingTo, action.payload)};
+			let pubTo = removeContact(state.publishingTo, action.payload);
+			let selRec = removeItem(state.selectedReceiver, action.payload.from);
+			return {...state, publishingTo: pubTo, selectedReceiver: selRec};
 		case REMOVE_SUBS_CONTACT:
 			return {...state, subscribedTo: removeContact(state.subscribedTo, action.payload)};
 		case ADD_SELECTED_TO_MAP:

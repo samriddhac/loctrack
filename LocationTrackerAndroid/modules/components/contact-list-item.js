@@ -9,7 +9,8 @@ import Spinner from 'react-native-spinkit';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { STATUS_PENDING,
 	STATUS_APPROVED, 
-	STATUS_LIVE} from '../common/constants';
+	STATUS_LIVE,
+	SHARED} from '../common/constants';
 import styles from '../styles/style';
 import { getStatus } from '../utils/utilities';
 
@@ -22,6 +23,7 @@ export default class ContactListItem extends React.PureComponent {
 		};
 
 		this._renderMap = this._renderMap.bind(this);
+		this.getSharingStatus = this.getSharingStatus.bind(this);
 	}
 
 	_onPressRow() {
@@ -105,6 +107,27 @@ export default class ContactListItem extends React.PureComponent {
 					return null;
 				}
 			}
+		}
+		else if(this.props.options.optionId===2) {
+			let status = this.getSharingStatus(this.props._selectedReceiver, data);
+			if(status!==undefined && status!==null && status!=='') {
+				return(
+					<View style={[styles.subRightContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+						<View style={[styles.subRightBtnContainer, this.state.selected ? styles.selected :  styles.unselected]}>
+							<View style={styles.statusContainer}>
+								<Text style={styles.statusTextContainer}>{status}</Text>
+							</View>
+						</View>
+					</View>
+				);
+			}
+		}
+		return null;
+	}
+
+	getSharingStatus(items, data) {
+		if(_.includes(items, data.phno) === true) {
+			return SHARED;
 		}
 		return null;
 	}

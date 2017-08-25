@@ -88,11 +88,14 @@ class SearchView extends React.PureComponent {
 		if(newProps.selectedReceiver!==undefined 
 				&& newProps.selectedReceiver!==null
 				&& newProps.selectedReceiver.length>0) {
-			start(); 
-			sendGeoTrackingNotification();
-			this.setState({isGeolocationOn: true});
-			ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
-			ToastAndroid.SHORT, ToastAndroid.TOP);
+			let isGeolocationOn = isServiceRunning();
+			if(isGeolocationOn === true) {
+				start(); 
+				sendGeoTrackingNotification();
+				this.setState({isGeolocationOn: true});
+				ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
+				ToastAndroid.SHORT, ToastAndroid.TOP);
+			}
 		}
 	}
 

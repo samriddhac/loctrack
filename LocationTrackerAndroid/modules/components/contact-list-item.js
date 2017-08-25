@@ -30,17 +30,9 @@ export default class ContactListItem extends React.PureComponent {
 		let data = this.props.data.item;
 		if(this.state.selected === true) {
 			data.selected = false;
-			if(this.props.options.optionId==2 ||
-				this.props.options.optionId==6) {
-				this.props._removeSelectedReceiver(data.phno);
-			}
 		}
 		else {
 			data.selected = true;
-			if(this.props.options.optionId==2 ||
-				this.props.options.optionId==6) {
-				this.props._addToSelectedReceiver(data.phno);
-			}
 		}
 		this.setState({ selected: data.selected });
 		this.props._onRowPressed(data);

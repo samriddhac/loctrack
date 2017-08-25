@@ -14,7 +14,8 @@ store.subscribe(throttle(()=>{
 			contactState: {
 				myContact:store.getState().contactState.myContact,
 				subscribedTo:store.getState().contactState.subscribedTo,
-				publishingTo:store.getState().contactState.publishingTo
+				publishingTo:store.getState().contactState.publishingTo,
+				selectedReceiver:store.getState().contactState.selectedReceiver
 			}
 		});
 	}

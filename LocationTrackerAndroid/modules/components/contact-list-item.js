@@ -37,6 +37,11 @@ export default class ContactListItem extends React.PureComponent {
 		this.setState({ selected: data.selected });
 		this.props._onRowPressed(data);
 	}
+	componentWillReceiveProps(newProps) {
+		if(newProps.resetSelection === true) {
+			this.setState({ selected: false });
+		}
+	}
 	_renderMap() {
 		let data = this.props.data.item;
 		if(this.props.options.optionId==1 ||
@@ -100,7 +105,7 @@ export default class ContactListItem extends React.PureComponent {
 				}
 			}
 		}
-		else if(this.props.options.optionId===2) {
+		else if(this.props.options.optionId===2 || this.props.options.optionId===3) {
 			let status = this.getSharingStatus(this.props._selectedReceiver, data);
 			if(status!==undefined && status!==null && status!=='') {
 				return(

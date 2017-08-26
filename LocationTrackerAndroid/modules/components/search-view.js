@@ -43,7 +43,8 @@ class SearchView extends React.PureComponent {
 			behavior: 'padding',
 			currentList: [],
 			selectionCount:0,
-			isGeolocationOn: isServiceRunning()
+			isGeolocationOn: isServiceRunning(),
+			resetSelection: false
 		};
 
 		this.selectedData = [];
@@ -70,11 +71,10 @@ class SearchView extends React.PureComponent {
 		this._stopShare = this._stopShare.bind(this);
 		this._stopReceiving = this._stopReceiving.bind(this);
 		this._declineRequest = this._declineRequest.bind(this);
-		this._stopAltShare = this._stopAltShare.bind(this);
-		this._shareLocationAlt = this._shareLocationAlt.bind(this);
 	}
 
 	componentWillReceiveProps(newProps) {
+		console.log('newProps.selectedReceiver ',newProps.selectedReceiver);
 		if(newProps.selectedReceiver===undefined
 			|| newProps.selectedReceiver===null
 			|| newProps.selectedReceiver.length===0) {
@@ -88,14 +88,11 @@ class SearchView extends React.PureComponent {
 		if(newProps.selectedReceiver!==undefined 
 				&& newProps.selectedReceiver!==null
 				&& newProps.selectedReceiver.length>0) {
-			let isGeolocationOn = isServiceRunning();
-			if(isGeolocationOn === true) {
-				start(); 
-				sendGeoTrackingNotification();
-				this.setState({isGeolocationOn: true});
-				ToastAndroid.showWithGravity('Started location sharing to approved subscribers', 
-				ToastAndroid.SHORT, ToastAndroid.TOP);
-			}
+			start(); 
+			sendGeoTrackingNotification();
+			this.setState({isGeolocationOn: true});
+			ToastAndroid.showWithGravity('Sharing location to approved recipients', 
+			ToastAndroid.SHORT, ToastAndroid.TOP);
 		}
 	}
 
@@ -141,7 +138,7 @@ class SearchView extends React.PureComponent {
 			}
 		}
 		let newCount = this.selectedData.length;
-		this.setState({...this.state, selectionCount:newCount});
+		this.setState({...this.state, selectionCount:newCount, resetSelection: false});
 	}
 
 	_renderRow(data) {
@@ -153,6 +150,7 @@ class SearchView extends React.PureComponent {
 			_goToMap={this._goToMap}
 			options={this.props.options}
 			_selectedReceiver={this.props.selectedReceiver}
+			resetSelection={this.state.resetSelection}
 			/>
 		);
 	}
@@ -382,7 +380,7 @@ class SearchView extends React.PureComponent {
 					'share', 35, 'Request Share', {});
 			case 2:
 				return this._getDoubleBottombarButton(this._shareLocation, '#4A44F2',
-				'share-variant', 35, 'Share Location', styles.bottomBarCustomPadding, this._stopAltShare, '#CC1D23',
+				'share-variant', 35, 'Share Location', styles.bottomBarCustomPadding, this._stopShare, '#CC1D23',
 				'close-circle', 35, 'Stop Sharing', styles.bottomBarCustomPadding);
 				return this._getShareUnshareButton();
 			case 3:
@@ -396,7 +394,7 @@ class SearchView extends React.PureComponent {
 				'share', 35, 'Request Share', {}, this._stopReceiving, '#CC1D23',
 				'close-circle', 35, 'Delete Request', styles.bottomBarCustomPadding);
 			case 6:
-				return this._getDoubleBottombarButton(this._shareLocationAlt, '#4A44F2',
+				return this._getDoubleBottombarButton(this._shareLocation, '#4A44F2',
 			'share-variant', 35, 'Share Location', styles.bottomBarCustomPadding, this._declineRequest, '#CC1D23',
 				'close-circle', 35, 'Decline Request', styles.bottomBarCustomPadding);
 				
@@ -478,29 +476,8 @@ class SearchView extends React.PureComponent {
 		if(serverObjs!==undefined && serverObjs!==null
 			&& serverObjs.length>0) {
 			status = addDataToPublish(from, serverObjs);
-		}
-	}
-
-	_shareLocationAlt() {
-		let serverObjs =[];
-		let from = this.props.myContact;
-		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			this.selectedData.forEach((data)=> {
-				let obj = {
-					to: data.phno
-				};
-				serverObjs.push(obj);
-				let dObj = JSON.parse(JSON.stringify(data));
-				dObj.status = STATUS_APPROVED;
-				this.props.addToPublish(dObj);
-				this.props.addToSelectedReceiver(data.phno);
-			});
-		}
-		if(serverObjs!==undefined && serverObjs!==null
-			&& serverObjs.length>0) {
-			status = addDataToPublish(from, serverObjs);
 			this.selectedData = [];
-			this.setState({selectionCount:this.selectedData.length});
+			this.setState({selectionCount:this.selectedData.length, resetSelection: true});
 		}
 	}
 
@@ -513,18 +490,7 @@ class SearchView extends React.PureComponent {
 			});
 			stopPublishLocation(this.props.myContact, {}, stopList);
 			this.selectedData = [];
-			this.setState({selectionCount:this.selectedData.length});
-		}
-	}
-
-	_stopAltShare() {
-		let stopList = [];
-		if(this.selectedData!==undefined && this.selectedData.length>0) {
-			this.selectedData.forEach((data)=> {
-				stopList.push(data.phno);
-				this.props.removeSelectedReceiver(data.phno);
-			});
-			stopPublishLocation(this.props.myContact, {}, stopList);
+			this.setState({selectionCount:this.selectedData.length, resetSelection: true});
 		}
 	}
 

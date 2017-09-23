@@ -520,8 +520,8 @@ const styles = StyleSheet.create({
   mapMarker: {
     position:'absolute',
     bottom: 10,
-    width: 40,
-    height: 40
+    width: 25,
+    height: 45
   },
   mapMarkerArrow: {
     position:'absolute',

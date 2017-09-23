@@ -63,9 +63,10 @@ export default class PinMarker extends Component {
 	}
 
 	render() {
-		let imageSource = require('../images/icons/map-marker.png');
-		let downArrowSource = require('../images/icons/blue-arrow.png');
-
+		let imageSource = require('../images/icons/map-marker-me.png');
+		if(this.props.marker.id !== -1) {
+			imageSource = require('../images/icons/map-marker.png');
+		}
 		let thumbnail = require('../images/icons/default.jpg');
 		if(this.props.marker.thumbnailPath!==undefined && this.props.marker.thumbnailPath!==null 
 			&& this.props.marker.thumbnailPath!=='') {

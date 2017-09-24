@@ -64,8 +64,14 @@ export default class PinMarker extends Component {
 
 	render() {
 		let imageSource = require('../images/icons/map-marker-me.png');
+		let arrowStyle = {
+			color: '#CC1D23'
+		};
 		if(this.props.marker.id !== -1) {
 			imageSource = require('../images/icons/map-marker.png');
+			arrowStyle = {
+				color: '#4A44F2'
+			};
 		}
 		let thumbnail = require('../images/icons/default.jpg');
 		if(this.props.marker.thumbnailPath!==undefined && this.props.marker.thumbnailPath!==null 
@@ -88,7 +94,7 @@ export default class PinMarker extends Component {
 						<Text style={{width:0, height:0}}>{Math.random()}</Text>
 					</Image>
 					<View style={[styles.mapMarkerArrow, this.getRotateStyle() ]}>
-						<Ionicons name="md-arrow-dropdown" size={30} style={styles.markArrow}/>
+						<Ionicons name="md-arrow-dropdown" size={30} style={arrowStyle}/>
 					</View>
 				</View>
 				<MapView.Callout style={styles.plainView}>

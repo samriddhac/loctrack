@@ -47,6 +47,7 @@ class GoogleMapView extends Component {
 		this.longDelta = LONGITUDE_DELTA;
 		this.onRegionChange = this.onRegionChange.bind(this);
 		this._renderBottomBar = this._renderBottomBar.bind(this);
+		this._getStrokeColor = this._getStrokeColor.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -349,6 +350,14 @@ class GoogleMapView extends Component {
 		return null;
 	}
 
+	_getStrokeColor(id) {
+		if(id !== -1) {
+			return "rgba(74,68,242, 0.2)";
+		}
+		else 
+			return "rgba(204,29,35, 0.2)";
+	}
+
 	render() {
 		if(this.state.region === undefined) {
 			return (
@@ -373,8 +382,8 @@ class GoogleMapView extends Component {
 							<MapView.Circle
 					            center={marker.position}
 					            radius={100}
-					            fillColor="rgba(74,68,242, 0.2)"
-					            strokeColor="rgba(74,68,242,0.2)"
+					            fillColor={this._getStrokeColor(marker.id)}
+					            strokeColor={this._getStrokeColor(marker.id)}
 					            zIndex={1}
 					            strokeWidth={1}
 					          />

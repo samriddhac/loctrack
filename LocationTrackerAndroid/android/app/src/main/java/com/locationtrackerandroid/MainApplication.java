@@ -15,6 +15,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.marianhello.react.BackgroundGeolocationPackage; 
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.mihir.react.tts.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
           new VectorIconsPackage(),
           new ReactNativeContacts(),
           new BackgroundGeolocationPackage(),
-          new ReactNativePushNotificationPackage()
+          new ReactNativePushNotificationPackage(),
+          new RCTTextToSpeechModule()
       );
     }
   };

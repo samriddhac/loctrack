@@ -57,6 +57,7 @@ export function convertContacts(cntList) {
 			}	
 			});
 	}
+	contacts = _.sortBy(contacts, 'searchName');
 	return contacts;
 }
 function escapeRegExp(str) {

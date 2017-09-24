@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
   },
   mapMarkerArrow: {
     position:'absolute',
-    bottom: -10
+    bottom: -12
   },
   markArrow: {
     color: '#4A44F2'

@@ -48,6 +48,7 @@ class GoogleMapView extends Component {
 		this.onRegionChange = this.onRegionChange.bind(this);
 		this._renderBottomBar = this._renderBottomBar.bind(this);
 		this._getStrokeColor = this._getStrokeColor.bind(this);
+		this._renderTime = this._renderTime.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -334,6 +335,7 @@ class GoogleMapView extends Component {
 				&& obj.loc.speed!=='') {
 				speed = obj.loc.speed + ' meters/second'
 			}
+
 			return (
 				<View style={styles.mapBottomBar}>
 					<Image style={styles.mapBottomImage}
@@ -343,6 +345,7 @@ class GoogleMapView extends Component {
 				        	{name}
 				    	</Text>
 				    	<Text>{speed}</Text>
+				    	{this._renderTime(obj)}
 					</View>
 				</View>
 			);
@@ -350,6 +353,15 @@ class GoogleMapView extends Component {
 		return null;
 	}
 
+	_renderTime(obj) {
+		if(obj.loc.time!==undefined && obj.loc.time!==null
+			&& obj.loc.time!=='') {
+			let utcTime = Number(obj.loc.time);
+			let date = new Date(utcTime).toString();
+			return ( <Text>{date}</Text> );
+		}
+		return null;
+	}
 	_getStrokeColor(id) {
 		if(id !== -1) {
 			return "rgba(74,68,242, 0.2)";

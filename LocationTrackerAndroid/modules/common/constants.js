@@ -57,3 +57,6 @@ export const ME = -1;
 export const SHARED = 'Shared';
 
 export const PRIVACY_LINK = 'https://samriddhac.github.io/loctrack-privacy-policy/index.html';
+
+export const WELCOME_SPEECH = 'Voice notification is enabled now';
+export const CLOSE_SPEECH = 'Voice notification is disabled now';

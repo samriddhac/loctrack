@@ -9,12 +9,14 @@ import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash/isEqual';
 import _ from 'lodash';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../styles/style';
-import { VIEW_HOME, ALL_FRIEND, ME, STATUS_APPROVED, STATUS_LIVE } from '../common/constants';
+import { VIEW_HOME, ALL_FRIEND, ME, STATUS_APPROVED, STATUS_LIVE,
+	WELCOME_SPEECH, CLOSE_SPEECH } from '../common/constants';
 import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import PinMarker from './pin-marker';
+import {speak, stopSpeaking} from '../tts-handler';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
 const ANCHOR = { x: 0.5, y: 0.5 };
@@ -41,7 +43,8 @@ class GoogleMapView extends Component {
 		this.state = {
 			region: null,
 			markars: [],
-			radius:0
+			radius:0,
+			ttsEnabled: false
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
@@ -49,6 +52,9 @@ class GoogleMapView extends Component {
 		this._renderBottomBar = this._renderBottomBar.bind(this);
 		this._getStrokeColor = this._getStrokeColor.bind(this);
 		this._renderTime = this._renderTime.bind(this);
+		this._renderSpeak = this._renderSpeak.bind(this);
+		this._enableSpeech = this._enableSpeech.bind(this);
+		this._disableSpeech = this._disableSpeech.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -364,10 +370,57 @@ class GoogleMapView extends Component {
 	}
 	_getStrokeColor(id) {
 		if(id !== -1) {
-			return "rgba(74,68,242, 0.2)";
+			return "rgba(204,29,35, 0.2)";
 		}
 		else 
-			return "rgba(204,29,35, 0.2)";
+			return "rgba(74,68,242, 0.2)";
+	}
+
+	_enableSpeech() {
+		this.setState({ttsEnabled: true});
+		speak(WELCOME_SPEECH);
+	}
+
+	_disableSpeech() {
+		this.setState({ttsEnabled: false});
+		speak(CLOSE_SPEECH);
+	}
+
+	_renderSpeak() {
+		if(this.props.selected>0){
+			if(this.state.ttsEnabled!==undefined && this.state.ttsEnabled!==null
+				&& this.state.ttsEnabled === true) {
+				return (
+					<View style={[styles.speechPositionContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+							this._disableSpeech();
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<View style={[styles.speechDisabledContainerStyle]}>
+								<MaterialCommunityIcons name="microphone-off" size={30} 
+								style={[styles.speechDisabledStyle]} />
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+				);
+			}
+			else {
+				return (
+					<View style={[styles.speechPositionContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+							this._enableSpeech();
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<View style={[styles.speechEnabledContainerStyle]}>
+								<MaterialCommunityIcons name="microphone" size={30} 
+								style={[styles.speechEnabledStyle]} />
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+				);
+			}
+		}
+		return null;
 	}
 
 	render() {
@@ -410,6 +463,7 @@ class GoogleMapView extends Component {
 						))}
 					</MapView>
 					{this._renderBottomBar()}
+					{this._renderSpeak()}
 				</View>
 			);
 		}

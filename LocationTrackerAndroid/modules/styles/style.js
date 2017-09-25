@@ -672,6 +672,31 @@ const styles = StyleSheet.create({
   },
   spinner: {
     marginLeft: 5
+  },
+  speechPositionContainer: {
+    position:'absolute',
+    top: 70,
+    right: 10
+  },
+  speechDisabledContainerStyle: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    borderColor:'#CC1D23'
+  },
+  speechDisabledStyle: {
+    backgroundColor: 'transparent',
+    color: '#CC1D23'
+  },
+  speechEnabledContainerStyle: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    borderColor:'#4A44F2'
+  }, 
+  speechEnabledStyle: {
+    backgroundColor: 'transparent',
+    color: '#4A44F2'
   }
 });
 export default styles;

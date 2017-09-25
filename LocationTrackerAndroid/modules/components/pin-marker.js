@@ -65,12 +65,12 @@ export default class PinMarker extends Component {
 	render() {
 		let imageSource = require('../images/icons/map-marker-me.png');
 		let arrowStyle = {
-			color: '#CC1D23'
+			color: '#4A44F2'
 		};
 		if(this.props.marker.id !== -1) {
 			imageSource = require('../images/icons/map-marker.png');
 			arrowStyle = {
-				color: '#4A44F2'
+				color: '#CC1D23'
 			};
 		}
 		let thumbnail = require('../images/icons/default.jpg');

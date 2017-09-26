@@ -697,6 +697,12 @@ const styles = StyleSheet.create({
   speechEnabledStyle: {
     backgroundColor: 'transparent',
     color: '#4A44F2'
+  },
+  addressPositionContainer:{
+    position:'absolute',
+    bottom: 20,
+    left: 10,
+    padding: 5
   }
 });
 export default styles;

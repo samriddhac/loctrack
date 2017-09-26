@@ -45,7 +45,9 @@ class GoogleMapView extends Component {
 			region: null,
 			markars: [],
 			radius:0,
-			ttsEnabled: false
+			ttsEnabled: false,
+			myAddress: '',
+			selAddress: ''
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
@@ -56,6 +58,7 @@ class GoogleMapView extends Component {
 		this._renderSpeak = this._renderSpeak.bind(this);
 		this._enableSpeech = this._enableSpeech.bind(this);
 		this._disableSpeech = this._disableSpeech.bind(this);
+		this._renderAddress = this._renderAddress.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -96,6 +99,7 @@ class GoogleMapView extends Component {
 				        	},
 				        	markars: []
 				        });
+				        this._setMyAddress({lat:pos.coords.latitude, lng:pos.coords.longitude});
 				       	if(props.selected === ALL_FRIEND) {
 				       		let myPosition = {
 					  			id:-1,
@@ -178,6 +182,7 @@ class GoogleMapView extends Component {
 	        	},
 	        	markars: [...this.state.markars, myPosition]
 	        });
+	        this._setMyAddress({lat:position.coords.latitude, lng:position.coords.longitude});
 	      }
 	    }, (err)=>{
 	    	console.log('[ERROR]: Geolocation error ',err);
@@ -389,10 +394,42 @@ class GoogleMapView extends Component {
 	}
 
 	_speakLocation(name, pos) {
+		let _that = this;
+		let shouldSpeak = false;
 		if(this.state.ttsEnabled!==undefined &&
 			this.state.ttsEnabled!==null &&
 			this.state.ttsEnabled===true) {
-			let addr = getAddress(pos, name, speak);
+			shouldSpeak = true;
+		}
+		getAddress(pos, name, speak, (addrText)=>{
+			_that.setState({..._that.state, selAddress:addrText});
+		}, shouldSpeak);
+	}
+
+	_setMyAddress(pos) {
+		let _that = this;
+		getAddress(pos, '', null, (addrText)=>{
+			_that.setState({..._that.state, myAddress:addrText});
+		}, false);
+	}
+
+	_renderAddress() {
+		let address = '';
+		if(this.props.selected>0){
+			address = this.state.selAddress;
+		}
+		else {
+			address = this.state.myAddress;
+		}
+		if(address!=='') {
+			return (
+				<View style={[styles.addressPositionContainer]}>
+					<Text>{address}</Text>
+				</View>
+			);
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -474,6 +511,7 @@ class GoogleMapView extends Component {
 					</MapView>
 					{this._renderBottomBar()}
 					{this._renderSpeak()}
+					{this._renderAddress()}
 				</View>
 			);
 		}

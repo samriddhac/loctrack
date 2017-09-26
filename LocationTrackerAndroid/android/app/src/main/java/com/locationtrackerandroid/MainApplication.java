@@ -16,6 +16,7 @@ import com.facebook.soloader.SoLoader;
 import com.marianhello.react.BackgroundGeolocationPackage; 
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.mihir.react.tts.*;
+import com.devfd.RNGeocoder.RNGeocoderPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
           new ReactNativeContacts(),
           new BackgroundGeolocationPackage(),
           new ReactNativePushNotificationPackage(),
-          new RCTTextToSpeechModule()
+          new RCTTextToSpeechModule(),
+          new RNGeocoderPackage()
       );
     }
   };

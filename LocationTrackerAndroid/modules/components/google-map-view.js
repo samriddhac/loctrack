@@ -17,6 +17,7 @@ import myLocIcon from '../images/icons/map-marker.png';
 import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import PinMarker from './pin-marker';
 import {speak, stopSpeaking} from '../tts-handler';
+import {getAddress} from '../geocoder-receiver';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
 const ANCHOR = { x: 0.5, y: 0.5 };
@@ -280,6 +281,7 @@ class GoogleMapView extends Component {
 				        	region:region,
 				        	markars: [...markerArray]
 				        });
+				        this._speakLocation(m.name, {lat:obj.loc.latitude, lng:obj.loc.longitude});
 					}
 				}
 			}
@@ -377,13 +379,21 @@ class GoogleMapView extends Component {
 	}
 
 	_enableSpeech() {
-		this.setState({ttsEnabled: true});
+		this.setState({...this.state, ttsEnabled: true});
 		speak(WELCOME_SPEECH);
 	}
 
 	_disableSpeech() {
-		this.setState({ttsEnabled: false});
+		this.setState({...this.state, ttsEnabled: false});
 		speak(CLOSE_SPEECH);
+	}
+
+	_speakLocation(name, pos) {
+		if(this.state.ttsEnabled!==undefined &&
+			this.state.ttsEnabled!==null &&
+			this.state.ttsEnabled===true) {
+			let addr = getAddress(pos, name, speak);
+		}
 	}
 
 	_renderSpeak() {

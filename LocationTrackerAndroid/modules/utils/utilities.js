@@ -289,3 +289,17 @@ export function doneShareRequest(items, selectedLists) {
 	}
 	return returnList;
 }
+
+export function buildAddrText(addrList) {
+	let addrText ='';
+	if(addrList!==undefined && addrList!==null
+		&& addrList.length>0) {
+		let addrObj = addrList[0];
+		if(addrObj!==undefined && addrObj!==null) {
+			if(addrObj.formattedAddress!==undefined && addrObj.formattedAddress!==null) {
+				addrText = addrText + addrObj.formattedAddress;
+			}
+		}
+	}
+	return addrText;
+}

@@ -19,3 +19,5 @@ include ':bugsnag-react-native'
 project(':bugsnag-react-native').projectDir = file('../node_modules/bugsnag-react-native/android')
 include ':react-native-android-speech'
 project(':react-native-android-speech').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-speech')
+include ':react-native-geocoder', ':app'
+project(':react-native-geocoder').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-geocoder/android')

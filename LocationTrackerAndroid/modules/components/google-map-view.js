@@ -406,9 +406,9 @@ class GoogleMapView extends Component {
 							this._disableSpeech();
 						}}
 						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<View style={[styles.speechDisabledContainerStyle]}>
-								<MaterialCommunityIcons name="microphone-off" size={30} 
-								style={[styles.speechDisabledStyle]} />
+							<View style={[styles.speechEnabledContainerStyle]}>
+								<MaterialCommunityIcons name="microphone" size={30} 
+								style={[styles.speechEnabledStyle]} />
 							</View>
 						</TouchableNativeFeedback>
 					</View>
@@ -421,9 +421,9 @@ class GoogleMapView extends Component {
 							this._enableSpeech();
 						}}
 						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
-							<View style={[styles.speechEnabledContainerStyle]}>
-								<MaterialCommunityIcons name="microphone" size={30} 
-								style={[styles.speechEnabledStyle]} />
+							<View style={[styles.speechDisabledContainerStyle]}>
+								<MaterialCommunityIcons name="microphone-off" size={30} 
+								style={[styles.speechDisabledStyle]} />
 							</View>
 						</TouchableNativeFeedback>
 					</View>

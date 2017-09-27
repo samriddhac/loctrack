@@ -18,6 +18,7 @@ import { createAnimatableComponent, View, Text } from 'react-native-animatable';
 import PinMarker from './pin-marker';
 import {speak, stopSpeaking} from '../tts-handler';
 import {getAddress} from '../geocoder-receiver';
+import {getRoute} from '../geo-direction';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true };
 const ANCHOR = { x: 0.5, y: 0.5 };
@@ -47,7 +48,8 @@ class GoogleMapView extends Component {
 			radius:0,
 			ttsEnabled: false,
 			myAddress: '',
-			selAddress: ''
+			selAddress: '',
+			showRoute: false
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
@@ -59,6 +61,9 @@ class GoogleMapView extends Component {
 		this._enableSpeech = this._enableSpeech.bind(this);
 		this._disableSpeech = this._disableSpeech.bind(this);
 		this._renderAddress = this._renderAddress.bind(this);
+		this._renderRoute = this._renderRoute.bind(this);
+		this._enableRoute = this._enableRoute.bind(this);
+		this._disableRoute = this._disableRoute.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -393,6 +398,30 @@ class GoogleMapView extends Component {
 		speak(CLOSE_SPEECH);
 	}
 
+	_enableRoute() {
+		this.setState({...this.state, showRoute: true});
+		this.watchID = navigator.geolocation.getCurrentPosition((position) => {
+		  console.log('position ',position);
+	      let myPosition = {
+	      	id:-1,
+	      	position: position.coords,
+	      	name: 'Me',
+		    thumbnailPath: ''
+	      };
+	      let obj = _.find(this.props.subscribedTo, {recordID: this.props.selected});
+	      getRoute({lat:position.coords.latitude, lng:position.coords.longitude},
+	      	{lat:obj.loc.latitude, lng:obj.loc.longitude}, (res)=>{
+	      		console.log('res ',res);
+	      	});
+	    }, (err)=>{
+	    	console.log('[ERROR]: Geolocation error ',err);
+	    });
+	}
+
+	_disableRoute() {
+		this.setState({...this.state, showRoute: false});
+	}
+
 	_speakLocation(name, pos) {
 		let _that = this;
 		let shouldSpeak = false;
@@ -431,6 +460,43 @@ class GoogleMapView extends Component {
 		else {
 			return null;
 		}
+	}
+
+	_renderRoute() {
+		if(this.props.selected>0){
+			if(this.state.showRoute!==undefined && this.state.showRoute!==null
+				&& this.state.showRoute === true) {
+				return (
+					<View style={[styles.routePositionContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+							this._disableRoute();
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<View style={[styles.routeEnabledContainerStyle]}>
+								<MaterialCommunityIcons name="near-me" size={30} 
+								style={[styles.routeEnabledStyle]} />
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+				);
+			}
+			else {
+				return (
+					<View style={[styles.routePositionContainer]}>
+						<TouchableNativeFeedback onPress={()=>{
+							this._enableRoute();
+						}}
+						background={TouchableNativeFeedback.Ripple('#CC39C4', true)}>
+							<View style={[styles.routeDisabledContainerStyle]}>
+								<MaterialCommunityIcons name="near-me" size={30} 
+								style={[styles.routeDisabledStyle]} />
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+				);
+			}
+		}
+		return null;
 	}
 
 	_renderSpeak() {
@@ -511,6 +577,7 @@ class GoogleMapView extends Component {
 					</MapView>
 					{this._renderBottomBar()}
 					{this._renderSpeak()}
+					{this._renderRoute()}
 					{this._renderAddress()}
 				</View>
 			);

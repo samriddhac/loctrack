@@ -703,6 +703,31 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 10,
     padding: 5
-  }
+  },
+  routePositionContainer: {
+    position:'absolute',
+    top: 100,
+    right: 10
+  },
+  routeDisabledContainerStyle: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    borderColor:'#CC1D23'
+  },
+  routeDisabledStyle: {
+    backgroundColor: 'transparent',
+    color: '#CC1D23'
+  },
+  routeEnabledContainerStyle: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    borderColor:'#4A44F2'
+  }, 
+  routeEnabledStyle: {
+    backgroundColor: 'transparent',
+    color: '#4A44F2'
+  },
 });
 export default styles;

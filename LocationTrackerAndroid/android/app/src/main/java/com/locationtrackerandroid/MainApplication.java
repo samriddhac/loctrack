@@ -17,6 +17,7 @@ import com.marianhello.react.BackgroundGeolocationPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.mihir.react.tts.*;
 import com.devfd.RNGeocoder.RNGeocoderPackage;
+import cl.json.RNSharePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
           new BackgroundGeolocationPackage(),
           new ReactNativePushNotificationPackage(),
           new RCTTextToSpeechModule(),
-          new RNGeocoderPackage()
+          new RNGeocoderPackage(),
+          new RNSharePackage()
       );
     }
   };

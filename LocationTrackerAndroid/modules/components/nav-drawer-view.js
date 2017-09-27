@@ -96,6 +96,10 @@ class NavDrawerView extends Component {
 					this.props.closeNav();
 					this.props.changeView({id:VIEW_SEARCH_BOX, options:{optionId: id}});
 					break;
+				case 7:
+					this.props.closeNav();
+					this.props.openShare();
+					break;
 			}
 		}
 		catch(e) {
@@ -200,6 +204,12 @@ class NavDrawerView extends Component {
 				key: 6,
 				label: 'My Pending Approvals',
 				icon: 'account-plus'
+			},
+			{ 
+				id: 7,
+				key: 7,
+				label: 'Invite Friends',
+				icon: 'launch'
 			}
 		];
 

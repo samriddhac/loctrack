@@ -36,6 +36,7 @@ const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 const timeout = 4000;
+const distnce_timeout = 2000;
 let animationTimeout;
 
 class GoogleMapView extends Component {
@@ -49,7 +50,8 @@ class GoogleMapView extends Component {
 			ttsEnabled: false,
 			myAddress: '',
 			selAddress: '',
-			showRoute: false
+			showRoute: false,
+			routes: []
 		};
 		this.latDelta = LATITUDE_DELTA;
 		this.longDelta = LONGITUDE_DELTA;
@@ -64,6 +66,7 @@ class GoogleMapView extends Component {
 		this._renderRoute = this._renderRoute.bind(this);
 		this._enableRoute = this._enableRoute.bind(this);
 		this._disableRoute = this._disableRoute.bind(this);
+		this._renderRouteLine = this._renderRouteLine.bind(this);
 	}
 
 	onRegionChange(region) {
@@ -292,6 +295,18 @@ class GoogleMapView extends Component {
 				        	markars: [...markerArray]
 				        });
 				        this._speakLocation(m.name, {lat:obj.loc.latitude, lng:obj.loc.longitude});
+						if(this.props.selected>0){
+							if(this.state.showRoute!==undefined && this.state.showRoute!==null
+								&& this.state.showRoute === true) {
+								let routeList = this.state.routes;
+								routeList.push({latitude: obj.loc.latitude,
+				            		longitude: obj.loc.longitude});
+								this.setState({ 
+						        	...this.state,
+						        	routes: routeList
+						        });
+							}
+						}
 					}
 				}
 			}
@@ -328,6 +343,14 @@ class GoogleMapView extends Component {
 	    if(this.map!==undefined && this.map!==null &&
 	    	markers!==undefined && markers!==null && markers.length>0) {
 	    	this.map.fitToSuppliedMarkers(markers, animated);
+	    }
+	}
+
+	fitMap(coords, options, animated) {
+	    console.log('coords received to populate map: ', coords);
+	    if(this.map!==undefined && this.map!==null &&
+	    	coords!==undefined && coords!==null && coords.length>0) {
+	    	this.map.fitToCoordinates(coords, options, animated);
 	    }
 	}
 
@@ -399,9 +422,9 @@ class GoogleMapView extends Component {
 	}
 
 	_enableRoute() {
+		let _that = this;
 		this.setState({...this.state, showRoute: true});
 		this.watchID = navigator.geolocation.getCurrentPosition((position) => {
-		  console.log('position ',position);
 	      let myPosition = {
 	      	id:-1,
 	      	position: position.coords,
@@ -411,7 +434,25 @@ class GoogleMapView extends Component {
 	      let obj = _.find(this.props.subscribedTo, {recordID: this.props.selected});
 	      getRoute({lat:position.coords.latitude, lng:position.coords.longitude},
 	      	{lat:obj.loc.latitude, lng:obj.loc.longitude}, (res)=>{
-	      		console.log('res ',res);
+	      		let markerArray = [myPosition, ..._that.state.markars];
+	      		if(markerArray!==undefined
+				&& markerArray!==null
+				&& markerArray.length>0) {
+					_that.setState({..._that.state, markars:markerArray});
+					let markerIDs = [];
+					markerArray.forEach((item)=>{
+						markerIDs.push(item.id.toString());
+					});
+					animationTimeout = setTimeout(() => {
+				      _that.setState({..._that.state, routes:res});
+				      _that.fitMap(res,{edgePadding:{
+				      	top: 60,
+				      	right:30,
+				      	bottom: 30,
+  						left: 30
+				      }}, true);
+					}, distnce_timeout);
+				}
 	      	});
 	    }, (err)=>{
 	    	console.log('[ERROR]: Geolocation error ',err);
@@ -419,7 +460,28 @@ class GoogleMapView extends Component {
 	}
 
 	_disableRoute() {
-		this.setState({...this.state, showRoute: false});
+		this.setState({...this.state, showRoute: false, routes:[]});
+		let obj = _.find(this.props.subscribedTo, {recordID: this.props.selected});
+		if(obj!==undefined && obj!==null && obj.status===STATUS_LIVE
+			&& obj.loc!==undefined && obj.loc!==null) {
+			let m = {
+				id: obj.recordID,
+				position: obj.loc,
+				thumbnailPath: obj.thumbnailPath,
+				name: obj.givenName
+			};
+			let markerArray = [m];
+			let region = {
+        		latitude: obj.loc.latitude,
+	            longitude: obj.loc.longitude,
+	            latitudeDelta: this.latDelta,
+		        longitudeDelta: this.longDelta,
+        	};
+			this.setState({ 
+	        	region:region,
+	        	markars: [...markerArray]
+	        });
+	    }
 	}
 
 	_speakLocation(name, pos) {
@@ -536,6 +598,23 @@ class GoogleMapView extends Component {
 		return null;
 	}
 
+	_renderRouteLine() {
+		if(this.props.selected>0){
+			console.log('this.state.routes',this.state.routes);
+			if(this.state.routes!==undefined && this.state.routes!==null
+				&& this.state.routes.length>0) {
+				return (
+					<MapView.Polyline
+			            coordinates={this.state.routes}
+			            strokeColor="#4A44F2"
+			            strokeWidth={4}
+				     />
+				);
+			}
+		}
+		return null;
+	}
+
 	render() {
 		if(this.state.region === undefined) {
 			return (
@@ -574,6 +653,7 @@ class GoogleMapView extends Component {
 						  marker={marker}
 						/>
 						))}
+						{this._renderRouteLine()}
 					</MapView>
 					{this._renderBottomBar()}
 					{this._renderSpeak()}

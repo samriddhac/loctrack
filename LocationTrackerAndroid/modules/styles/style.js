@@ -706,7 +706,7 @@ const styles = StyleSheet.create({
   },
   routePositionContainer: {
     position:'absolute',
-    top: 100,
+    top: 130,
     right: 10
   },
   routeDisabledContainerStyle: {

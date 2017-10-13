@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  ToastAndroid
+  ToastAndroid,
+  Clipboard
 } from 'react-native';
 import Share, {ShareSheet, Button} from 'react-native-share';
 
